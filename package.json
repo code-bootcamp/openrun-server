@@ -21,6 +21,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@nestjs/cli": "^9.0.0",
     "@elastic/elasticsearch": "^8.2.1",
     "@golevelup/nestjs-graphql-request": "^0.1.13",
     "@google-cloud/storage": "^6.3.0",
@@ -67,7 +68,6 @@
     "util": "^0.12.4"
   },
   "devDependencies": {
-    "@nestjs/cli": "^9.0.0",
     "@nestjs/schematics": "^9.0.0",
     "@nestjs/testing": "^9.0.0",
     "@types/bcrypt": "^5.0.0",
