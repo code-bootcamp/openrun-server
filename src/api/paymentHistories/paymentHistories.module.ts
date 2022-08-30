@@ -8,4 +8,4 @@ import { PaymentHistoriesService } from './paymentHistories.service';
     PaymentHistoriesService,
   ],
 })
-export class PayemntHistoriesModule {}
+export class PaymentHistoriesModule {}

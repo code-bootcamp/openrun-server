@@ -1,9 +1,13 @@
 import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { Category } from 'src/api/categories/entities/category.entity';
+import { Tag } from 'src/api/tags/entities/tag.entity';
+import { User } from 'src/api/users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -60,4 +64,16 @@ export class Board {
   @DeleteDateColumn()
   @Field(() => Date)
   deletedAt: Date;
+
+  @ManyToOne(() => User)
+  @Field(() => User)
+  user: User;
+
+  @ManyToOne(() => Tag)
+  @Field(() => Tag)
+  tag: Tag;
+
+  @ManyToOne(() => Category)
+  @Field(() => Category)
+  category: Category;
 }

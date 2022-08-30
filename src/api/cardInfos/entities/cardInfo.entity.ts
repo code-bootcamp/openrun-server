@@ -1,5 +1,12 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from 'src/api/users/entities/user.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -23,4 +30,9 @@ export class CardInfo {
   @Column()
   @Field(() => String)
   cvcNum: string;
+
+  @JoinColumn()
+  @OneToOne(() => User)
+  @Field(() => User)
+  user: User;
 }
