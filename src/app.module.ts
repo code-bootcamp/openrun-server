@@ -4,7 +4,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { AppController } from './app.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import { BoardCommentAnswersModule } from './api/BoardCommentAnswers/BoardCommentAnswers.module';
+import { BoardCommentAnswersModule } from './api/boardCommentAnswers/BoardCommentAnswers.module';
 import { BoardCommentsModule } from './api/boardComments/boardComments.module';
 import { BoardsModule } from './api/boards/boards.module';
 import { CardInfosModule } from './api/cardInfos/cardInfos.module';
@@ -19,6 +19,7 @@ import { RunnersModule } from './api/runners/runners.module';
 import { TagsModule } from './api/tags/tags.module';
 import { TokensModule } from './api/tokens/tokens.module';
 import { UsersModule } from './api/users/users.module';
+import { EventsModule } from './api/events/events.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { UsersModule } from './api/users/users.module';
     BoardsModule,
     CardInfosModule,
     CategoriesModule,
+    EventsModule,
     InquiriesModule,
     InquiriesAnswerModule,
     InterestsModule,
