@@ -5,7 +5,7 @@ import { BoardCommentAnswersService } from './BoardCommentAnswers.service';
 @Module({
   providers: [
     BoardCommentAnswersResolver, //
-    BoardCommentAnswersService,
+    BoardCommentAnswersService, //
   ],
 })
 export class BoardCommentAnswersModule {}
