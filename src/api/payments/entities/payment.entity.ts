@@ -1,5 +1,6 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from 'src/api/users/entities/user.entity';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -19,4 +20,8 @@ export class Payment {
   @Column()
   @Field(() => Int)
   amount: number;
+
+  @ManyToOne(() => User)
+  @Field(() => User)
+  user: User;
 }

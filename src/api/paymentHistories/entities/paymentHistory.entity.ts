@@ -1,8 +1,13 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { Board } from 'src/api/boards/entities/board.entity';
+import { User } from 'src/api/users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -20,4 +25,13 @@ export class PaymentHistory {
   @CreateDateColumn()
   @Field(() => Date)
   createdAt: Date;
+
+  @ManyToOne(() => User)
+  @Field(() => User)
+  user: User;
+
+  @JoinColumn()
+  @OneToOne(() => Board)
+  @Field(() => Board)
+  board: Board;
 }

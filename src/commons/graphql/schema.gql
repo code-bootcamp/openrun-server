@@ -1,0 +1,79 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Category {
+  id: String!
+  name: String!
+}
+
+type Tag {
+  id: String!
+  name: String!
+}
+
+type User {
+  id: String!
+  email: String!
+  password: String!
+  nickName: String!
+  phone: String!
+  point: Int!
+  rating: Int!
+  profile: String!
+  report: Int!
+  isAdmin: Boolean!
+  type: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deleteAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Board {
+  id: String!
+  title: String!
+  contents: String!
+  status: BOARD_STATUS_ENUM!
+  price: Int!
+  storeName: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime!
+  user: User!
+  tag: Tag!
+  category: Category!
+}
+
+enum BOARD_STATUS_ENUM {
+  RECRUITING
+  INPROGRESS
+  FINISHED
+}
+
+type BoardComment {
+  id: String!
+  contents: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime!
+  board: Board!
+  user: User!
+}
+
+type Inquiry {
+  id: String!
+  type: String!
+  title: String!
+  contents: String!
+  user: User!
+  board: Board!
+}
+
+type Query {
+  helloWorld: String!
+}

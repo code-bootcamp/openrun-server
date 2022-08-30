@@ -8,4 +8,4 @@ import { ReportsService } from './reports.service';
     ReportsService,
   ],
 })
-export class ReportsModules {}
+export class ReportsModule {}

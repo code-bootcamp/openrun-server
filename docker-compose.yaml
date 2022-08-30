@@ -12,7 +12,7 @@ services:
     env_file:
       - ./.env
 
-  database:
+  my-database:
     platform: linux/x86_64
     image: mysql:latest
     environment:

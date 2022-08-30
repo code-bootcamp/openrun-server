@@ -1,5 +1,14 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Inquiry } from 'src/api/inquiries/entities/inquiry.entity';
+import { User } from 'src/api/users/entities/user.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -11,4 +20,13 @@ export class InquiriesAnswer {
   @Column()
   @Field(() => String)
   contents: string;
+
+  @JoinColumn()
+  @OneToOne(() => Inquiry)
+  @Field(() => Inquiry)
+  inquiry: Inquiry;
+
+  @ManyToOne(() => User)
+  @Field(() => User)
+  user: User;
 }

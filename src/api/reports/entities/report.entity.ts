@@ -1,5 +1,14 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Board } from 'src/api/boards/entities/board.entity';
+import { User } from 'src/api/users/entities/user.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -15,4 +24,13 @@ export class Report {
   @Column()
   @Field(() => String)
   title: string;
+
+  @ManyToOne(() => User)
+  @Field(() => User)
+  user: User;
+
+  @JoinColumn()
+  @OneToOne(() => Board)
+  @Field(() => Board)
+  board: Board;
 }
