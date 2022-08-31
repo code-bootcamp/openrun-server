@@ -1,4 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql';
+import { CreateCardInfoInput } from 'src/api/cardInfos/dto/createCardInfo.input';
 
 @InputType()
 export class CreateUserInput {
@@ -14,6 +15,6 @@ export class CreateUserInput {
   @Field(() => String)
   phone: string;
 
-  @Field(() => String)
-  profile: string;
+  @Field(() => CreateCardInfoInput)
+  cardInfoInput: CreateCardInfoInput;
 }

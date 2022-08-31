@@ -1,12 +1,33 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import {
+  Field,
+  Float,
+  Int,
+  ObjectType,
+  registerEnumType,
+} from '@nestjs/graphql';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Min } from 'class-validator';
+import { CardInfo } from 'src/api/cardInfos/entities/cardInfo.entity';
+
+export enum USER_LOGINTYPE_ENUM {
+  BASIC = '기본',
+  GOOGLE = '구글',
+  NAVER = '네이버',
+  KAKAO = '카카오',
+}
+
+registerEnumType(USER_LOGINTYPE_ENUM, {
+  name: 'USER_LOGINTYPE_ENUM',
+});
 
 @Entity()
 @ObjectType()
@@ -15,7 +36,7 @@ export class User {
   @Field(() => String)
   id: string;
 
-  @Column()
+  @Column({ unique: true })
   @Field(() => String)
   email: string;
 
@@ -23,7 +44,7 @@ export class User {
   @Field(() => String)
   password: string;
 
-  @Column()
+  @Column({ unique: true })
   @Field(() => String)
   nickName: string;
 
@@ -31,29 +52,36 @@ export class User {
   @Field(() => String)
   phone: string;
 
+  @Min(0)
   @Column()
   @Field(() => Int)
   point: number;
 
+  @Min(0)
   @Column()
-  @Field(() => Int)
+  @Field(() => Float)
   rating: number;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => String)
-  profile: string;
+  profileImg: string;
 
+  @Min(0)
   @Column()
   @Field(() => Int)
   report: number;
 
-  @Column()
+  @Column({ default: false })
   @Field(() => Boolean)
   isAdmin: boolean;
 
-  @Column()
-  @Field(() => String)
-  type: string;
+  @Column({
+    type: 'enum',
+    enum: USER_LOGINTYPE_ENUM,
+    default: USER_LOGINTYPE_ENUM.BASIC,
+  })
+  @Field(() => USER_LOGINTYPE_ENUM)
+  loginType: string;
 
   @CreateDateColumn()
   @Field(() => Date)
@@ -66,4 +94,9 @@ export class User {
   @DeleteDateColumn()
   @Field(() => Date)
   deleteAt: Date;
+
+  @JoinColumn()
+  @OneToOne(() => CardInfo)
+  @Field(() => CardInfo)
+  cardInfo: CardInfo;
 }
