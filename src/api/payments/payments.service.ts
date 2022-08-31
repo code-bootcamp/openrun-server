@@ -26,6 +26,15 @@ export class PaymentsService {
     return result;
   }
 
+  async findPointCharge({ id }) {
+    const result = await this.paymentRepository.find({
+      where: { user: { id: id } },
+      relations: ['user'],
+    });
+
+    return result;
+  }
+
   async create({ impUid, amount, user: _user }) {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();

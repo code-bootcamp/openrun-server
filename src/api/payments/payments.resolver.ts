@@ -2,7 +2,7 @@ import {
   ConflictException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { Args, Context, Int, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { IContext } from 'src/commons/types/type';
 import { IamportsService } from '../iamport/iamport.service';
 import { Payment, PAYMENT_STATUS_ENUM } from './entities/payment.entity';
@@ -14,6 +14,25 @@ export class PaymentsResolver {
     private readonly paymentsService: PaymentsService, //
     private readonly iamportService: IamportsService, //
   ) {}
+
+  @Query(() => [Payment])
+  async fetchPointChargeHistory(
+    @Context() context: IContext, //
+  ) {
+    const user = context.req.user;
+    // const user = {
+    //   email: 'asd@asd.com',
+    //   sub: '1d81836c-5aa3-4caf-a6e3-b9d03c7090c7',
+    // };
+
+    const isUser = await this.paymentsService.findOne({ email: user.email });
+
+    const result = await this.paymentsService.findPointCharge({
+      id: isUser.id,
+    });
+
+    return result;
+  }
 
   @Mutation(() => Payment)
   async chargePayment(
