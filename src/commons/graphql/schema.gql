@@ -24,6 +24,14 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type Payment {
+  id: String!
+  impUid: String!
+  status: String!
+  amount: Int!
+  user: User!
+}
+
 type Category {
   id: String!
   name: String!
@@ -76,4 +84,8 @@ type Inquiry {
 
 type Query {
   helloWorld: String!
+}
+
+type Mutation {
+  chargePayment(impUid: String!, amount: Int!): Payment!
 }
