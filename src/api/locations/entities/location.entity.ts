@@ -1,12 +1,5 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Board } from 'src/api/boards/entities/board.entity';
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -30,9 +23,4 @@ export class Location {
   @Column()
   @Field(() => Int)
   lng: number;
-
-  @JoinColumn()
-  @OneToOne(() => Board)
-  @Field(() => Board)
-  board: Board;
 }
