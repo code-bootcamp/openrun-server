@@ -13,6 +13,13 @@ export class UsersService {
     private readonly userRepository: Repository<User>, //
   ) {}
 
+  findOne({ email }) {
+    return this.userRepository.findOne({
+      where: { email },
+      relations: ['cardInfo'],
+    });
+  }
+
   async create({ createUserInput }) {
     const { cardInfoInput, ...userInfo } = createUserInput;
 
