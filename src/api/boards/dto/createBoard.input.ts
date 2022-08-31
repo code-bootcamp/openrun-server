@@ -1,4 +1,5 @@
-import { Field, Float, InputType, Int } from '@nestjs/graphql';
+import { Field, InputType, Int } from '@nestjs/graphql';
+import { LocationInput } from 'src/api/locations/dto/createLocation.input';
 
 @InputType()
 export class CreateBoardInput {
@@ -11,20 +12,14 @@ export class CreateBoardInput {
   @Field(() => Int)
   price: number;
 
+  @Field(() => Int)
+  productPrice: number;
+
   @Field(() => String)
   storeName: string;
 
-  @Field(() => String)
-  address: string;
-
-  @Field(() => String)
-  addressDetail: string;
-
-  @Field(() => Float)
-  lat: number;
-
-  @Field(() => Float)
-  lng: number;
+  @Field(() => LocationInput)
+  location: LocationInput;
 
   @Field(() => [String])
   imgUrl: string[];

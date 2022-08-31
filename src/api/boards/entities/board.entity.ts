@@ -1,13 +1,17 @@
 import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Category } from 'src/api/categories/entities/category.entity';
+import { Location } from 'src/api/locations/entities/location.entity';
 import { Tag } from 'src/api/tags/entities/tag.entity';
 import { User } from 'src/api/users/entities/user.entity';
+
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -50,6 +54,10 @@ export class Board {
   price: number;
 
   @Column()
+  @Field(() => Int)
+  productPrice: number;
+
+  @Column()
   @Field(() => String)
   storeName: string;
 
@@ -76,4 +84,12 @@ export class Board {
   @ManyToOne(() => Category)
   @Field(() => Category)
   category: Category;
+
+  @JoinColumn()
+  @OneToOne(() => Location)
+  @Field(() => Location)
+  location: Location;
+
+  @Field(() => [String])
+  imgUrl: string[];
 }
