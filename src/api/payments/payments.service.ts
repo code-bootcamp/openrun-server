@@ -33,9 +33,9 @@ export class PaymentsService {
     await queryRunner.startTransaction('SERIALIZABLE');
 
     try {
-      const user = await this.userRepository.findOne({
-        where: { email: _user.email },
-        order: { id: 'DESC' },
+      const user = await queryRunner.manager.findOne(User, {
+        where: { id: _user },
+        lock: { mode: 'pessimistic_write' },
       });
 
       const payment = this.paymentRepository.create({
@@ -57,6 +57,52 @@ export class PaymentsService {
       await queryRunner.commitTransaction();
 
       return payment;
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
+  async findOne({ email }) {
+    const result = await this.userRepository.findOne({
+      where: { email },
+    });
+
+    return result;
+  }
+
+  async cancel({ impUid, user, amount }) {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+
+    await queryRunner.startTransaction('SERIALIZABLE');
+
+    try {
+      const findUser = await queryRunner.manager.findOne(User, {
+        where: { id: user.id },
+        lock: { mode: 'pessimistic_write' },
+      });
+
+      const updateUser = this.userRepository.create({
+        ...findUser,
+        point: findUser.point - amount,
+      });
+
+      await queryRunner.manager.save(updateUser);
+
+      const cancelPayment = this.paymentRepository.create({
+        amount: -amount,
+        impUid,
+        user: findUser,
+        status: PAYMENT_STATUS_ENUM.CANCEL,
+      });
+
+      await queryRunner.manager.save(cancelPayment);
+
+      await queryRunner.commitTransaction();
+
+      return cancelPayment;
     } catch (err) {
       await queryRunner.rollbackTransaction();
     } finally {

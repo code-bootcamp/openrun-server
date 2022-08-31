@@ -3,21 +3,10 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { Args, Context, Int, Mutation, Resolver } from '@nestjs/graphql';
+import { IContext } from 'src/commons/types/type';
 import { IamportsService } from '../iamport/iamport.service';
-import { Payment } from './entities/payment.entity';
+import { Payment, PAYMENT_STATUS_ENUM } from './entities/payment.entity';
 import { PaymentsService } from './payments.service';
-
-export interface IUser {
-  user: {
-    email: string;
-    sub: string;
-  };
-}
-
-interface IContext {
-  req?: Request & IUser;
-  res?: Response;
-}
 
 @Resolver()
 export class PaymentsResolver {
@@ -46,9 +35,55 @@ export class PaymentsResolver {
 
     const isValid = await this.iamportService.checkPayment({ token, impUid });
 
+    const isUser = await this.paymentsService.findOne({ email: user.email });
+
     if (typeof isValid === 'string')
       throw new UnprocessableEntityException(isValid);
 
-    return this.paymentsService.create({ impUid, amount, user });
+    return this.paymentsService.create({ impUid, amount, user: isUser });
+  }
+
+  @Mutation(() => Payment)
+  async cancelPayment(
+    @Args('impUid') impUid: string,
+    @Args('amount') amount: number,
+    @Context() context: IContext, //
+  ) {
+    const user = context.req.user;
+
+    const isCanceled = await this.paymentsService.findPayment({ impUid });
+
+    if (isCanceled.status === PAYMENT_STATUS_ENUM.CANCEL)
+      throw new UnprocessableEntityException('이미 환불 되었습니다.');
+
+    const isUser = await this.paymentsService.findOne({ email: user.email });
+
+    if (isUser.id !== isCanceled.user.id)
+      throw new UnprocessableEntityException('유저 정보가 일치하지 않습니다.');
+
+    if (isUser.point < amount)
+      throw new UnprocessableEntityException('보유 포인트가 부족합니다.');
+
+    const token = await this.iamportService.createIamportAccessToken();
+
+    const isValid = await this.iamportService.checkPayment({ token, impUid });
+
+    if (typeof isValid === 'string')
+      throw new UnprocessableEntityException(isValid);
+
+    if (isValid.data.response.status === 'cancelled')
+      throw new UnprocessableEntityException('이미 환불 되었습니다.');
+
+    const cancelAmount = await this.iamportService.cancelPayment({
+      impUid,
+      token,
+      amount,
+    });
+
+    return this.paymentsService.cancel({
+      impUid,
+      user: isUser,
+      amount: cancelAmount,
+    });
   }
 }

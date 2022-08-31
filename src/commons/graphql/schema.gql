@@ -88,4 +88,5 @@ type Query {
 
 type Mutation {
   chargePayment(impUid: String!, amount: Int!): Payment!
+  cancelPayment(impUid: String!, amount: Float!): Payment!
 }

@@ -12,18 +12,22 @@ export class IamportsService {
   ) {}
 
   async createIamportAccessToken() {
-    const result = await axios({
-      url: 'https://api.iamport.kr/users/getToken',
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      data: {
-        imp_key: process.env.IMP_KEY,
-        imp_secret: process.env.IMP_SECRET,
-      },
-    });
-    return result.data.response.access_token;
+    try {
+      const result = await axios({
+        url: 'https://api.iamport.kr/users/getToken',
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: {
+          imp_key: process.env.IMP_KEY,
+          imp_secret: process.env.IMP_SECRET,
+        },
+      });
+      return result.data.response.access_token;
+    } catch (err) {
+      throw new Error(err);
+    }
   }
 
   async checkPayment({ token, impUid }) {
@@ -36,7 +40,24 @@ export class IamportsService {
       });
       return result;
     } catch (err) {
+      console.log(err);
       return err.response.data.message;
     }
+  }
+
+  async cancelPayment({ impUid, token, amount }) {
+    const result = await axios({
+      url: 'https://api.iamport.kr/payments/cancel',
+      method: 'post',
+      headers: {
+        Authorization: token,
+      },
+      data: {
+        reason: '이유는 생각해봐야 됨',
+        imp_uid: impUid,
+        amount,
+      },
+    });
+    return result.data.response.amount;
   }
 }
