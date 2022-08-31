@@ -34,6 +34,11 @@ export class PaymentsResolver {
     return result;
   }
 
+  @Query(() => Int)
+  fetchPayments() {
+    return this.paymentsService.findAll();
+  }
+
   @Mutation(() => Payment)
   async chargePayment(
     @Args('impUid') impUid: string,
