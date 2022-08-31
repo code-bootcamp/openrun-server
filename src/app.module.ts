@@ -7,7 +7,6 @@ import { ConfigModule } from '@nestjs/config';
 import { BoardCommentAnswersModule } from './api/boardCommentAnswers/BoardCommentAnswers.module';
 import { BoardCommentsModule } from './api/boardComments/boardComments.module';
 import { BoardsModule } from './api/boards/boards.module';
-import { CardInfosModule } from './api/cardInfos/cardInfos.module';
 import { CategoriesModule } from './api/categories/categories.module';
 import { InquiriesModule } from './api/inquiries/inquiries.module';
 import { InquiriesAnswerModule } from './api/inquiriesAnswer/inquiriesAnswer.module';
@@ -26,7 +25,6 @@ import { EventsModule } from './api/events/events.module';
     BoardCommentAnswersModule,
     BoardCommentsModule,
     BoardsModule,
-    CardInfosModule,
     CategoriesModule,
     EventsModule,
     InquiriesModule,
