@@ -21,11 +21,11 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
-    "@nestjs/cli": "^9.0.0",
     "@elastic/elasticsearch": "^8.2.1",
     "@golevelup/nestjs-graphql-request": "^0.1.13",
     "@google-cloud/storage": "^6.3.0",
     "@nestjs/apollo": "^10.0.17",
+    "@nestjs/cli": "^9.0.0",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.0.0",

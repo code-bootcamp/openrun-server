@@ -2,6 +2,11 @@ import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { User } from 'src/api/users/entities/user.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
+export enum PAYMENT_STATUS_ENUM {
+  PAYMENT = 'PAYMENT',
+  CANCEL = 'CANCEL',
+}
+
 @Entity()
 @ObjectType()
 export class Payment {
@@ -13,7 +18,7 @@ export class Payment {
   @Field(() => String)
   impUid: string;
 
-  @Column()
+  @Column({ type: 'enum', enum: PAYMENT_STATUS_ENUM })
   @Field(() => String)
   status: string;
 
