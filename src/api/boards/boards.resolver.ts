@@ -8,10 +8,11 @@ import { Board } from './entities/board.entity';
 export class BoardsResolver {
   constructor(private readonly boardsService: BoardsService) {}
 
-  // @Query(() => [Board])
-  // featchBoards() {
-  //   return this.boardsService.findAll();
-  // }
+  @Query(() => [Board])
+  featchBoards() {
+    return this.boardsService.findAll();
+  }
+
   @Query(() => Board)
   fetchBoard(
     @Args('boardId') boardId: string, //
