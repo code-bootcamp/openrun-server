@@ -1,4 +1,4 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -17,10 +17,10 @@ export class Location {
   addressDetail: string;
 
   @Column()
-  @Field(() => Int)
+  @Field(() => Float)
   lat: number;
 
   @Column()
-  @Field(() => Int)
+  @Field(() => Float)
   lng: number;
 }

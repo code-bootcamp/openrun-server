@@ -23,4 +23,10 @@ export class CreateBoardInput {
 
   @Field(() => [String])
   imgUrl: string[];
+
+  @Field(() => String)
+  tag: string;
+
+  @Field(() => String)
+  category: string;
 }

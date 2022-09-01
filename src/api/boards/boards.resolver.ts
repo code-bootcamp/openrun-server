@@ -20,10 +20,10 @@ export class BoardsResolver {
   ) {
     // const user = context.req.user;
     const user = {
-      email: '123@123.com',
+      email: '12@na.com',
       id: 'abc',
     };
 
-    return this.boardsService.create({ createBoardInput });
+    return this.boardsService.create({ createBoardInput, email: user.email });
   }
 }

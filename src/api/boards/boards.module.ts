@@ -1,8 +1,13 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CardInfosService } from '../cardInfos/cardInfos.service';
+import { CardInfo } from '../cardInfos/entities/cardInfo.entity';
+import { Category } from '../categories/entities/category.entity';
 import { Image } from '../images/entities/image.entity';
 import { Location } from '../locations/entities/location.entity';
+import { Tag } from '../tags/entities/tag.entity';
 import { User } from '../users/entities/user.entity';
+import { UsersService } from '../users/users.service';
 import { BoardsResolver } from './boards.resolver';
 import { BoardsService } from './boards.service';
 import { Board } from './entities/board.entity';
@@ -14,12 +19,17 @@ import { Board } from './entities/board.entity';
       Image,
       Location,
       User,
+      Category,
+      Tag,
+      CardInfo,
     ]),
   ],
 
   providers: [
     BoardsResolver, //
     BoardsService,
+    UsersService,
+    CardInfosService,
   ],
 })
 export class BoardsModule {}
