@@ -36,7 +36,7 @@ export class PaymentsResolver {
 
   @Query(() => Int)
   fetchPayments() {
-    return this.paymentsService.findAll();
+    return this.paymentsService.findTotalAmount();
   }
 
   @Mutation(() => Payment)
