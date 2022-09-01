@@ -35,6 +35,25 @@ export class PaymentsService {
     return result;
   }
 
+  async findAll() {
+    const payment = await this.paymentRepository.find({
+      where: { status: PAYMENT_STATUS_ENUM.PAYMENT },
+    });
+    const cancel = await this.paymentRepository.find({
+      where: { status: PAYMENT_STATUS_ENUM.CANCEL },
+    });
+
+    const plus = payment.reduce((acc, cur) => {
+      return acc + cur.amount;
+    }, 0);
+
+    const minus = cancel.reduce((acc, cur) => {
+      return acc + cur.amount;
+    }, 0);
+
+    return plus + minus;
+  }
+
   async create({ impUid, amount, user: _user }) {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
