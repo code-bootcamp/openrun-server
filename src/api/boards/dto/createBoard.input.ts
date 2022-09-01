@@ -22,7 +22,7 @@ export class CreateBoardInput {
   location: LocationInput;
 
   @Field(() => [String])
-  imgUrl: string[];
+  image: string[];
 
   @Field(() => String)
   tag: string;

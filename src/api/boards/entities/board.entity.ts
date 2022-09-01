@@ -1,5 +1,6 @@
 import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Category } from 'src/api/categories/entities/category.entity';
+import { Image } from 'src/api/images/entities/image.entity';
 import { Location } from 'src/api/locations/entities/location.entity';
 import { Tag } from 'src/api/tags/entities/tag.entity';
 import { User } from 'src/api/users/entities/user.entity';
@@ -11,6 +12,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -90,6 +92,7 @@ export class Board {
   @Field(() => Location)
   location: Location;
 
-  @Field(() => [String])
-  imgUrl: string[];
+  @OneToMany(() => Image, (image) => image.board)
+  @Field(() => [Image])
+  image: Image[];
 }

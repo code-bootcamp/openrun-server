@@ -1,6 +1,5 @@
 import { Resolver, Query, Mutation, Args, Context } from '@nestjs/graphql';
-import e from 'express';
-import { stringify } from 'querystring';
+
 import { BoardsService } from './boards.service';
 import { CreateBoardInput } from './dto/createBoard.input';
 import { Board } from './entities/board.entity';
@@ -13,10 +12,17 @@ export class BoardsResolver {
   // featchBoards() {
   //   return this.boardsService.findAll();
   // }
+  @Query(() => Board)
+  fetchBoard(
+    @Args('boardId') boardId: string, //
+  ) {
+    return this.boardsService.findOne({ boardId });
+  }
+
   @Mutation(() => Board)
   createBoard(
     @Args('createBoardInput') createBoardInput: CreateBoardInput, //
-    @Context() context: any, //
+    //@Context() context: any
   ) {
     // const user = context.req.user;
     const user = {

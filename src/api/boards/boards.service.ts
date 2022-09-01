@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Image } from '../images/entities/image.entity';
@@ -31,7 +31,7 @@ export class BoardsService {
 
   //게시물 등록
   async create({ createBoardInput, email }) {
-    const { tag, category, imgUrl, location } = createBoardInput;
+    const { tag, category, image, location } = createBoardInput;
 
     const resultUser = await this.userService.findOne({
       email,
@@ -65,30 +65,50 @@ export class BoardsService {
     });
 
     const arr = [];
-    for (let i = 0; i < imgUrl.length; i++) {
+    for (let i = 0; i < image.length; i++) {
       const temp = await this.imageRepository.save({
-        url: imgUrl[i],
+        url: image[i],
         board: result.id,
       });
 
-      arr.push(temp.url);
+      arr.push(temp);
     }
     console.log(result);
     return {
       ...result,
-      imgUrl: arr,
+      image: arr,
       location: resultLocation,
       tag: resultTag,
       category: resultCategory,
       user: resultUser,
     };
   }
-
-  findOne({ id }) {
-    return this.boardRepository.findOne({
-      where: { id: id },
-      relations: ['imgUrl', 'tag', 'category'],
+  //상세페이지
+  async findOne({ boardId }) {
+    // const result = await this.imageRepository.find({
+    //   where: { board: { id: boardId } },
+    // });
+    // const arr = [];
+    // for (let i = 0; i < result.length; i++) {
+    //   arr.push(result[i].url);
+    // }
+    // console.log(arr);
+    const resultBoard = await this.boardRepository.findOne({
+      where: { id: boardId },
+      // relations: ['tag', 'category', 'user', 'location', 'image'],
+      relations: {
+        tag: true,
+        category: true,
+        user: true,
+        location: true,
+        image: true,
+      },
     });
+    return resultBoard;
+    // return {
+    //   ...resultBoard,
+    //   image: arr,
+    // };
   }
 
   async findAll() {
@@ -97,6 +117,3 @@ export class BoardsService {
     });
   }
 }
-
-// fetchBoard 나와야할 것들
-// 제목, 이미지, 날짜, 시간, 유저 아이디, 찜 , 위치정보, 태그,
