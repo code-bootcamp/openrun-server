@@ -1,5 +1,6 @@
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { IContext } from 'src/commons/types/type';
+import { UsersService } from '../users/users.service';
 import { CreateInquiryInput } from './dto/inquiry.input';
 import { Inquiry } from './entities/inquiry.entity';
 import { InquiriesService } from './inquiries.service';
@@ -8,6 +9,8 @@ import { InquiriesService } from './inquiries.service';
 export class InquiriesResolver {
   constructor(
     private readonly inquiriesService: InquiriesService, //
+
+    private readonly usersService: UsersService,
   ) {}
 
   @Mutation(() => Inquiry)
@@ -28,5 +31,16 @@ export class InquiriesResolver {
   @Query(() => [Inquiry])
   fetchInquiry() {
     return this.inquiriesService.findAll();
+  }
+
+  @Query(() => [Inquiry])
+  async fetchLoginUserInquiry(
+    @Context() context: IContext, //
+  ) {
+    const contextUser = context.req.user;
+
+    const user = await this.usersService.findOne({ email: contextUser.email });
+
+    return this.inquiriesService.findUserInquiry({ user });
   }
 }

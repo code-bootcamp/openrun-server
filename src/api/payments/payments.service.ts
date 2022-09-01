@@ -92,14 +92,6 @@ export class PaymentsService {
     }
   }
 
-  async findOne({ email }) {
-    const result = await this.userRepository.findOne({
-      where: { email },
-    });
-
-    return result;
-  }
-
   async cancel({ impUid, user, amount }) {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
