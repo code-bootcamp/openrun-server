@@ -17,6 +17,22 @@ export class InquiriesService {
     private readonly boardsService: BoardsService,
   ) {}
 
+  findAll() {
+    return this.inquiryRepository.find({
+      relations: {
+        user: {
+          cardInfo: true,
+        },
+        board: {
+          tag: true,
+          category: true,
+          user: true,
+          location: true,
+        },
+      },
+    });
+  }
+
   async create({ createInquiryInput, email, boardId }) {
     const user = await this.usersService.findOne({
       email,
