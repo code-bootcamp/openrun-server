@@ -31,11 +31,23 @@ export class BoardsService {
 
   //게시물 등록
   async create({ createBoardInput, email }) {
-    const { tag, category, image, location } = createBoardInput;
+    const {
+      tag, //
+      category,
+      image,
+      location,
+      price,
+      ...board
+    } = createBoardInput;
 
     const resultUser = await this.userService.findOne({
       email,
     });
+
+    await this.userRepository.update(
+      { email: email },
+      { point: resultUser.point - price },
+    );
 
     const resultLocation = await this.locationRepository.save({
       ...location,
@@ -65,6 +77,7 @@ export class BoardsService {
 
       arr.push(temp);
     }
+
     return {
       ...result,
       image: arr,
@@ -76,17 +89,9 @@ export class BoardsService {
   }
   //상세페이지
   async findOne({ boardId }) {
-    // const result = await this.imageRepository.find({
-    //   where: { board: { id: boardId } },
-    // });
-    // const arr = [];
-    // for (let i = 0; i < result.length; i++) {
-    //   arr.push(result[i].url);
-    // }
-    // console.log(arr);
     const resultBoard = await this.boardRepository.findOne({
       where: { id: boardId },
-      // relations: ['tag', 'category', 'user', 'location', 'image'],
+
       relations: {
         tag: true,
         category: true,
@@ -96,10 +101,6 @@ export class BoardsService {
       },
     });
     return resultBoard;
-    // return {
-    //   ...resultBoard,
-    //   image: arr,
-    // };
   }
 
   async findAll() {
