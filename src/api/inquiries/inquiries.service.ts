@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BoardsService } from '../boards/boards.service';
-import { Board } from '../boards/entities/board.entity';
 import { UsersService } from '../users/users.service';
 import { Inquiry } from './entities/inquiry.entity';
 
@@ -33,19 +32,36 @@ export class InquiriesService {
     });
   }
 
+  async findUserInquiry({ user }) {
+    const result = await this.inquiryRepository.find({
+      where: { user: { id: user.id } },
+      relations: {
+        board: {
+          tag: true,
+          category: true,
+          user: true,
+          location: true,
+          image: true,
+        },
+      },
+    });
+
+    return result;
+  }
+
   async create({ createInquiryInput, email, boardId }) {
     const user = await this.usersService.findOne({
       email,
     });
 
-    // const board = await this.boardsService.findOne({
-    //   boardId,
-    // });
+    const board = await this.boardsService.findOne({
+      boardId,
+    });
 
     return this.inquiryRepository.save({
       ...createInquiryInput,
       user,
-      //   board,
+      board,
     });
   }
 }

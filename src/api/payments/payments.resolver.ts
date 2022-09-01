@@ -5,6 +5,7 @@ import {
 import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { IContext } from 'src/commons/types/type';
 import { IamportsService } from '../iamport/iamport.service';
+import { UsersService } from '../users/users.service';
 import { Payment, PAYMENT_STATUS_ENUM } from './entities/payment.entity';
 import { PaymentsService } from './payments.service';
 
@@ -13,6 +14,7 @@ export class PaymentsResolver {
   constructor(
     private readonly paymentsService: PaymentsService, //
     private readonly iamportService: IamportsService, //
+    private readonly usersService: UsersService,
   ) {}
 
   @Query(() => [Payment])
@@ -25,7 +27,7 @@ export class PaymentsResolver {
     //   sub: '1d81836c-5aa3-4caf-a6e3-b9d03c7090c7',
     // };
 
-    const isUser = await this.paymentsService.findOne({ email: user.email });
+    const isUser = await this.usersService.findOne({ email: user.email });
 
     const result = await this.paymentsService.findPointCharge({
       id: isUser.id,
@@ -59,7 +61,7 @@ export class PaymentsResolver {
 
     const isValid = await this.iamportService.checkPayment({ token, impUid });
 
-    const isUser = await this.paymentsService.findOne({ email: user.email });
+    const isUser = await this.usersService.findOne({ email: user.email });
 
     if (typeof isValid === 'string')
       throw new UnprocessableEntityException(isValid);
@@ -80,7 +82,7 @@ export class PaymentsResolver {
     if (isCanceled.status === PAYMENT_STATUS_ENUM.CANCEL)
       throw new UnprocessableEntityException('이미 환불 되었습니다.');
 
-    const isUser = await this.paymentsService.findOne({ email: user.email });
+    const isUser = await this.usersService.findOne({ email: user.email });
 
     if (isUser.id !== isCanceled.user.id)
       throw new UnprocessableEntityException('유저 정보가 일치하지 않습니다.');
