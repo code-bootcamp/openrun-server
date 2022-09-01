@@ -62,7 +62,7 @@ export class User {
   @Field(() => Float)
   rating: number;
 
-  @Column({ nullable: true })
+  @Column()
   @Field(() => String)
   profileImg: string;
 
