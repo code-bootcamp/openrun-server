@@ -6,14 +6,13 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
-  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
 @Entity()
 @ObjectType()
-export class InquiriesAnswer {
+export class InquiryAnswer {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => String)
   id: string;
@@ -26,10 +25,6 @@ export class InquiriesAnswer {
   @OneToOne(() => Inquiry)
   @Field(() => Inquiry)
   inquiry: Inquiry;
-
-  @ManyToOne(() => User)
-  @Field(() => User)
-  user: User;
 
   @CreateDateColumn()
   @Field(() => Date)
