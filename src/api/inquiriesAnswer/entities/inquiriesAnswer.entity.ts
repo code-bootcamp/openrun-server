@@ -3,6 +3,7 @@ import { Inquiry } from 'src/api/inquiries/entities/inquiry.entity';
 import { User } from 'src/api/users/entities/user.entity';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -29,4 +30,8 @@ export class InquiriesAnswer {
   @ManyToOne(() => User)
   @Field(() => User)
   user: User;
+
+  @CreateDateColumn()
+  @Field(() => Date)
+  createdAt: Date;
 }
