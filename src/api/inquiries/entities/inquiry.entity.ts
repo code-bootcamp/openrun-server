@@ -1,7 +1,13 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Board } from 'src/api/boards/entities/board.entity';
 import { User } from 'src/api/users/entities/user.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -29,4 +35,8 @@ export class Inquiry {
   @ManyToOne(() => Board)
   @Field(() => Board)
   board: Board;
+
+  @CreateDateColumn()
+  @Field(() => Date)
+  createdAt: Date;
 }
