@@ -10,21 +10,22 @@ export class JwtAccessStrategy extends PassportStrategy(Strategy, 'access') {
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: 'openrunAccessKey',
+      secretOrKey: 'myAccessKey',
       passReqToCallback: true,
     });
   }
 
   async validate(request, payload) {
     const accessToken = request.headers.authorization.replace(
-      'Bearer',
+      'Bearer ',
       'accessToken:',
     );
 
     //redis에 accessToken이 있는지 확인(데이터가 있다면 로그아웃된 계정)
     const accessCache = await this.cacheManager.get(accessToken);
+    console.log(accessCache);
     if (accessCache) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('이미 로그아웃된 계정입니다.');
     }
 
     return {

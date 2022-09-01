@@ -14,7 +14,7 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
         const refreshToken = cookie.replace('refreshToken=', '');
         return refreshToken;
       },
-      secretOrKey: 'openrunRefreshKey',
+      secretOrKey: 'myRefreshKey',
       passReqToCallback: true,
     });
   }
@@ -25,7 +25,7 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
     //redis에 refreshToken이 있는지 확인(데이터가 있다면 로그아웃된 계정)
     const refreshAccess = await this.cacheManager.get(refreshToken);
     if (refreshAccess) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('이미 로그아웃된 계정입니다.');
     }
 
     return {
