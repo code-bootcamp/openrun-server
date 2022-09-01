@@ -37,24 +37,16 @@ export class BoardsService {
       email,
     });
 
-    console.log(resultUser);
-
     const resultLocation = await this.locationRepository.save({
       ...location,
     });
 
-    console.log(resultLocation);
-
     const resultTag = await this.tagRepository.save({
       name: tag,
     });
-
-    console.log(resultTag);
     const resultCategory = await this.categoryRepository.save({
       name: category,
     });
-
-    console.log(resultCategory);
 
     const result = await this.boardRepository.save({
       ...createBoardInput,
@@ -73,7 +65,6 @@ export class BoardsService {
 
       arr.push(temp);
     }
-    console.log(result);
     return {
       ...result,
       image: arr,
@@ -112,8 +103,9 @@ export class BoardsService {
   }
 
   async findAll() {
-    return await this.boardRepository.find({
-      //   relations: [],
+    const resultBoards = await this.boardRepository.find({
+      relations: ['tag', 'category', 'location', 'image', 'user'],
     });
+    return resultBoards;
   }
 }
