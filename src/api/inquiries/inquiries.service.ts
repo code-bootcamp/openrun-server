@@ -49,6 +49,12 @@ export class InquiriesService {
     return result;
   }
 
+  async findOne({ inquiryId }) {
+    return await this.inquiryRepository.findOne({
+      where: { id: inquiryId },
+    });
+  }
+
   async create({ createInquiryInput, email, boardId }) {
     const user = await this.usersService.findOne({
       email,
