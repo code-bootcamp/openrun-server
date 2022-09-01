@@ -1,5 +1,5 @@
 import { NotFoundException } from '@nestjs/common';
-import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { IContext } from 'src/commons/types/type';
 import { InquiriesService } from '../inquiries/inquiries.service';
 import { UsersService } from '../users/users.service';
@@ -20,7 +20,11 @@ export class InquiriesAnswerResolver {
     @Args('contents') contents: string,
     @Context() context: IContext,
   ) {
-    const user = context.req.user;
+    // const user = context.req.user;
+
+    const user = {
+      email: 'asd@asd.com',
+    };
 
     const result = await this.usersService.findOne({
       email: user.email,
@@ -31,5 +35,12 @@ export class InquiriesAnswerResolver {
     const inquiry = await this.inquiriesService.findOne({ inquiryId });
 
     return this.inquiriesAnswerService.create({ inquiry, contents });
+  }
+
+  @Query(() => [InquiryAnswer])
+  fetchLoginUserInquiryAnswer(
+    @Context() context: IContext, //
+  ) {
+    const user = context.req.user;
   }
 }

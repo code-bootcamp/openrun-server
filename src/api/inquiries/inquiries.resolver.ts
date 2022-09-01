@@ -19,7 +19,11 @@ export class InquiriesResolver {
     @Args('boardId') boardId: string,
     @Context() context: IContext,
   ) {
-    const user = context.req.user;
+    // const user = context.req.user;
+
+    const user = {
+      email: 'asd@asd.com',
+    };
 
     return this.inquiriesService.create({
       createInquiryInput,
