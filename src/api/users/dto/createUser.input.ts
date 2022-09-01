@@ -15,6 +15,9 @@ export class CreateUserInput {
   @Field(() => String)
   phone: string;
 
+  @Field(() => String)
+  profileImg: string;
+
   @Field(() => CreateCardInfoInput)
   cardInfoInput: CreateCardInfoInput;
 }
