@@ -35,7 +35,7 @@ export class PaymentsService {
     return result;
   }
 
-  async findAll() {
+  async findTotalAmount() {
     const payment = await this.paymentRepository.find({
       where: { status: PAYMENT_STATUS_ENUM.PAYMENT },
     });
