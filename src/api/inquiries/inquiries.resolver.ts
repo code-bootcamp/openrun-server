@@ -1,4 +1,4 @@
-import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { IContext } from 'src/commons/types/type';
 import { CreateInquiryInput } from './dto/inquiry.input';
 import { Inquiry } from './entities/inquiry.entity';
@@ -23,5 +23,10 @@ export class InquiriesResolver {
       email: user.email,
       boardId,
     });
+  }
+
+  @Query(() => [Inquiry])
+  fetchInquiry() {
+    return this.inquiriesService.findAll();
   }
 }

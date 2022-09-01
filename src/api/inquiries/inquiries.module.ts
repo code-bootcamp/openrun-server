@@ -4,8 +4,10 @@ import { BoardsService } from '../boards/boards.service';
 import { Board } from '../boards/entities/board.entity';
 import { CardInfosService } from '../cardInfos/cardInfos.service';
 import { CardInfo } from '../cardInfos/entities/cardInfo.entity';
+import { Category } from '../categories/entities/category.entity';
 import { Image } from '../images/entities/image.entity';
 import { Location } from '../locations/entities/location.entity';
+import { Tag } from '../tags/entities/tag.entity';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { Inquiry } from './entities/inquiry.entity';
@@ -21,6 +23,8 @@ import { InquiriesService } from './inquiries.service';
       Board,
       Image,
       Location,
+      Tag,
+      Category,
     ]),
   ],
   providers: [
