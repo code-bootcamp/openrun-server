@@ -1,9 +1,10 @@
-import { UnprocessableEntityException } from '@nestjs/common';
+import { UnprocessableEntityException, UseGuards } from '@nestjs/common';
 import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { IContext } from 'src/commons/types/type';
 import { UsersService } from '../users/users.service';
 import { AuthsService } from './auths.service';
 import * as bcrypt from 'bcrypt';
+import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 
 @Resolver()
 export class AuthsResolver {
@@ -38,5 +39,15 @@ export class AuthsResolver {
 
     //AccessToken 생성하여 리턴
     return this.authsService.getAccessToken({ user });
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => Boolean)
+  logout(@Context() context: IContext) {
+    const accessToken = context.req.headers['authorization'].split(' ')[1];
+    const refreshToken = context.req.headers['cookie'].split('=')[1];
+
+    //Token검증 및 Redis저장
+    return this.authsService.checkAndSaveToken({ accessToken, refreshToken });
   }
 }

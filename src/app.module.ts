@@ -1,5 +1,5 @@
 import { ApolloDriver } from '@nestjs/apollo';
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { AppController } from './app.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -20,6 +20,8 @@ import { TokensModule } from './api/tokens/tokens.module';
 import { UsersModule } from './api/users/users.module';
 import { EventsModule } from './api/events/events.module';
 import { AuthsModule } from './api/auths/auths.module';
+import { RedisClientOptions } from 'redis';
+import * as redisStore from 'cache-manager-redis-store';
 
 @Module({
   imports: [
@@ -61,6 +63,11 @@ import { AuthsModule } from './api/auths/auths.module';
       entities: [__dirname + '/api/**/*.entity.*'],
       synchronize: true,
       logging: true,
+    }),
+    CacheModule.register<RedisClientOptions>({
+      store: redisStore,
+      url: 'redis://my-redis:6379',
+      isGlobal: true,
     }),
   ],
   controllers: [AppController],
