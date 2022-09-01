@@ -19,9 +19,11 @@ import { TagsModule } from './api/tags/tags.module';
 import { TokensModule } from './api/tokens/tokens.module';
 import { UsersModule } from './api/users/users.module';
 import { EventsModule } from './api/events/events.module';
+import { AuthsModule } from './api/auths/auths.module';
 
 @Module({
   imports: [
+    AuthsModule,
     BoardCommentAnswersModule,
     BoardCommentsModule,
     BoardsModule,
