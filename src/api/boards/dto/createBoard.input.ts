@@ -12,9 +12,6 @@ export class CreateBoardInput {
   @Field(() => Int)
   price: number;
 
-  @Field(() => Int)
-  productPrice: number;
-
   @Field(() => String)
   storeName: string;
 
@@ -26,4 +23,7 @@ export class CreateBoardInput {
 
   @Field(() => String)
   category: string;
+
+  @Field(() => Date)
+  dueDate: Date;
 }
