@@ -55,10 +55,6 @@ export class Board {
   price: number;
 
   @Column()
-  @Field(() => Int)
-  productPrice: number;
-
-  @Column()
   @Field(() => String)
   storeName: string;
 

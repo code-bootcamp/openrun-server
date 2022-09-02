@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CardInfosService } from '../cardInfos/cardInfos.service';
 import { CardInfo } from '../cardInfos/entities/cardInfo.entity';
+import { CategoriesService } from '../categories/categories.service';
 import { Category } from '../categories/entities/category.entity';
 import { Image } from '../images/entities/image.entity';
 import { Location } from '../locations/entities/location.entity';
@@ -28,6 +29,7 @@ import { Board } from './entities/board.entity';
     BoardsService,
     UsersService,
     CardInfosService,
+    CategoriesService,
   ],
 })
 export class BoardsModule {}

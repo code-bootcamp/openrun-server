@@ -4,6 +4,7 @@ import { BoardsService } from '../boards/boards.service';
 import { Board } from '../boards/entities/board.entity';
 import { CardInfosService } from '../cardInfos/cardInfos.service';
 import { CardInfo } from '../cardInfos/entities/cardInfo.entity';
+import { CategoriesService } from '../categories/categories.service';
 import { Category } from '../categories/entities/category.entity';
 import { Image } from '../images/entities/image.entity';
 import { Inquiry } from '../inquiries/entities/inquiry.entity';
@@ -35,6 +36,7 @@ import { InquiriesAnswerService } from './inquiriesAnswer.service';
     UsersService,
     BoardsService,
     CardInfosService,
+    CategoriesService,
   ],
 })
 export class InquiriesAnswerModule {}

@@ -5,6 +5,7 @@ import { IContext } from 'src/commons/types/type';
 
 import { BoardsService } from './boards.service';
 import { CreateBoardInput } from './dto/createBoard.input';
+import { updateBoardInput } from './dto/updateBoard.input';
 import { Board } from './entities/board.entity';
 
 @Resolver()
@@ -12,7 +13,7 @@ export class BoardsResolver {
   constructor(private readonly boardsService: BoardsService) {}
 
   @Query(() => [Board])
-  featchBoards() {
+  fetchBoards() {
     return this.boardsService.findAll();
   }
 
@@ -32,5 +33,13 @@ export class BoardsResolver {
     const user = context.req.user;
 
     return this.boardsService.create({ createBoardInput, email: user.email });
+  }
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => Board)
+  async updateBoard(
+    @Args('boardId') boardId: string,
+    @Args('updateBoardInput') updateBoardInput: updateBoardInput,
+  ) {
+    return await this.boardsService.update({ boardId, updateBoardInput });
   }
 }

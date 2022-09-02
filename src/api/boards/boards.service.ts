@@ -3,10 +3,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Image } from '../images/entities/image.entity';
 import { User } from '../users/entities/user.entity';
-import { Board } from './entities/board.entity';
+import { Board, BOARD_STATUS_ENUM } from './entities/board.entity';
 import { Location } from '../locations/entities/location.entity';
 import { Category } from '../categories/entities/category.entity';
 import { UsersService } from '../users/users.service';
+import { CategoriesService } from '../categories/categories.service';
 // import { Category } from '../categories/entities/category.entity';
 
 @Injectable()
@@ -23,6 +24,7 @@ export class BoardsService {
     @InjectRepository(Category)
     private readonly categoryRepository: Repository<Category>,
     private readonly userService: UsersService,
+    private readonly categoriesService: CategoriesService,
   ) {}
 
   //게시물 등록
@@ -38,6 +40,7 @@ export class BoardsService {
     const resultUser = await this.userService.findOne({
       email,
     });
+    // const resultCategory = await this.categoriesService.findOne({ name });
 
     const resultPoint = await this.userService.updatePoint({
       resultUser,
@@ -49,8 +52,8 @@ export class BoardsService {
       ...location,
     });
 
-    const resultCategory = await this.categoryRepository.save({
-      name: category,
+    const resultCategory = await this.categoriesService.findOne({
+      categoryName: category,
     });
 
     const result = await this.boardRepository.save({
@@ -78,6 +81,27 @@ export class BoardsService {
       user: resultUser,
     };
   }
+
+  async update({ boardId, updateBoardInput }) {
+    const newBoard = await this.boardRepository.findOne({
+      where: { id: boardId },
+    });
+    const result = {
+      ...newBoard,
+      id: boardId,
+      ...updateBoardInput,
+    };
+    return await this.boardRepository.save(result);
+  }
+
+  async updateStatus({ board }) {
+    const result = await this.boardRepository.save({
+      ...board,
+      status: BOARD_STATUS_ENUM.INPROGRESS,
+    });
+    return result;
+  }
+
   //상세페이지
   async findOne({ boardId }) {
     const resultBoard = await this.boardRepository.findOne({
@@ -92,7 +116,6 @@ export class BoardsService {
     });
     return resultBoard;
   }
-
   async findAll() {
     const resultBoards = await this.boardRepository.find({
       relations: ['category', 'location', 'image', 'user'],
