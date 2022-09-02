@@ -1,5 +1,6 @@
-import { NotFoundException } from '@nestjs/common';
+import { NotFoundException, UseGuards } from '@nestjs/common';
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { IContext } from 'src/commons/types/type';
 import { InquiriesService } from '../inquiries/inquiries.service';
 import { UsersService } from '../users/users.service';
@@ -14,17 +15,14 @@ export class InquiriesAnswerResolver {
     private readonly usersService: UsersService,
   ) {}
 
+  @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => InquiryAnswer)
   async createInquiryAnswer(
     @Args('inquiryId') inquiryId: string, //
     @Args('contents') contents: string,
     @Context() context: IContext,
   ) {
-    // const user = context.req.user;
-
-    const user = {
-      email: 'asd@asd.com',
-    };
+    const user = context.req.user;
 
     const result = await this.usersService.findOne({
       email: user.email,
@@ -37,10 +35,13 @@ export class InquiriesAnswerResolver {
     return this.inquiriesAnswerService.create({ inquiry, contents });
   }
 
+  @UseGuards(GqlAuthAccessGuard)
   @Query(() => [InquiryAnswer])
-  fetchLoginUserInquiryAnswer(
-    @Context() context: IContext, //
+  async fetchLoginUserInquiryAnswer(
+    @Args('inquiryId') inquiryId: string, //
   ) {
-    const user = context.req.user;
+    const inquiry = await this.inquiriesService.findOne({ inquiryId });
+
+    return this.inquiriesAnswerService.findAllByInquiry({ inquiry });
   }
 }
