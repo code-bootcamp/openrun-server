@@ -9,7 +9,6 @@ import { Image } from '../images/entities/image.entity';
 import { Inquiry } from '../inquiries/entities/inquiry.entity';
 import { InquiriesService } from '../inquiries/inquiries.service';
 import { Location } from '../locations/entities/location.entity';
-import { Tag } from '../tags/entities/tag.entity';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { InquiryAnswer } from './entities/inquiryAnswer.entity';
@@ -25,7 +24,6 @@ import { InquiriesAnswerService } from './inquiriesAnswer.service';
       Board,
       Image,
       Location,
-      Tag,
       Category,
       CardInfo,
     ]),

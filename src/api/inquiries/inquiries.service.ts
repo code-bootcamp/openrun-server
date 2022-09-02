@@ -23,7 +23,6 @@ export class InquiriesService {
           cardInfo: true,
         },
         board: {
-          tag: true,
           category: true,
           user: true,
           location: true,
@@ -37,7 +36,6 @@ export class InquiriesService {
       where: { user: { id: user.id } },
       relations: {
         board: {
-          tag: true,
           category: true,
           user: true,
           location: true,
