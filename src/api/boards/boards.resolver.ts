@@ -1,6 +1,7 @@
 import { UseGuards } from '@nestjs/common';
 import { Resolver, Query, Mutation, Args, Context } from '@nestjs/graphql';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
+import { IContext } from 'src/commons/types/type';
 
 import { BoardsService } from './boards.service';
 import { CreateBoardInput } from './dto/createBoard.input';
@@ -26,7 +27,7 @@ export class BoardsResolver {
   @Mutation(() => Board)
   createBoard(
     @Args('createBoardInput') createBoardInput: CreateBoardInput, //
-    @Context() context: any,
+    @Context() context: IContext,
   ) {
     const user = context.req.user;
 
