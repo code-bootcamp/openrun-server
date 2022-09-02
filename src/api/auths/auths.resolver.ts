@@ -4,7 +4,10 @@ import { IContext } from 'src/commons/types/type';
 import { UsersService } from '../users/users.service';
 import { AuthsService } from './auths.service';
 import * as bcrypt from 'bcrypt';
-import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
+import {
+  GqlAuthAccessGuard,
+  GqlAuthRefreshGuard,
+} from 'src/commons/auth/gql-auth.guard';
 
 @Resolver()
 export class AuthsResolver {
@@ -49,5 +52,13 @@ export class AuthsResolver {
 
     //Token검증 및 Redis저장
     return this.authsService.checkAndSaveToken({ accessToken, refreshToken });
+  }
+
+  @UseGuards(GqlAuthRefreshGuard)
+  @Mutation(() => String)
+  restoreAccessToken(
+    @Context() context: IContext, //
+  ) {
+    return this.authsService.getAccessToken({ user: context.req.user });
   }
 }

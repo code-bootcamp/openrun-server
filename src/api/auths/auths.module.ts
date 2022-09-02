@@ -17,6 +17,7 @@ import { AuthsService } from './auths.service';
   ],
   providers: [
     JwtAccessStrategy,
+    JwtRefreshStrategy,
     AuthsResolver, //
     AuthsService,
     UsersService,
