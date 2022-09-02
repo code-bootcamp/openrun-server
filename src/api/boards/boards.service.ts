@@ -44,10 +44,16 @@ export class BoardsService {
       email,
     });
 
-    await this.userRepository.update(
-      { email: email },
-      { point: resultUser.point - price },
-    );
+    const resultPoint = await this.userService.updatePoint({
+      resultUser,
+      price,
+      flag: false,
+    });
+
+    // await this.userRepository.update(
+    //   { email: email },
+    //   { point: resultUser.point - price },
+    // );
 
     const resultLocation = await this.locationRepository.save({
       ...location,
