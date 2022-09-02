@@ -45,13 +45,6 @@ export class BoardsService {
       flag: false,
     });
 
-    //정렬
-    const pagination = await this.boardRepository.createQueryBuilder('board');
-    // .select('board.createdAt')
-    // .orderBy('board.createdAt', 'DESC');
-    console.log('========================');
-    console.log(pagination);
-
     const resultLocation = await this.locationRepository.save({
       ...location,
     });
