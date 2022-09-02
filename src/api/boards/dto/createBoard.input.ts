@@ -25,8 +25,5 @@ export class CreateBoardInput {
   image: string[];
 
   @Field(() => String)
-  tag: string;
-
-  @Field(() => String)
   category: string;
 }

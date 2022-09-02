@@ -5,10 +5,8 @@ import { Image } from '../images/entities/image.entity';
 import { User } from '../users/entities/user.entity';
 import { Board } from './entities/board.entity';
 import { Location } from '../locations/entities/location.entity';
-import { Tag } from '../tags/entities/tag.entity';
 import { Category } from '../categories/entities/category.entity';
 import { UsersService } from '../users/users.service';
-// import { Tag } from '../tags/entities/tag.entity';
 // import { Category } from '../categories/entities/category.entity';
 
 @Injectable()
@@ -22,8 +20,6 @@ export class BoardsService {
     private readonly imageRepository: Repository<Image>,
     @InjectRepository(Location)
     private readonly locationRepository: Repository<Location>,
-    @InjectRepository(Tag)
-    private readonly tagRepository: Repository<Tag>,
     @InjectRepository(Category)
     private readonly categoryRepository: Repository<Category>,
     private readonly userService: UsersService,
@@ -32,8 +28,7 @@ export class BoardsService {
   //게시물 등록
   async create({ createBoardInput, email }) {
     const {
-      tag, //
-      category,
+      category, //
       image,
       location,
       price,
@@ -59,9 +54,6 @@ export class BoardsService {
       ...location,
     });
 
-    const resultTag = await this.tagRepository.save({
-      name: tag,
-    });
     const resultCategory = await this.categoryRepository.save({
       name: category,
     });
@@ -69,7 +61,6 @@ export class BoardsService {
     const result = await this.boardRepository.save({
       ...createBoardInput,
       location: resultLocation,
-      tag: resultTag,
       category: resultCategory,
       user: resultUser,
     });
@@ -88,7 +79,6 @@ export class BoardsService {
       ...result,
       image: arr,
       location: resultLocation,
-      tag: resultTag,
       category: resultCategory,
       user: resultUser,
     };
@@ -99,7 +89,6 @@ export class BoardsService {
       where: { id: boardId },
 
       relations: {
-        tag: true,
         category: true,
         user: true,
         location: true,
@@ -111,7 +100,7 @@ export class BoardsService {
 
   async findAll() {
     const resultBoards = await this.boardRepository.find({
-      relations: ['tag', 'category', 'location', 'image', 'user'],
+      relations: ['category', 'location', 'image', 'user'],
     });
     return resultBoards;
   }

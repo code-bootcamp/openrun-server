@@ -4,8 +4,6 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { AppController } from './app.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import { BoardCommentAnswersModule } from './api/boardCommentAnswers/BoardCommentAnswers.module';
-import { BoardCommentsModule } from './api/boardComments/boardComments.module';
 import { BoardsModule } from './api/boards/boards.module';
 import { CategoriesModule } from './api/categories/categories.module';
 import { InquiriesModule } from './api/inquiries/inquiries.module';
@@ -15,7 +13,6 @@ import { PaymentHistoriesModule } from './api/paymentHistories/paymentHistories.
 import { PaymentsModule } from './api/payments/payments.module';
 import { ReportsModule } from './api/reports/reports.module';
 import { RunnersModule } from './api/runners/runners.module';
-import { TagsModule } from './api/tags/tags.module';
 import { TokensModule } from './api/tokens/tokens.module';
 import { UsersModule } from './api/users/users.module';
 import { EventsModule } from './api/events/events.module';
@@ -26,8 +23,6 @@ import * as redisStore from 'cache-manager-redis-store';
 @Module({
   imports: [
     AuthsModule,
-    BoardCommentAnswersModule,
-    BoardCommentsModule,
     BoardsModule,
     CategoriesModule,
     EventsModule,
@@ -38,7 +33,6 @@ import * as redisStore from 'cache-manager-redis-store';
     PaymentsModule,
     ReportsModule,
     RunnersModule,
-    TagsModule,
     TokensModule,
     UsersModule,
     ConfigModule.forRoot({

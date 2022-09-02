@@ -2,7 +2,6 @@ import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Category } from 'src/api/categories/entities/category.entity';
 import { Image } from 'src/api/images/entities/image.entity';
 import { Location } from 'src/api/locations/entities/location.entity';
-import { Tag } from 'src/api/tags/entities/tag.entity';
 import { User } from 'src/api/users/entities/user.entity';
 
 import {
@@ -78,10 +77,6 @@ export class Board {
   @ManyToOne(() => User)
   @Field(() => User)
   user: User;
-
-  @ManyToOne(() => Tag)
-  @Field(() => Tag)
-  tag: Tag;
 
   @ManyToOne(() => Category)
   @Field(() => Category)

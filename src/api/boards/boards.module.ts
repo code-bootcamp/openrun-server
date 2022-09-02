@@ -5,7 +5,6 @@ import { CardInfo } from '../cardInfos/entities/cardInfo.entity';
 import { Category } from '../categories/entities/category.entity';
 import { Image } from '../images/entities/image.entity';
 import { Location } from '../locations/entities/location.entity';
-import { Tag } from '../tags/entities/tag.entity';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { BoardsResolver } from './boards.resolver';
@@ -20,7 +19,6 @@ import { Board } from './entities/board.entity';
       Location,
       User,
       Category,
-      Tag,
       CardInfo,
     ]),
   ],
