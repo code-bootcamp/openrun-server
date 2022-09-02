@@ -30,10 +30,13 @@ export class UsersResolver {
     });
 
     //패스워드 Encrypt
-    const { password, cardInfoInput, ...user } = createUserInput;
+    const { password, ...user } = createUserInput;
     const hashedPwd = await bcrypt.hash(password, 10);
 
     //유저 생성
-    return this.usersService.create({ _user: user, hashedPwd, cardInfoInput });
+    return this.usersService.create({
+      _user: user,
+      hashedPwd,
+    });
   }
 }

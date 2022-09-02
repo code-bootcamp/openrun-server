@@ -10,13 +10,10 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  JoinColumn,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Min } from 'class-validator';
-import { CardInfo } from 'src/api/cardInfos/entities/cardInfo.entity';
 
 export enum USER_LOGINTYPE_ENUM {
   BASIC = '기본',
@@ -94,9 +91,4 @@ export class User {
   @DeleteDateColumn()
   @Field(() => Date)
   deleteAt: Date;
-
-  @JoinColumn()
-  @OneToOne(() => CardInfo)
-  @Field(() => CardInfo)
-  cardInfo: CardInfo;
 }

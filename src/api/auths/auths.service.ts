@@ -30,7 +30,7 @@ export class AuthsService {
   getAccessToken({ user }) {
     const accessToken = this.jwtService.sign(
       { email: user.email, sub: user.id },
-      { secret: 'myAccessKey', expiresIn: '1h' },
+      { secret: 'myAccessKey', expiresIn: '4h' },
     );
     return accessToken;
   }
@@ -82,5 +82,22 @@ export class AuthsService {
     } catch (error) {
       throw new ConflictException('해당 사용자의 토큰이 올바르지 않습니다.');
     }
+  }
+
+  async socialLogin({ _user, res, loginType }) {
+    //가입 확인
+    let user = await this.usersService.findOne({ email: _user.email });
+
+    //회원 가입
+    if (!user) {
+      user = await this.usersService.createSocialUser({
+        _user,
+        loginType,
+      });
+    }
+
+    //로그인
+    this.setRefreshToken({ user, res });
+    res.redirect('http://localhost:5500/frontend/login/index.html');
   }
 }
