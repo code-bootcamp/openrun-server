@@ -38,6 +38,20 @@ export class UsersService {
     return userResult;
   }
 
+  updatePoint({ resultUser, price, flag }) {
+    if (flag) {
+      return this.userRepository.update(
+        { email: resultUser.email },
+        { point: resultUser.point + price },
+      );
+    } else {
+      return this.userRepository.update(
+        { email: resultUser.email },
+        { point: resultUser.point - price },
+      );
+    }
+  }
+
   async checkIsUserAvailable({ email }) {
     const result = await this.userRepository.findOne({ where: { email } });
     if (result) {
