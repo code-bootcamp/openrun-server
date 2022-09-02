@@ -16,16 +16,11 @@ export class UsersService {
   async findOne({ email }) {
     return await this.userRepository.findOne({
       where: { email },
-      relations: ['cardInfo'],
+      // relations: ['cardInfo'],
     });
   }
 
-  async create({ _user, hashedPwd: password, cardInfoInput }) {
-    //CardInfo저장
-    const cardInfoResult = await this.cardInfosService.create({
-      ...cardInfoInput,
-    });
-
+  async create({ _user, hashedPwd: password }) {
     //User 데이터 저장
     const userResult = await this.userRepository.save({
       ..._user,
@@ -33,9 +28,19 @@ export class UsersService {
       point: 0,
       rating: 0,
       report: 0,
-      cardInfo: cardInfoResult,
     });
     return userResult;
+  }
+
+  async createSocialUser({ _user, loginType }) {
+    //User 데이터 저장(Social Login용)
+    return this.userRepository.save({
+      loginType,
+      ..._user,
+      point: 0,
+      rating: 0,
+      report: 0,
+    });
   }
 
   updatePoint({ resultUser, price, flag }) {
