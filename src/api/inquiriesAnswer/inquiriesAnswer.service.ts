@@ -16,4 +16,10 @@ export class InquiriesAnswerService {
       inquiry,
     });
   }
+
+  findAllByInquiry({ inquiry }) {
+    return this.inquiriesAnswerRepository.find({
+      where: { inquiry: { id: inquiry.id } },
+    });
+  }
 }
