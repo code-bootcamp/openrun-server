@@ -45,11 +45,6 @@ export class BoardsService {
       flag: false,
     });
 
-    // await this.userRepository.update(
-    //   { email: email },
-    //   { point: resultUser.point - price },
-    // );
-
     const resultLocation = await this.locationRepository.save({
       ...location,
     });
@@ -101,7 +96,9 @@ export class BoardsService {
   async findAll() {
     const resultBoards = await this.boardRepository.find({
       relations: ['category', 'location', 'image', 'user'],
+      order: { updatedAt: 'DESC' },
     });
+    console.log(resultBoards);
     return resultBoards;
   }
 }

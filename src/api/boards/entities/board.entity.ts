@@ -74,6 +74,10 @@ export class Board {
   @Field(() => Date)
   deletedAt: Date;
 
+  @Column()
+  @Field(() => Date)
+  dueDate: Date;
+
   @ManyToOne(() => User)
   @Field(() => User)
   user: User;
