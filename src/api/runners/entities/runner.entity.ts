@@ -5,6 +5,7 @@ import {
   Column,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -26,7 +27,7 @@ export class Runner {
   user: User;
 
   @JoinColumn()
-  @OneToOne(() => Board)
+  @ManyToOne(() => Board)
   @Field(() => Board)
   board: Board;
 }
