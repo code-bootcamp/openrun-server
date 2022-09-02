@@ -1,5 +1,5 @@
-import { UseGuards } from '@nestjs/common';
-import { Context, Query, Resolver } from '@nestjs/graphql';
+import { NotFoundException, UseGuards } from '@nestjs/common';
+import { Context, Int, Query, Resolver } from '@nestjs/graphql';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { IContext } from 'src/commons/types/type';
 import { UsersService } from '../users/users.service';
@@ -12,6 +12,7 @@ export class PaymentHistoriesResolver {
     private readonly usersService: UsersService, //
     private readonly paymentHistoiesService: PaymentHistoriesService,
   ) {}
+
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => [PaymentHistory])
   async fetchPaymentHistory(
@@ -24,5 +25,19 @@ export class PaymentHistoriesResolver {
     });
 
     return this.paymentHistoiesService.findAllByUser({ user: findUser });
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => Int)
+  async fetchPaymentHistoryCount(
+    @Context() context: IContext, //
+  ) {
+    const user = context.req.user;
+
+    const findUser = await this.usersService.findOne({ email: user.email });
+
+    if (!findUser.isAdmin) throw new NotFoundException('관리자가 아닙니다.');
+
+    return (await this.paymentHistoiesService.findAll()).length;
   }
 }

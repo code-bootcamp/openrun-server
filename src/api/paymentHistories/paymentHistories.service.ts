@@ -15,4 +15,8 @@ export class PaymentHistoriesService {
       where: { user: { id: user.id } },
     });
   }
+
+  findAll() {
+    return this.paymentHistoryRepository.find();
+  }
 }
