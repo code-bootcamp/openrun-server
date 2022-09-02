@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Board, BOARD_STATUS_ENUM } from '../boards/entities/board.entity';
 import { Runner } from './entities/runner.entity';
 
 @Injectable()
@@ -8,6 +9,9 @@ export class RunnersService {
   constructor(
     @InjectRepository(Runner)
     private readonly runnerRepository: Repository<Runner>, //
+
+    @InjectRepository(Board)
+    private readonly boardReposioty: Repository<Board>,
   ) {}
 
   create({ user, board }) {
@@ -26,5 +30,35 @@ export class RunnersService {
       },
     });
     return result.map((el) => el.user);
+  }
+
+  async findOneByBoardUser({ boardId, userId }) {
+    const result = await this.runnerRepository.findOne({
+      where: { board: { id: boardId }, user: { id: userId } },
+      relations: {
+        user: true,
+        board: true,
+      },
+    });
+    console.log('runner: ', result);
+    return result;
+  }
+
+  async updateIsChecked({ runner }) {
+    const result = await this.runnerRepository.save({
+      ...runner,
+      isChecked: true,
+    });
+
+    return result;
+  }
+
+  async updateStatus({ board }) {
+    const result = await this.boardReposioty.save({
+      ...board,
+      status: BOARD_STATUS_ENUM.INPROGRESS,
+    });
+
+    return result;
   }
 }
