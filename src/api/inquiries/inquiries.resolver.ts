@@ -1,4 +1,6 @@
+import { UseGuards } from '@nestjs/common';
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { IContext } from 'src/commons/types/type';
 import { UsersService } from '../users/users.service';
 import { CreateInquiryInput } from './dto/inquiry.input';
@@ -13,17 +15,14 @@ export class InquiriesResolver {
     private readonly usersService: UsersService,
   ) {}
 
+  @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Inquiry)
   createInquiry(
     @Args('createInquiryInput') createInquiryInput: CreateInquiryInput, //
     @Args('boardId') boardId: string,
     @Context() context: IContext,
   ) {
-    // const user = context.req.user;
-
-    const user = {
-      email: 'asd@asd.com',
-    };
+    const user = context.req.user;
 
     return this.inquiriesService.create({
       createInquiryInput,
@@ -37,6 +36,7 @@ export class InquiriesResolver {
     return this.inquiriesService.findAll();
   }
 
+  @UseGuards(GqlAuthAccessGuard)
   @Query(() => [Inquiry])
   async fetchLoginUserInquiry(
     @Context() context: IContext, //

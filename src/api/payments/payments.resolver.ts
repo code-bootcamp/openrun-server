@@ -1,8 +1,10 @@
 import {
   ConflictException,
   UnprocessableEntityException,
+  UseGuards,
 } from '@nestjs/common';
 import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { IContext } from 'src/commons/types/type';
 import { IamportsService } from '../iamport/iamport.service';
 import { UsersService } from '../users/users.service';
@@ -17,15 +19,12 @@ export class PaymentsResolver {
     private readonly usersService: UsersService,
   ) {}
 
+  @UseGuards(GqlAuthAccessGuard)
   @Query(() => [Payment])
   async fetchPointChargeHistory(
     @Context() context: IContext, //
   ) {
     const user = context.req.user;
-    // const user = {
-    //   email: 'asd@asd.com',
-    //   sub: '1d81836c-5aa3-4caf-a6e3-b9d03c7090c7',
-    // };
 
     const isUser = await this.usersService.findOne({ email: user.email });
 
@@ -41,6 +40,7 @@ export class PaymentsResolver {
     return this.paymentsService.findTotalAmount();
   }
 
+  @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Payment)
   async chargePayment(
     @Args('impUid') impUid: string,
@@ -48,10 +48,6 @@ export class PaymentsResolver {
     @Context() context: IContext, //
   ) {
     const user = context.req.user;
-    // const user = {
-    //   email: 'asd@asd.com',
-    //   sub: '1d81836c-5aa3-4caf-a6e3-b9d03c7090c7',
-    // };
 
     const isPayment = await this.paymentsService.findPayment({ impUid });
 
@@ -69,6 +65,7 @@ export class PaymentsResolver {
     return this.paymentsService.create({ impUid, amount, user: isUser });
   }
 
+  @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Payment)
   async cancelPayment(
     @Args('impUid') impUid: string,
