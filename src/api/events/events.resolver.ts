@@ -24,4 +24,11 @@ export class EventsResolver {
 
     return this.eventsService.findAllByOld();
   }
+
+  @Query(() => Event)
+  fetchEvent(
+    @Args('eventId') eventId: string, //
+  ) {
+    return this.eventsService.findOne({ eventId });
+  }
 }

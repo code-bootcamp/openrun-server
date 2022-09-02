@@ -10,6 +10,12 @@ export class EventsService {
     private readonly eventRpository: Repository<Event>, //
   ) {}
 
+  findOne({ eventId }) {
+    return this.eventRpository.findOne({
+      where: { id: eventId },
+    });
+  }
+
   findAll() {
     return this.eventRpository.find({
       order: {
