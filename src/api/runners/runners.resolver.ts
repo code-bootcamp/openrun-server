@@ -1,8 +1,9 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { IContext } from 'src/commons/types/type';
 import { BoardsService } from '../boards/boards.service';
+import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { Runner } from './entities/runner.entity';
 import { RunnersService } from './runners.service';
@@ -28,5 +29,12 @@ export class RunnersResolver {
     const board = await this.boardsService.findOne({ boardId });
 
     return this.runnersService.create({ user: findUser, board });
+  }
+
+  @Query(() => [User])
+  fetchRunnerByBoard(
+    @Args('boardId') boardId: string, //
+  ) {
+    return this.runnersService.findAllByBoard({ boardId });
   }
 }
