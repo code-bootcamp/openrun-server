@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CardInfosService } from '../cardInfos/cardInfos.service';
-import { CardInfo } from '../cardInfos/entities/cardInfo.entity';
+import { BankAccountsService } from '../bankAccounts/bankAccounts.service';
+import { BankAccount } from '../bankAccounts/entities/ bankAccount.entity';
 import { IamportsService } from '../iamport/iamport.service';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
@@ -14,7 +14,7 @@ import { PaymentsService } from './payments.service';
     TypeOrmModule.forFeature([
       Payment, //
       User,
-      CardInfo,
+      BankAccount,
     ]),
   ],
   providers: [
@@ -22,7 +22,7 @@ import { PaymentsService } from './payments.service';
     PaymentsService,
     IamportsService,
     UsersService,
-    CardInfosService,
+    BankAccountsService,
   ],
 })
 export class PaymentsModule {}

@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CardInfosService } from '../cardInfos/cardInfos.service';
-import { CardInfo } from '../cardInfos/entities/cardInfo.entity';
+import { BankAccountsService } from '../bankAccounts/bankAccounts.service';
+import { BankAccount } from '../bankAccounts/entities/ bankAccount.entity';
 import { CategoriesService } from '../categories/categories.service';
 import { Category } from '../categories/entities/category.entity';
 import { Image } from '../images/entities/image.entity';
@@ -20,7 +20,7 @@ import { Board } from './entities/board.entity';
       Location,
       User,
       Category,
-      CardInfo,
+      BankAccount,
     ]),
   ],
 
@@ -28,7 +28,7 @@ import { Board } from './entities/board.entity';
     BoardsResolver, //
     BoardsService,
     UsersService,
-    CardInfosService,
+    BankAccountsService,
     CategoriesService,
   ],
 })

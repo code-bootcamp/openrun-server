@@ -27,9 +27,4 @@ export class BankAccount {
   @DeleteDateColumn()
   @Field(() => Date)
   deletedAt: Date;
-
-  @JoinColumn()
-  @OneToOne(() => User)
-  @Field(() => User)
-  user: User;
 }
