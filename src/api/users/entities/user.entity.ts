@@ -45,7 +45,7 @@ export class User {
   @Field(() => String)
   nickName: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => String)
   phone: string;
 
