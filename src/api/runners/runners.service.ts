@@ -9,9 +9,6 @@ export class RunnersService {
   constructor(
     @InjectRepository(Runner)
     private readonly runnerRepository: Repository<Runner>, //
-
-    @InjectRepository(Board)
-    private readonly boardReposioty: Repository<Board>,
   ) {}
 
   create({ user, board }) {
@@ -48,15 +45,6 @@ export class RunnersService {
     const result = await this.runnerRepository.save({
       ...runner,
       isChecked: true,
-    });
-
-    return result;
-  }
-
-  async updateStatus({ board }) {
-    const result = await this.boardReposioty.save({
-      ...board,
-      status: BOARD_STATUS_ENUM.INPROGRESS,
     });
 
     return result;
