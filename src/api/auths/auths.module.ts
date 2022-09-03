@@ -4,6 +4,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtAccessStrategy } from 'src/commons/auth/jwt-access.strategy';
 import { JwtRefreshStrategy } from 'src/commons/auth/jwt-refresh.strategy';
 import { JwtGoogleStrategy } from 'src/commons/auth/jwt-social-google.strategy';
+import { JwtKakaoStrategy } from 'src/commons/auth/jwt-social-kakao.strategy';
+import { JwtNaverStrategy } from 'src/commons/auth/jwt-social-naver.strategy';
 import { CardInfosService } from '../cardInfos/cardInfos.service';
 import { CardInfo } from '../cardInfos/entities/cardInfo.entity';
 import { User } from '../users/entities/user.entity';
@@ -21,6 +23,8 @@ import { AuthsService } from './auths.service';
     JwtAccessStrategy,
     JwtRefreshStrategy,
     JwtGoogleStrategy,
+    JwtKakaoStrategy,
+    JwtNaverStrategy,
     AuthsResolver, //
     AuthsService,
     UsersService,

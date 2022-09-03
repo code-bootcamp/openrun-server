@@ -21,4 +21,30 @@ export class AuthsController {
       loginType: USER_LOGINTYPE_ENUM.GOOGLE,
     });
   }
+
+  @Get('/login/kakao')
+  @UseGuards(AuthGuard('kakao'))
+  loginKakao(
+    @Req() req: Request & IOAuthUser, //
+    @Res() res: Response,
+  ) {
+    this.authsService.socialLogin({
+      _user: req.user,
+      res,
+      loginType: USER_LOGINTYPE_ENUM.KAKAO,
+    });
+  }
+
+  @Get('/login/naver')
+  @UseGuards(AuthGuard('naver'))
+  loginNaver(
+    @Req() req: Request & IOAuthUser, //
+    @Res() res: Response,
+  ) {
+    this.authsService.socialLogin({
+      _user: req.user,
+      res,
+      loginType: USER_LOGINTYPE_ENUM.NAVER,
+    });
+  }
 }
