@@ -36,4 +36,7 @@ export class Event {
   @CreateDateColumn()
   @Field(() => Date)
   createdAt: Date;
+
+  @Column()
+  fakeData: string;
 }

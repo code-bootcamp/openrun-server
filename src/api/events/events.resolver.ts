@@ -9,19 +9,8 @@ export class EventsResolver {
     private readonly eventsService: EventsService, //
   ) {}
 
-  @Mutation(() => Event)
-  createEvent(
-    @Args('createEventInput') createEventInput: CreateEventInput, //
-  ) {
-    return this.eventsService.create({ createEventInput });
-  }
-
-  @Query(() => [Event])
-  fetchEvents(
-    @Args('dueDate', { nullable: true }) dueDate: boolean, //
-  ) {
-    if (!dueDate) return this.eventsService.findAll();
-
+  @Query(() => [[Event]])
+  fetchEvents() {
     return this.eventsService.findAllByOld();
   }
 
@@ -30,5 +19,19 @@ export class EventsResolver {
     @Args('eventId') eventId: string, //
   ) {
     return this.eventsService.findOne({ eventId });
+  }
+
+  @Query(() => [Event])
+  fetchEventsByDate(
+    @Args('date') date: Date, //
+  ) {
+    return this.eventsService.findByDate({ date });
+  }
+
+  @Mutation(() => Event)
+  createEvent(
+    @Args('createEventInput') createEventInput: CreateEventInput, //
+  ) {
+    return this.eventsService.create({ createEventInput });
   }
 }
