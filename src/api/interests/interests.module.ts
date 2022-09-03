@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { BankAccountsService } from '../bankAccounts/bankAccounts.service';
+import { BankAccount } from '../bankAccounts/entities/ bankAccount.entity';
 import { BoardsService } from '../boards/boards.service';
 import { Board } from '../boards/entities/board.entity';
-import { CardInfosService } from '../cardInfos/cardInfos.service';
-import { CardInfo } from '../cardInfos/entities/cardInfo.entity';
 import { CategoriesService } from '../categories/categories.service';
 import { Category } from '../categories/entities/category.entity';
 import { Image } from '../images/entities/image.entity';
@@ -18,7 +18,7 @@ import { InterestsService } from './interests.service';
   imports: [
     TypeOrmModule.forFeature([
       User, //
-      CardInfo,
+      BankAccount,
       Interest,
       Board,
       Image,
@@ -31,7 +31,7 @@ import { InterestsService } from './interests.service';
     InterestsResolver, //
     InterestsService,
     UsersService,
-    CardInfosService,
+    BankAccountsService,
     BoardsService,
     CategoriesService,
   ],

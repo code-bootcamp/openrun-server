@@ -3,17 +3,15 @@ import { CreateUserInput } from './dto/createUser.input';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
 import * as bcrypt from 'bcrypt';
+import { UpdateUserInput } from './dto/updateUser.input';
+import { UseGuards } from '@nestjs/common';
+import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 
 @Resolver()
 export class UsersResolver {
   constructor(
     private readonly usersService: UsersService, //
   ) {}
-
-  @Query(() => String)
-  helloWorld() {
-    return 'helloworld!';
-  }
 
   @Mutation(() => User)
   async createUser(
@@ -38,5 +36,13 @@ export class UsersResolver {
       _user: user,
       hashedPwd,
     });
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => User)
+  updateLoginUser(
+    @Args('updateUserInput') updateUserInput: UpdateUserInput, //
+  ) {
+    // return this.usersService.updateUser({ updateUserInput });
   }
 }

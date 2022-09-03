@@ -1,17 +1,17 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CardInfosService } from '../cardInfos/cardInfos.service';
-import { CardInfo } from '../cardInfos/entities/cardInfo.entity';
+import { BankAccountsService } from '../bankAccounts/bankAccounts.service';
+import { BankAccount } from '../bankAccounts/entities/ bankAccount.entity';
 import { User } from './entities/user.entity';
 import { UsersResolver } from './users.resolver';
 import { UsersService } from './users.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, CardInfo])],
+  imports: [TypeOrmModule.forFeature([User, BankAccount])],
   providers: [
     UsersService, //
     UsersResolver,
-    CardInfosService,
+    BankAccountsService,
   ],
 })
 export class UsersModule {}

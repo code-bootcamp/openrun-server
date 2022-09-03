@@ -1,13 +1,13 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CardInfosService } from '../cardInfos/cardInfos.service';
+import { BankAccountsService } from '../bankAccounts/bankAccounts.service';
 import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
-    private readonly cardInfosService: CardInfosService,
+    private readonly bankAccountsService: BankAccountsService,
 
     @InjectRepository(User)
     private readonly userRepository: Repository<User>, //
@@ -16,7 +16,7 @@ export class UsersService {
   async findOne({ email }) {
     return await this.userRepository.findOne({
       where: { email },
-      // relations: ['cardInfo'],
+      relations: ['bankAccount'],
     });
   }
 
@@ -42,6 +42,10 @@ export class UsersService {
       report: 0,
     });
   }
+
+  // updateUser({ updateUserInput }) {
+  //   const {bankAccount, ..._user}
+  // }
 
   updatePoint({ resultUser, price, flag }) {
     if (flag) {

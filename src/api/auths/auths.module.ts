@@ -6,8 +6,8 @@ import { JwtRefreshStrategy } from 'src/commons/auth/jwt-refresh.strategy';
 import { JwtGoogleStrategy } from 'src/commons/auth/jwt-social-google.strategy';
 import { JwtKakaoStrategy } from 'src/commons/auth/jwt-social-kakao.strategy';
 import { JwtNaverStrategy } from 'src/commons/auth/jwt-social-naver.strategy';
-import { CardInfosService } from '../cardInfos/cardInfos.service';
-import { CardInfo } from '../cardInfos/entities/cardInfo.entity';
+import { BankAccountsService } from '../bankAccounts/bankAccounts.service';
+import { BankAccount } from '../bankAccounts/entities/ bankAccount.entity';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { AuthsController } from './auths.controller';
@@ -17,7 +17,7 @@ import { AuthsService } from './auths.service';
 @Module({
   imports: [
     JwtModule.register({}), //
-    TypeOrmModule.forFeature([User, CardInfo]),
+    TypeOrmModule.forFeature([User, BankAccount]),
   ],
   providers: [
     JwtAccessStrategy,
@@ -27,8 +27,8 @@ import { AuthsService } from './auths.service';
     JwtNaverStrategy,
     AuthsResolver, //
     AuthsService,
+    BankAccountsService,
     UsersService,
-    CardInfosService,
   ],
   controllers: [AuthsController],
 })
