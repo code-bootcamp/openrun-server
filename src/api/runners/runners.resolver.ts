@@ -60,7 +60,7 @@ export class RunnersResolver {
     if (runner.isChecked)
       throw new NotFoundException('이미 신청한 게시물 입니다.');
 
-    this.runnersService.updateStatus({ board });
+    this.boardsService.updateStatus({ board });
 
     return this.runnersService.updateIsChecked({ runner });
   }
