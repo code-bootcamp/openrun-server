@@ -16,25 +16,77 @@ export class EventsService {
     });
   }
 
-  findAll() {
-    return this.eventRpository.find({
+  async findAll() {
+    const result = await this.eventRpository.find({
       order: {
         createdAt: 'DESC',
       },
     });
+
+    return result;
   }
 
   async findAllByOld() {
-    const result = await this.eventRpository.find();
-    const curDate = new Date();
-    const old = result.map((el) => {
-      const event = Math.abs(el.period.getTime() / 1000);
-      const cur = Math.abs(curDate.getTime() / 1000);
-      return { ...el, temp: Math.ceil(event) - Math.ceil(cur) };
+    const result = await this.eventRpository.find({
+      order: { period: 'ASC' },
     });
-    old.sort((a, b) => a.temp - b.temp);
 
-    return old;
+    const boards = [];
+
+    const date = new Date();
+
+    const cur = Math.abs(date.getTime() / 1000);
+
+    let arr = [];
+    for (let i = 0; i < result.length; i++) {
+      const p = result[i].period;
+      const e = Math.abs(p.getTime() / 1000);
+      console.log(e, cur);
+      if (Math.ceil(e) < Math.ceil(cur)) continue;
+
+      if (result[i + 1] === undefined) {
+        arr.push(result[i]);
+        boards.push(arr);
+        arr = [];
+        continue;
+      }
+      if (result[i - 1] === undefined) {
+        arr.push(result[i]);
+        if (result[i].fakeData !== result[i + 1].fakeData) {
+          boards.push(arr);
+          arr = [];
+        }
+        continue;
+      }
+      if (
+        result[i].fakeData === result[i + 1].fakeData ||
+        result[i].fakeData === result[i - 1].fakeData
+      ) {
+        arr.push(result[i]);
+      }
+
+      if (
+        result[i].fakeData !== result[i + 1].fakeData ||
+        result[i].fakeData !== result[i - 1].fakeData
+      ) {
+        arr.push(result[i]);
+      }
+
+      if (result[i].fakeData !== result[i + 1].fakeData) {
+        boards.push(arr);
+
+        arr = [];
+      }
+    }
+
+    return boards;
+  }
+
+  findByDate({ date }) {
+    const strDate = JSON.stringify(date).slice(1, 11);
+    return this.eventRpository.find({
+      where: { fakeData: strDate },
+    });
   }
 
   create({ createEventInput }) {

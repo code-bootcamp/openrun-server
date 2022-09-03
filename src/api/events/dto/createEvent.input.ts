@@ -16,4 +16,7 @@ export class CreateEventInput {
 
   @Field(() => String)
   image: string;
+
+  @Field(() => String)
+  fakeData: string;
 }
