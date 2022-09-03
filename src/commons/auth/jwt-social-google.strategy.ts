@@ -14,8 +14,8 @@ export class JwtGoogleStrategy extends PassportStrategy(Strategy, 'google') {
   validate(accessToken, refreshToken, profile) {
     return {
       email: profile.emails[0].value,
-      password: '1234',
-      nickName: profile.displayName,
+      password: 'socialLogin',
+      nickName: '', //profile.displayName -> unique를 풀거나 닉네임을 없애야함..
       phone: '',
       profileImg: 'default.png',
     };
