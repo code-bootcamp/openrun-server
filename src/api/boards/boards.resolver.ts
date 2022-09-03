@@ -13,8 +13,13 @@ export class BoardsResolver {
   constructor(private readonly boardsService: BoardsService) {}
 
   @Query(() => [Board])
-  fetchBoards() {
-    return this.boardsService.findAll();
+  fetchBoards(@Args('dateType') dateType: string) {
+    if (dateType === '최신순')
+      //
+      return this.boardsService.findAllbyCurrent();
+    if (dateType === '마감 임박순')
+      //
+      return this.boardsService.findAllbyLimit();
   }
 
   @Query(() => Board)

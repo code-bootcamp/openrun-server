@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { MoreThan, Repository } from 'typeorm';
 import { Image } from '../images/entities/image.entity';
 import { User } from '../users/entities/user.entity';
 import { Board, BOARD_STATUS_ENUM } from './entities/board.entity';
@@ -116,12 +116,27 @@ export class BoardsService {
     });
     return resultBoard;
   }
-  async findAll() {
+  async findAllbyCurrent() {
+    const today = new Date();
+
     const resultBoards = await this.boardRepository.find({
       relations: ['category', 'location', 'image', 'user'],
       order: { updatedAt: 'DESC' },
+      where: {
+        dueDate: MoreThan(today),
+      },
     });
-    console.log(resultBoards);
+    return resultBoards;
+  }
+  async findAllbyLimit() {
+    const today = new Date();
+    const resultBoards = await this.boardRepository.find({
+      relations: ['category', 'location', 'image', 'user'],
+      order: { dueDate: 'ASC' },
+      where: {
+        dueDate: MoreThan(today),
+      },
+    });
     return resultBoards;
   }
 }
