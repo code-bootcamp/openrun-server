@@ -47,4 +47,11 @@ export class BoardsResolver {
   ) {
     return await this.boardsService.update({ boardId, updateBoardInput });
   }
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => Boolean)
+  deleteBoard(
+    @Args('boardId') boardId: string, //
+  ) {
+    return this.boardsService.delete({ boardId });
+  }
 }

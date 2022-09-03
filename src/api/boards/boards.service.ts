@@ -139,4 +139,9 @@ export class BoardsService {
     });
     return resultBoards;
   }
+
+  async delete({ boardId }) {
+    const result = await this.boardRepository.softDelete({ id: boardId });
+    return result.affected ? true : false;
+  }
 }
