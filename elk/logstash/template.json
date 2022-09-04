@@ -1,0 +1,50 @@
+{
+  "template": "template_event",
+  "index_patterns": ["*"],
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "my_ngram_analyzer": {
+          "tokenizer": "my_ngram_tokenizer"
+        }
+      },
+      "tokenizer": {
+        "my_ngram_tokenizer": {
+          "type": "nGram",
+          "min_gram": "1",
+          "max_gram": "10"
+        }
+      }
+    },
+    "max_ngram_diff": "20"
+  },
+  "mappings": {
+    "properties": {
+      "id": {
+        "type": "text"
+      },
+      "contents": {
+        "type": "text"
+      },
+      "title": {
+        "type": "text",
+        "analyzer": "my_ngram_analyzer"
+      },
+      "location": {
+        "type": "text"
+      },
+      "image": {
+        "type": "text"
+      },
+      "fakeData": {
+        "type": "text"
+      },
+      "createdAt": {
+        "type": "long"
+      },
+      "period": {
+        "type": "text"
+      }
+    }
+  }
+}
