@@ -23,7 +23,6 @@ export class JwtAccessStrategy extends PassportStrategy(Strategy, 'access') {
 
     //redis에 accessToken이 있는지 확인(데이터가 있다면 로그아웃된 계정)
     const accessCache = await this.cacheManager.get(accessToken);
-    console.log(accessCache);
     if (accessCache) {
       throw new UnauthorizedException('이미 로그아웃된 계정입니다.');
     }

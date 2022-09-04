@@ -1,8 +1,7 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { CreateUserInput } from './dto/createUser.input';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
-import * as bcrypt from 'bcrypt';
 import { UpdateUserInput } from './dto/updateUser.input';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
@@ -29,7 +28,7 @@ export class UsersResolver {
 
     //패스워드 Encrypt
     const { password, ...user } = createUserInput;
-    const hashedPwd = await bcrypt.hash(password, 10);
+    const hashedPwd = await this.usersService.encryptPassword({ password });
 
     //유저 생성
     return this.usersService.create({
@@ -43,6 +42,6 @@ export class UsersResolver {
   updateLoginUser(
     @Args('updateUserInput') updateUserInput: UpdateUserInput, //
   ) {
-    // return this.usersService.updateUser({ updateUserInput });
+    return this.usersService.updateUser({ updateUserInput });
   }
 }
