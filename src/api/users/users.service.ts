@@ -14,6 +14,12 @@ export class UsersService {
     private readonly userRepository: Repository<User>, //
   ) {}
 
+  findAll() {
+    return this.userRepository.find({
+      relations: ['bankAccount'],
+    });
+  }
+
   async findOne({ email }) {
     return await this.userRepository.findOne({
       where: { email },
