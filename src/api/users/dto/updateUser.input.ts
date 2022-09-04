@@ -4,6 +4,6 @@ import { CreateUserInput } from './createUser.input';
 
 @InputType()
 export class UpdateUserInput extends PartialType(CreateUserInput) {
-  @Field(() => BankAccountInput)
+  @Field({ name: 'bankAccount', nullable: true })
   bankAccount: BankAccountInput;
 }

@@ -10,10 +10,21 @@ export class BankAccountsService {
     private readonly bankAccountRepository: Repository<BankAccount>,
   ) {}
 
-  async create({ company, bankAccountNum }) {
-    return await this.bankAccountRepository.save({
+  create({ company, bankAccountNum }) {
+    return this.bankAccountRepository.save({
       company,
       bankAccountNum,
+    });
+  }
+
+  async update({ bankAccountId, bankAccount }) {
+    const account = await this.bankAccountRepository.findOne({
+      where: { id: bankAccountId },
+    });
+
+    return this.bankAccountRepository.save({
+      ...account,
+      ...bankAccount,
     });
   }
 }

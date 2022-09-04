@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BankAccountsService } from '../bankAccounts/bankAccounts.service';
 import { User } from './entities/user.entity';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -43,9 +44,43 @@ export class UsersService {
     });
   }
 
-  // updateUser({ updateUserInput }) {
-  //   const {bankAccount, ..._user}
-  // }
+  async updateUser({ updateUserInput }) {
+    const { email, password, bankAccount, ...userInput } = updateUserInput;
+
+    //user 정보 찾기
+    const user = await this.findOne({ email });
+
+    //비밀번호 Encrypt
+    const hashedPwd = await this.encryptPassword({ password });
+
+    //등록된 bankAccount가 있는지 확인하고 없으면 신규 추가, 있다면 업데이트
+    let account = {};
+    if (bankAccount) {
+      if (!user.bankAccount) {
+        account = await this.bankAccountsService.create({ ...bankAccount });
+      } else {
+        account = await this.bankAccountsService.update({
+          bankAccountId: user.bankAccount.id,
+          bankAccount,
+        });
+      }
+
+      //bankAccount가 있는 user 정보 업데이트
+      return this.userRepository.save({
+        ...user,
+        password: hashedPwd,
+        ...userInput,
+        bankAccount: account,
+      });
+    } else {
+      //bankAccount가 없는 user 정보 업데이트
+      return this.userRepository.save({
+        ...user,
+        password: hashedPwd,
+        ...userInput,
+      });
+    }
+  }
 
   updatePoint({ resultUser, price, flag }) {
     if (flag) {
@@ -73,5 +108,10 @@ export class UsersService {
     if (result) {
       throw new UnprocessableEntityException('이미 사용중인 닉네임입니다.');
     }
+  }
+
+  async encryptPassword({ password }) {
+    const hashedPwd = await bcrypt.hash(password, 10);
+    return hashedPwd;
   }
 }
