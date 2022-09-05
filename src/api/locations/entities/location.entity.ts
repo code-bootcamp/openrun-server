@@ -27,6 +27,6 @@ export class Location {
   lng: number;
 
   @Column({ nullable: true })
-  @Field(() => Number)
-  postNum: number;
+  @Field(() => String)
+  postNum: string;
 }

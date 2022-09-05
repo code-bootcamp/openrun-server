@@ -15,5 +15,5 @@ export class LocationInput {
   lng: number;
 
   @Field(() => Int, { nullable: true, name: 'postNum' })
-  postNum: number;
+  postNum: string;
 }
