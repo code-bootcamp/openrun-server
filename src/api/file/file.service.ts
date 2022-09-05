@@ -6,6 +6,24 @@ import { isCompositeType } from 'graphql';
 
 @Injectable()
 export class FileService {
+  async uploadOne({ file }) {
+    const storage = new Storage({
+      projectId: process.env.GOOGLE_BUCKET_PROJECT_ID,
+      keyFilename: process.env.GOOGLE_BUCKET_KEY_FILENAME,
+    }).bucket(process.env.GOOGLE_BUCKET);
+
+    const result = await new Promise((resolve, reject) => {
+      const fname = `profile/${getToday()}/${uuidv4()}/origin/${file.filename}`;
+      file
+        .createReadStream()
+        .pipe(storage.file(fname).createWriteStream())
+        .on('finish', () => resolve(`${fname}`))
+        .on('error', () => reject('이미지 저장에 실패하였습니다.'));
+    });
+
+    return result;
+  }
+
   async upload({ files }) {
     const waitedFiles = await Promise.all(files);
 
@@ -18,7 +36,9 @@ export class FileService {
       waitedFiles.map(
         (ele) =>
           new Promise((resolve, reject) => {
-            const fname = `${getToday()}/${uuidv4()}/origin/${ele.filename}`;
+            const fname = `board/${getToday()}/${uuidv4()}/origin/${
+              ele.filename
+            }`;
             ele
               .createReadStream()
               .pipe(storage.file(fname).createWriteStream())
