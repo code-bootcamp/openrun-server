@@ -16,15 +16,15 @@ export class Inquiry {
   @Field(() => String)
   id: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => String)
   type: string; //추후에 type지정하여 ENUM 작업해줘야함!(아직 유형 미정)
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => String)
   title: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => String)
   contents: string;
 

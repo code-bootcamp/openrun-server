@@ -13,11 +13,13 @@ export class BankAccount {
   @Field(() => String)
   id: string;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   @Field(() => String)
   company: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => String)
   bankAccountNum: string;
 

@@ -9,7 +9,9 @@ export class Image {
   @Field(() => String)
   id: string;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   @Field(() => String)
   url: string;
 

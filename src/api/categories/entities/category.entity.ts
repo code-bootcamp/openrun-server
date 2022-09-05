@@ -8,7 +8,10 @@ export class Category {
   @Field(() => String)
   id: string;
 
-  @Column({ unique: true })
+  @Column({
+    unique: true, //
+    nullable: true,
+  })
   @Field(() => String)
   name: string;
 }

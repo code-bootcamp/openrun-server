@@ -17,7 +17,7 @@ export class InquiryAnswer {
   @Field(() => String)
   id: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => String)
   contents: string;
 

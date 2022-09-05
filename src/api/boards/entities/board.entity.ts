@@ -39,7 +39,7 @@ export class Board {
   @Field(() => String)
   title: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => String)
   contents: string;
 
@@ -47,17 +47,14 @@ export class Board {
     type: 'enum',
     enum: BOARD_STATUS_ENUM,
     default: BOARD_STATUS_ENUM.RECRUITING,
+    nullable: true,
   })
   @Field(() => BOARD_STATUS_ENUM)
   status: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => Int)
   price: number;
-
-  @Column()
-  @Field(() => String)
-  storeName: string;
 
   @CreateDateColumn()
   @Field(() => Date)
@@ -71,7 +68,7 @@ export class Board {
   @Field(() => Date)
   deletedAt: Date;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => Date)
   dueDate: Date;
 

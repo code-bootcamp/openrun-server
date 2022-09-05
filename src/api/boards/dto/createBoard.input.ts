@@ -12,9 +12,6 @@ export class CreateBoardInput {
   @Field(() => Int)
   price: number;
 
-  @Field(() => String)
-  storeName: string;
-
   @Field(() => LocationInput)
   location: LocationInput;
 

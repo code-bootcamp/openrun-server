@@ -40,7 +40,7 @@ export class User {
   @Field(() => String)
   email: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => String)
   password: string;
 
@@ -53,25 +53,28 @@ export class User {
   phone: string;
 
   @Min(0)
-  @Column()
+  @Column({ nullable: true })
   @Field(() => Int)
   point: number;
 
   @Min(0)
-  @Column()
+  @Column({ nullable: true })
   @Field(() => Float)
   rating: number;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => String)
   profileImg: string;
 
   @Min(0)
-  @Column()
+  @Column({ nullable: true })
   @Field(() => Int)
   report: number;
 
-  @Column({ default: false })
+  @Column({
+    default: false, //
+    nullable: true,
+  })
   @Field(() => Boolean)
   isAdmin: boolean;
 
@@ -79,6 +82,7 @@ export class User {
     type: 'enum',
     enum: USER_LOGINTYPE_ENUM,
     default: USER_LOGINTYPE_ENUM.BASIC,
+    nullable: true,
   })
   @Field(() => USER_LOGINTYPE_ENUM)
   loginType: string;

@@ -22,7 +22,7 @@ export class Payment {
   @Field(() => String)
   status: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => Int)
   amount: number;
 
