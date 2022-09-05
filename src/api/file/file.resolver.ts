@@ -8,8 +8,15 @@ export class FileResolver {
     private readonly fileService: FileService, //
   ) {}
 
-  @Mutation(() => [String])
+  @Mutation(() => String)
   uploadFile(
+    @Args({ name: 'file', type: () => GraphQLUpload }) file: FileUpload,
+  ) {
+    return this.fileService.uploadOne({ file });
+  }
+
+  @Mutation(() => [String])
+  uploadFiles(
     @Args({ name: 'files', type: () => [GraphQLUpload] }) files: FileUpload[],
   ) {
     return this.fileService.upload({ files });
