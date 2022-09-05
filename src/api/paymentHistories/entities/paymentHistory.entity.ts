@@ -18,7 +18,7 @@ export class PaymentHistory {
   @Field(() => String)
   id: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => String)
   status: string;
 

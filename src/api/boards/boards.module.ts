@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ElasticsearchModule } from '@nestjs/elasticsearch';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BankAccountsService } from '../bankAccounts/bankAccounts.service';
 import { BankAccount } from '../bankAccounts/entities/ bankAccount.entity';
@@ -25,6 +26,9 @@ import { Board } from './entities/board.entity';
       BankAccount,
       Image,
     ]),
+    ElasticsearchModule.register({
+      node: 'http://elasticsearch:9200', //
+    }),
   ],
 
   providers: [
@@ -35,7 +39,6 @@ import { Board } from './entities/board.entity';
     CategoriesService,
     ImagesService,
     FileService,
-    
   ],
 })
 export class BoardsModule {}

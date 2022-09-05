@@ -34,11 +34,14 @@ export class Report {
     type: 'enum',
     enum: REPORT_TYPE_ENUM,
     default: REPORT_TYPE_ENUM.TRASH_TALK,
+    nullable: true,
   })
   @Field(() => REPORT_TYPE_ENUM)
   type: string;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   @Field(() => String)
   contents: string;
 

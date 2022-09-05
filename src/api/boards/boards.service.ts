@@ -64,7 +64,7 @@ export class BoardsService {
       category: resultCategory,
       user: resultUser,
     });
-    const resultImage = await this.imagesService.createImage({
+    const resultImage = await this.imagesService.createImages({
       board: result,
       image,
     });
@@ -142,7 +142,7 @@ export class BoardsService {
       relations: ['image'],
     });
 
-    const resultImage = await this.imagesService.deleteImage({
+    const resultImage = await this.imagesService.deleteImages({
       url: board.image,
     });
 
