@@ -8,6 +8,7 @@ import { Location } from '../locations/entities/location.entity';
 import { Category } from '../categories/entities/category.entity';
 import { UsersService } from '../users/users.service';
 import { CategoriesService } from '../categories/categories.service';
+import { ImagesService } from '../images/images.service';
 // import { Category } from '../categories/entities/category.entity';
 
 @Injectable()
@@ -25,6 +26,7 @@ export class BoardsService {
     private readonly categoryRepository: Repository<Category>,
     private readonly userService: UsersService,
     private readonly categoriesService: CategoriesService,
+    private readonly imagesService: ImagesService,
   ) {}
 
   //게시물 등록
@@ -62,20 +64,14 @@ export class BoardsService {
       category: resultCategory,
       user: resultUser,
     });
-
-    const arr = [];
-    for (let i = 0; i < image.length; i++) {
-      const temp = await this.imageRepository.save({
-        url: image[i],
-        board: result.id,
-      });
-
-      arr.push(temp);
-    }
+    const resultImage = await this.imagesService.createImage({
+      board: result,
+      image,
+    });
 
     return {
       ...result,
-      image: arr,
+      image: resultImage,
       location: resultLocation,
       category: resultCategory,
       user: resultUser,
@@ -141,7 +137,17 @@ export class BoardsService {
   }
 
   async delete({ boardId }) {
+    const board = await this.boardRepository.findOne({
+      where: { id: boardId },
+      relations: ['image'],
+    });
+
+    const resultImage = await this.imagesService.deleteImage({
+      url: board.image,
+    });
+
     const result = await this.boardRepository.softDelete({ id: boardId });
+
     return result.affected ? true : false;
   }
 }

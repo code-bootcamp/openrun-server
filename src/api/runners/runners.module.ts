@@ -6,7 +6,9 @@ import { BoardsService } from '../boards/boards.service';
 import { Board } from '../boards/entities/board.entity';
 import { CategoriesService } from '../categories/categories.service';
 import { Category } from '../categories/entities/category.entity';
+import { FileService } from '../file/file.service';
 import { Image } from '../images/entities/image.entity';
+import { ImagesService } from '../images/images.service';
 import { Location } from '../locations/entities/location.entity';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
@@ -33,6 +35,8 @@ import { RunnersService } from './runners.service';
     UsersService,
     BankAccountsService,
     CategoriesService,
+    ImagesService,
+    FileService,
   ],
 })
 export class RunnersModule {}

@@ -40,4 +40,10 @@ export class ReportsResolver {
       email: user.email,
     });
   }
+  @Mutation(() => Boolean)
+  deleteReport(
+    @Args('reportId') reportId: string, //
+  ) {
+    return this.reportsService.delete({ reportId });
+  }
 }
