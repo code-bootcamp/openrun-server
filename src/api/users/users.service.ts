@@ -102,8 +102,16 @@ export class UsersService {
     }
   }
 
+  async delete({ email }) {
+    const result = await this.userRepository.softDelete({ email });
+    return result.affected;
+  }
+
   async checkIsUserAvailable({ email }) {
-    const result = await this.userRepository.findOne({ where: { email } });
+    const result = await this.userRepository.findOne({
+      where: { email },
+      withDeleted: true,
+    });
     if (result) {
       throw new UnprocessableEntityException('이미 사용중인 아이디입니다.');
     }

@@ -13,7 +13,4 @@ export class CreateUserInput {
 
   @Field(() => String, { nullable: true, name: 'phone' })
   phone: string;
-
-  @Field(() => String, { nullable: true, name: 'profileImg' })
-  profileImg: string;
 }

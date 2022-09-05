@@ -4,6 +4,9 @@ import { CreateUserInput } from './createUser.input';
 
 @InputType()
 export class UpdateUserInput extends PartialType(CreateUserInput) {
+  @Field(() => String, { nullable: true, name: 'profileImg' })
+  profileImg: string;
+
   @Field({ name: 'bankAccount', nullable: true })
   bankAccount: BankAccountInput;
 }
