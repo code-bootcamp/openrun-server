@@ -14,6 +14,6 @@ export class LocationInput {
   @Field(() => Float, { nullable: true, name: 'lng' })
   lng: number;
 
-  @Field(() => Int, { nullable: true, name: 'postNum' })
-  postNum: number;
+  @Field(() => String, { nullable: true, name: 'zipcode' })
+  zipcode: string;
 }
