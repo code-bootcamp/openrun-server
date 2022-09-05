@@ -12,7 +12,7 @@ export class Image {
   @Column({
     nullable: true,
   })
-  @Field(() => String)
+  @Field(() => String, { nullable: true, name: 'url' })
   url: string;
 
   @ManyToOne(() => Board)

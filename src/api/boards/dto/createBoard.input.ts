@@ -6,21 +6,27 @@ export class CreateBoardInput {
   @Field(() => String)
   title: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true, name: 'contents' })
   contents: string;
 
-  @Field(() => Int)
+  @Field(() => Int, { nullable: true, name: 'price' })
   price: number;
 
-  @Field(() => LocationInput)
+  @Field(() => LocationInput, { nullable: true, name: 'location' })
   location: LocationInput;
 
-  @Field(() => [String])
+  @Field(() => [String], { nullable: true, name: 'image' })
   image: string[];
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true, name: 'category' })
   category: string;
 
-  @Field(() => Date)
+  @Field(() => Date, { nullable: true, name: 'dueDate' })
   dueDate: Date;
+
+  @Field(() => Date, { nullable: true, name: 'eventDay' })
+  eventDay: Date;
+
+  @Field(() => String, { nullable: true, name: 'eventTime' })
+  eventTime: string;
 }

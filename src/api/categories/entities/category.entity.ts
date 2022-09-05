@@ -12,6 +12,6 @@ export class Category {
     unique: true, //
     nullable: true,
   })
-  @Field(() => String)
+  @Field(() => String, { nullable: true, name: 'name' })
   name: string;
 }

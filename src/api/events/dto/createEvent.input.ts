@@ -5,18 +5,18 @@ export class CreateEventInput {
   @Field(() => String)
   title: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true, name: 'contents' })
   contents: string;
 
-  @Field(() => Date)
+  @Field(() => Date, { nullable: true, name: 'period' })
   period: Date;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true, name: 'location' })
   location: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true, name: 'image' })
   image: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true, name: 'fakeData' })
   fakeData: string;
 }

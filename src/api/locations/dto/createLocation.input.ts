@@ -2,18 +2,18 @@ import { Field, Float, InputType, Int } from '@nestjs/graphql';
 
 @InputType()
 export class LocationInput {
-  @Field(() => String)
+  @Field(() => String, { nullable: true, name: 'address' })
   address: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true, name: 'addressDetail' })
   addressDetail: string;
 
-  @Field(() => Float)
+  @Field(() => Float, { nullable: true, name: 'lat' })
   lat: number;
 
-  @Field(() => Float)
+  @Field(() => Float, { nullable: true, name: 'lng' })
   lng: number;
 
-  @Field(() => Int)
+  @Field(() => Int, { nullable: true, name: 'postNum' })
   postNum: number;
 }

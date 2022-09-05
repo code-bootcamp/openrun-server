@@ -2,9 +2,9 @@ import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
 export class BankAccountInput {
-  @Field(() => String)
+  @Field(() => String, { nullable: true, name: 'company' })
   company: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true, name: 'backAccountNum' })
   bankAccountNum: string;
 }
