@@ -8,7 +8,6 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { ChatMessage } from './chatMessage.entity';
 
 @Entity()
 @ObjectType()
