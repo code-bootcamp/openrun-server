@@ -31,4 +31,24 @@ export class FileService {
 
     return results;
   }
+
+  async delete({ url }) {
+    const storage = new Storage({
+      projectId: process.env.GOOGLE_BUCKET_PROJECT_ID,
+      keyFilename: process.env.GOOGLE_BUCKET_KEY_FILENAME,
+    }).bucket(process.env.GOOGLE_BUCKET);
+
+    const results = await Promise.all(
+      url.map(
+        (ele) =>
+          new Promise((resolve) => {
+            const fname = ele.split('openrun-storage/')[1];
+            storage.file(fname).delete();
+            resolve(true);
+          }),
+      ),
+    );
+
+    return results;
+  }
 }
