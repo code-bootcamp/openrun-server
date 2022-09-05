@@ -11,10 +11,10 @@ import {
 } from 'typeorm';
 
 export enum REPORT_TYPE_ENUM {
-  TYPE1 = '비방/욕설',
-  TYPE2 = '광고/음란성',
-  TYPE3 = '미션 불이행',
-  TYPE4 = '기타',
+  TRASH_TALK = '비방/욕설',
+  ADV = '광고/음란성',
+  MISSION_FAILED = '미션 불이행',
+  ETC = '기타',
 }
 
 registerEnumType(REPORT_TYPE_ENUM, {
@@ -31,7 +31,7 @@ export class Report {
   @Column({
     type: 'enum',
     enum: REPORT_TYPE_ENUM,
-    default: REPORT_TYPE_ENUM.TYPE1,
+    default: REPORT_TYPE_ENUM.TRASH_TALK,
   })
   @Field(() => REPORT_TYPE_ENUM)
   type: string;
