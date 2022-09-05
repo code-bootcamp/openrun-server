@@ -9,7 +9,7 @@ export class FileResolver {
   ) {}
 
   @Mutation(() => [String])
-  uploadImage(
+  uploadFile(
     @Args({ name: 'files', type: () => [GraphQLUpload] }) files: FileUpload[],
   ) {
     return this.fileService.upload({ files });
