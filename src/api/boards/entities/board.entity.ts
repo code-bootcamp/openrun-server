@@ -1,5 +1,6 @@
 import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Category } from 'src/api/categories/entities/category.entity';
+import { ChatRoom } from 'src/api/chat/entities/chatRoom.entity';
 import { Image } from 'src/api/images/entities/image.entity';
 import { Location } from 'src/api/locations/entities/location.entity';
 import { User } from 'src/api/users/entities/user.entity';
@@ -90,4 +91,9 @@ export class Board {
   @OneToMany(() => Image, (image) => image.board)
   @Field(() => [Image])
   image: Image[];
+
+  @JoinColumn()
+  @OneToOne(() => ChatRoom)
+  @Field(() => ChatRoom)
+  chatRoom: ChatRoom;
 }

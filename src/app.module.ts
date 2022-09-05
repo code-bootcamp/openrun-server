@@ -20,12 +20,15 @@ import { AuthsModule } from './api/auths/auths.module';
 import { RedisClientOptions } from 'redis';
 import * as redisStore from 'cache-manager-redis-store';
 import { FileModule } from './api/file/file.module';
+import { ChatGateway } from './api/chat/chat.gateway';
+import { ChatModule } from './api/chat/chat.module';
 
 @Module({
   imports: [
     AuthsModule,
     BoardsModule,
     CategoriesModule,
+    ChatModule,
     EventsModule,
     FileModule,
     InquiriesModule,
