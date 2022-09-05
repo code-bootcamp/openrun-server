@@ -1,8 +1,11 @@
-import { Query, UseGuards } from '@nestjs/common';
-import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
+import { UseGuards } from '@nestjs/common';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { InjectRepository } from '@nestjs/typeorm';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { IContext } from 'src/commons/types/type';
+import { Repository } from 'typeorm';
 import { BoardsService } from '../boards/boards.service';
+import { User } from '../users/entities/user.entity';
 import { UsersResolver } from '../users/users.resolver';
 import { UsersService } from '../users/users.service';
 import { CreateReportInput } from './dto/report.input';
@@ -16,11 +19,14 @@ export class ReportsResolver {
     private readonly usersService: UsersService,
     private readonly boardsService: BoardsService,
   ) {}
-
-  //   @Query(() => [Report])
-  //   fetchReport() {}
-
-  //   @Query(() => )
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => [Report])
+  fetchReports(
+    @Context() context: IContext, //
+  ) {
+    const email = context.req.user.email;
+    return this.reportsService.findAll({ email });
+  }
 
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Report)
@@ -29,7 +35,7 @@ export class ReportsResolver {
     @Context() context: IContext,
   ) {
     const user = context.req.user;
-    return this.reportsService.creat({
+    return this.reportsService.create({
       createReportInput,
       email: user.email,
     });
