@@ -19,6 +19,7 @@ import { EventsModule } from './api/events/events.module';
 import { AuthsModule } from './api/auths/auths.module';
 import { RedisClientOptions } from 'redis';
 import * as redisStore from 'cache-manager-redis-store';
+import { FileModule } from './api/file/file.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import * as redisStore from 'cache-manager-redis-store';
     BoardsModule,
     CategoriesModule,
     EventsModule,
+    FileModule,
     InquiriesModule,
     InquiriesAnswerModule,
     InterestsModule,
