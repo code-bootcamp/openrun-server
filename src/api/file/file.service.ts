@@ -7,7 +7,6 @@ import { v4 as uuidv4 } from 'uuid';
 export class FileService {
   async upload({ files }) {
     const waitedFiles = await Promise.all(files);
-    console.log(waitedFiles);
 
     const address = 'https://storage.googleapis.com';
     const bucket = process.env.GOOGLE_BUCKET;
@@ -21,8 +20,15 @@ export class FileService {
         (ele) =>
           new Promise((resolve, reject) => {
             const fname = `${getToday()}/${uuidv4()}/origin/${ele.filename}`;
+            ele
+              .createReadStream()
+              .pipe(storage.file(fname).createWriteStream())
+              .on('finish', () => resolve(`${address}/${bucket}/${fname}`))
+              .on('error', () => reject('이미지 저장에 실패하였습니다.'));
           }),
       ),
     );
+
+    return results;
   }
 }
