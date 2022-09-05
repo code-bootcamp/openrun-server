@@ -3,6 +3,8 @@ import { Board } from 'src/api/boards/entities/board.entity';
 import { User } from 'src/api/users/entities/user.entity';
 import {
   Column,
+  CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -39,6 +41,14 @@ export class Report {
   @Column()
   @Field(() => String)
   contents: string;
+
+  @CreateDateColumn()
+  @Field(() => Date)
+  createdAt: Date;
+
+  @DeleteDateColumn()
+  @Field(() => Date)
+  deletedAt: Date;
 
   @ManyToOne(() => User)
   @Field(() => User)

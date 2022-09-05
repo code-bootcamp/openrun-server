@@ -19,23 +19,30 @@ export class ReportsService {
     private readonly boardsService: BoardsService,
   ) {}
 
-  async creat({ createReportInput, email }) {
+  async create({ createReportInput, email }) {
     const { boardId, ...report } = createReportInput;
 
     const resultUser = await this.usersService.findOne({
       email,
     });
+
     const resultBoard = await this.boardsService.findOne({
       boardId: boardId,
     });
 
     const result = await this.reportRepository.save({
-      ...createReportInput,
+      ...report,
       user: resultUser,
       board: resultBoard,
     });
-    console.log(result);
 
-    return await this.reportRepository.save(result);
+    return result;
+  }
+
+  async findAll({ email }) {
+    const result = await this.reportRepository.find({
+      where: { user: { email } },
+    });
+    return result;
   }
 }
