@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { Storage } from '@google-cloud/storage';
 import { getToday } from 'src/commons/libraries/utils';
 import { v4 as uuidv4 } from 'uuid';
-import { isCompositeType } from 'graphql';
 
 @Injectable()
 export class FileService {
