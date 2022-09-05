@@ -13,7 +13,10 @@ export class BoardsResolver {
   constructor(private readonly boardsService: BoardsService) {}
 
   @Query(() => [Board])
-  fetchBoards(@Args('dateType') dateType: string) {
+  fetchBoards(
+    //
+    @Args('dateType') dateType: string,
+  ) {
     if (dateType === '최신순')
       //
       return this.boardsService.findAllbyCurrent();
