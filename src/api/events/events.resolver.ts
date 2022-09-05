@@ -10,8 +10,10 @@ export class EventsResolver {
   ) {}
 
   @Query(() => [[Event]])
-  fetchEvents() {
-    return this.eventsService.findAllByOld();
+  fetchEvents(
+    @Args({ name: 'search', nullable: true }) search: string, //
+  ) {
+    return this.eventsService.findAllByOld({ search });
   }
 
   @Query(() => Event)

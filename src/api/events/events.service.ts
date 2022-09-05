@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Event } from './entities/event.entity';
@@ -8,6 +9,8 @@ export class EventsService {
   constructor(
     @InjectRepository(Event)
     private readonly eventRpository: Repository<Event>, //
+
+    private readonly elasticsearchService: ElasticsearchService, //
   ) {}
 
   findOne({ eventId }) {
@@ -26,10 +29,45 @@ export class EventsService {
     return result;
   }
 
-  async findAllByOld() {
-    const result = await this.eventRpository.find({
-      order: { period: 'ASC' },
-    });
+  async findAllByOld({ search }) {
+    let result;
+
+    if (!search) {
+      result = await this.eventRpository.find({
+        order: { period: 'ASC' },
+      });
+    } else {
+      const elasticResult = await this.elasticsearchService.search({
+        index: 'event',
+        _source: [
+          'id',
+          'title',
+          'contents',
+          'period',
+          'location',
+          'text',
+          'fakeData',
+          'image',
+          'createdAt',
+        ],
+        query: {
+          match: {
+            title: search,
+          },
+        },
+      });
+
+      result = elasticResult.hits.hits.map((el) => {
+        const obj: any = el._source;
+        const date = new Date(obj.fakeData);
+        const date2 = Math.abs(date.getTime() / 1000);
+        const a = new Date(obj.period);
+        const b = new Date(obj.createdAt * 1000.0195);
+        return { ...obj, period: a, createdAt: b, temp: date2 };
+      });
+
+      result.sort((a, b) => a.temp - b.temp);
+    }
 
     const boards = [];
 
@@ -41,7 +79,7 @@ export class EventsService {
     for (let i = 0; i < result.length; i++) {
       const p = result[i].period;
       const e = Math.abs(p.getTime() / 1000);
-      console.log(e, cur);
+
       if (Math.ceil(e) < Math.ceil(cur)) continue;
 
       if (result[i + 1] === undefined) {
@@ -78,7 +116,6 @@ export class EventsService {
         arr = [];
       }
     }
-
     return boards;
   }
 
