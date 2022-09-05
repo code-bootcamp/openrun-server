@@ -45,4 +45,9 @@ export class ReportsService {
     });
     return result;
   }
+  //개발 유저가 스스로 삭제 할 수 있을지 / 관리자가 삭제 할 수 있을지
+  async delete({ reportId }) {
+    const result = await this.reportRepository.softDelete({ id: reportId });
+    return result.affected ? true : false;
+  }
 }
