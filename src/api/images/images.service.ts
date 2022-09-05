@@ -13,7 +13,7 @@ export class ImagesService {
     private readonly imageRepository: Repository<Image>,
   ) {}
 
-  createImage({ board, image }) {
+  createImages({ board, image }) {
     //넘겨받은 image url를 DB에 저장
     return image.map((ele) => {
       return this.imageRepository.save({
@@ -23,7 +23,7 @@ export class ImagesService {
     });
   }
 
-  async deleteImage({ url }) {
+  async deleteImages({ url }) {
     //Google bucket에서 넘겨받은 파일들 삭제
     await this.fileService.delete({ url });
 
