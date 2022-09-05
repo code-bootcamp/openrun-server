@@ -58,4 +58,11 @@ export class UsersResolver {
   ) {
     return this.usersService.updateUser({ updateUserInput });
   }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => Boolean)
+  deleteLoginUser(@Context() context: IContext) {
+    const email = context.req.user.email;
+    return this.usersService.delete({ email });
+  }
 }
