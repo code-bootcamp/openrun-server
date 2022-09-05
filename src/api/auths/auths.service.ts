@@ -24,8 +24,11 @@ export class AuthsService {
       { email: user.email, sub: user.id }, //
       { secret: 'myRefreshKey', expiresIn: '2w' },
     );
-
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.setHeader(
+      'Set-Cookie',
+      `refreshToken=${refreshToken}; path=/; domain=.openrunbackend.shop; SameSite=None; Secure; httpOnly;`,
+    );
+    // res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     // res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`);
   }
 
