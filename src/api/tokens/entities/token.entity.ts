@@ -8,7 +8,7 @@ export class Token {
   @Field(() => String)
   id: string;
 
-  @Column()
+  @Column({ default: false })
   @Field(() => Boolean)
   isAuth: boolean;
 
