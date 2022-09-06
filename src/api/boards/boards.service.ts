@@ -58,8 +58,18 @@ export class BoardsService {
       categoryName: category,
     });
 
+    let dueDate = new Date(
+      `${createBoardInput.eventDay} ${createBoardInput.eventTime}`,
+    );
+
+    if (!createBoardInput.eventDay || !createBoardInput.eventTime) {
+      dueDate = new Date('2023');
+    }
+    console.log('===========', dueDate);
+
     const result = await this.boardRepository.save({
       ...createBoardInput,
+      dueDate: dueDate,
       location: resultLocation,
       category: resultCategory,
       user: resultUser,
@@ -130,6 +140,7 @@ export class BoardsService {
         dueDate: MoreThan(today),
       },
     });
+    console.log(resultBoards);
     return resultBoards;
   }
   async findAllbyLimit() {

@@ -79,8 +79,8 @@ export class Board {
   dueDate: Date;
 
   @Column({ nullable: true })
-  @Field(() => Date, { nullable: true, name: 'eventDay' })
-  eventDay: Date;
+  @Field(() => String, { nullable: true, name: 'eventDay' })
+  eventDay: string;
 
   @Column({ nullable: true })
   @Field(() => String, { nullable: true, name: 'eventTime' })
