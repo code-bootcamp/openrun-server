@@ -10,7 +10,6 @@ import { FileService } from '../file/file.service';
 import { Image } from '../images/entities/image.entity';
 import { ImagesService } from '../images/images.service';
 import { Location } from '../locations/entities/location.entity';
-import { Runner } from '../runners/entities/runner.entity';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { ChatGateway } from './chat.gateway';
@@ -30,7 +29,6 @@ import { ChatRoom } from './entities/chatRoom.entity';
       Image,
       Location,
       Category,
-      Runner,
     ]),
   ],
   providers: [
