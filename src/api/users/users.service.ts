@@ -52,6 +52,10 @@ export class UsersService {
     });
   }
 
+  findNumberOfUsers() {
+    return this.userRepository.count();
+  }
+
   async create({ _user, hashedPwd: password }) {
     //User 데이터 저장
     const userResult = await this.userRepository.save({

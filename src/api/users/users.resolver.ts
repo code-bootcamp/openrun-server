@@ -1,4 +1,4 @@
-import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CreateUserInput } from './dto/createUser.input';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
@@ -43,6 +43,19 @@ export class UsersResolver {
 
     //admin 모두 찾기
     return this.usersService.findAllAdmin();
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => Int)
+  async fetchUsersCount(
+    @Context() context: IContext, //
+  ) {
+    const email = context.req.user.email;
+    //admin 여부 확인
+    await this.usersService.checkIsAdmin({ email });
+
+    //총 유저 수 출력
+    return this.usersService.findNumberOfUsers();
   }
 
   @Mutation(() => User)
