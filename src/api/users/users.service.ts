@@ -42,6 +42,16 @@ export class UsersService {
     });
   }
 
+  findFourByRating() {
+    return this.userRepository.find({
+      order: {
+        rating: 'DESC',
+      },
+      take: 4,
+      relations: ['bankAccount'],
+    });
+  }
+
   async create({ _user, hashedPwd: password }) {
     //User 데이터 저장
     const userResult = await this.userRepository.save({
