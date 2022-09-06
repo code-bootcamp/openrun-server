@@ -25,6 +25,10 @@ export class AuthsService {
       { secret: 'myRefreshKey', expiresIn: '2w' },
     );
     //배포용
+    const now = new Date();
+    const expireTime = now.getTime() + 1000 * 36000;
+    now.setTime(expireTime);
+
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000'); //프론트와 연결
     res.setHeader('Access-Control-Allow-Credentials', 'true'); //credential 함께 allow
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'); //method 지정
@@ -34,7 +38,7 @@ export class AuthsService {
     );
     res.setHeader(
       'Set-Cookie',
-      `refreshToken=${refreshToken}; path=/; domain=.openrunbackend.shop; SameSite=None; Secure; httpOnly;`,
+      `refreshToken=${refreshToken}; path=/; domain=.openrunbackend.shop; SameSite=None; Secure; httpOnly; expires=${now.toUTCString()};`,
     );
 
     //개발용
