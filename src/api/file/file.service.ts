@@ -13,6 +13,7 @@ export class FileService {
 
     const result = await new Promise((resolve, reject) => {
       const fname = `profile/${getToday()}/${uuidv4()}/origin/${file.filename}`;
+      console.log(`fname = ${fname}`);
       file
         .createReadStream()
         .pipe(storage.file(fname).createWriteStream())
