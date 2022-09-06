@@ -26,6 +26,20 @@ export class UsersResolver {
     return this.usersService.findOne({ email });
   }
 
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => [User])
+  async fetchAdmin(
+    @Context() context: IContext, //
+  ) {
+    const email = context.req.user.email;
+
+    //admin 여부 확인
+    await this.usersService.checkIsAdmin({ email });
+
+    //admin 모두 찾기
+    return this.usersService.findAllAdmin();
+  }
+
   @Mutation(() => User)
   async createUser(
     @Args('createUserInput') createUserInput: CreateUserInput, //
