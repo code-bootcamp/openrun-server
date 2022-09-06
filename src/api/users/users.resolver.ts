@@ -26,6 +26,11 @@ export class UsersResolver {
     return this.usersService.findOne({ email });
   }
 
+  @Query(() => [User])
+  fetchBestOfUser() {
+    return this.usersService.findFourByRating();
+  }
+
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => [User])
   async fetchAdmin(
