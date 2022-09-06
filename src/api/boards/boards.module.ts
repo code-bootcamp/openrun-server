@@ -9,6 +9,7 @@ import { FileService } from '../file/file.service';
 import { Image } from '../images/entities/image.entity';
 import { ImagesService } from '../images/images.service';
 import { Location } from '../locations/entities/location.entity';
+import { Runner } from '../runners/entities/runner.entity';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { BoardsResolver } from './boards.resolver';
@@ -25,6 +26,7 @@ import { Board } from './entities/board.entity';
       Category,
       BankAccount,
       Image,
+      Runner,
     ]),
     ElasticsearchModule.register({
       node: 'http://elasticsearch:9200', //
