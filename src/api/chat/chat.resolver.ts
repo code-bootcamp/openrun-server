@@ -1,4 +1,4 @@
-import { UseGuards } from '@nestjs/common';
+import { NotFoundException, UseGuards } from '@nestjs/common';
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { IContext } from 'src/commons/types/type';
@@ -25,11 +25,14 @@ export class ChatResolver {
     @Args('boardId') boardId: string,
     @Context() context: IContext, //
   ) {
-    const prevRoom = this.chatService.findOne({ boardId });
-
-    if (prevRoom) return prevRoom;
+    const prevRoom = await this.chatService.findOne({ boardId });
 
     const email = context.req.user.email;
+
+    if (userEmail !== prevRoom.runner.email || email !== prevRoom.seller.email)
+      throw new NotFoundException('다른 유저는 들어갈 수 없습니다!');
+
+    if (prevRoom) return prevRoom;
 
     const hostUser = await this.usersService.findOne({ email });
     const curUser = await this.usersService.findOne({ email: userEmail });

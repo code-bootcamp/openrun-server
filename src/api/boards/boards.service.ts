@@ -64,10 +64,18 @@ export class BoardsService {
       category: resultCategory,
       user: resultUser,
     });
+
+    let img;
+
+    if (!image) {
+      img = ['default.img'];
+    }
+
     const resultImage = await this.imagesService.createImages({
       board: result,
-      image,
+      image: image ? image : img,
     });
+    console.log('맵 아래');
 
     return {
       ...result,
