@@ -25,6 +25,10 @@ export class ChatResolver {
     @Args('boardId') boardId: string,
     @Context() context: IContext, //
   ) {
+    const prevRoom = this.chatService.findOne({ boardId });
+
+    if (prevRoom) return prevRoom;
+
     const email = context.req.user.email;
 
     const hostUser = await this.usersService.findOne({ email });

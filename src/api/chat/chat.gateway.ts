@@ -51,6 +51,7 @@ export class ChatGateway {
     const user = await this.usersRepository.findOne({
       where: { nickName: nickname },
     });
+    console.log(room);
     await this.chatMessageRepository.save({
       message: message,
       room: room,

@@ -37,4 +37,15 @@ export class ChatService {
 
     return result;
   }
+
+  findOne({ boardId }) {
+    return this.chatRoomRepository.findOne({
+      where: { board: { id: boardId } },
+      relations: {
+        seller: true,
+        runner: true,
+        board: true,
+      },
+    });
+  }
 }
