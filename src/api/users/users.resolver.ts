@@ -65,4 +65,15 @@ export class UsersResolver {
     const email = context.req.user.email;
     return this.usersService.delete({ email });
   }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => Boolean) //굳이 user를 반환해줘야하나..?(여기서는 runner를 점수매기는 것이기 때문에 user필요없을 듯)
+  createRating(
+    @Args('boardId') boardId: string,
+    @Args('rate') rate: number, //
+  ) {
+    //boardId로 runner찾기
+    //temporary로 하나로 합쳐놓음
+    return this.usersService.updateRate({ boardId, rate });
+  }
 }

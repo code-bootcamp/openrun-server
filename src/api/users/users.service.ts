@@ -1,9 +1,14 @@
-import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BankAccountsService } from '../bankAccounts/bankAccounts.service';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
+import { Runner } from '../runners/entities/runner.entity';
 
 @Injectable()
 export class UsersService {
@@ -12,6 +17,9 @@ export class UsersService {
 
     @InjectRepository(User)
     private readonly userRepository: Repository<User>, //
+
+    @InjectRepository(Runner)
+    private readonly runnerRepository: Repository<Runner>, // temporary
   ) {}
 
   findAll() {
@@ -105,6 +113,35 @@ export class UsersService {
   async delete({ email }) {
     const result = await this.userRepository.softDelete({ email });
     return result.affected;
+  }
+
+  async updateRate({ boardId, rate }) {
+    //temporary - runner찾기
+    const runner = await this.runnerRepository.findOne({
+      where: { board: { id: boardId }, isChecked: true },
+      relations: ['user', 'board'],
+    });
+
+    //rating 평균값 계산
+    let newRate = 0;
+    if (runner.user.rating > 0) {
+      newRate = Number(((runner.user.rating + rate) / 2).toFixed(1));
+    } else {
+      newRate = rate;
+    }
+
+    //runner rating 반영
+    const result = await this.userRepository.save({
+      ...runner.user,
+      rating: newRate,
+    });
+
+    //데이터 반영 확인 후 return
+    if (result.rating !== newRate) {
+      throw new NotFoundException('별점 반영에 실패하였습니다.');
+    } else {
+      return true;
+    }
   }
 
   async checkIsUserAvailable({ email }) {
