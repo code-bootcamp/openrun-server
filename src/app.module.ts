@@ -49,6 +49,7 @@ import { ChatModule } from './api/chat/chat.module';
       cors: {
         origin: 'http://localhost:3000',
         credentials: true,
+        exposedHeaders: ['Set-Cookie', 'Cookie'],
       },
     }),
     TypeOrmModule.forRoot({
