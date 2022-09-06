@@ -25,11 +25,12 @@ export class AuthsService {
       { secret: 'myRefreshKey', expiresIn: '2w' },
     );
     //배포용
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000'); //프론트와 연결
+    res.setHeader('Access-Control-Allow-Credentials', 'true'); //credential 함께 allow
     res.setHeader(
       'Set-Cookie',
       `refreshToken=${refreshToken}; path=/; domain=.openrunbackend.shop; SameSite=None; Secure; httpOnly;`,
     );
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
 
     //개발용
     // res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`);
