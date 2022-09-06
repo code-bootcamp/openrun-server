@@ -30,7 +30,7 @@ export class AuthsService {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'); //method 지정
     res.setHeader(
       'Access-Control-Allow-Headers',
-      'Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With',
+      'Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With, Origin, Accept, Access-Control-Request-Method, Access-Control-Request-Headers',
     );
     res.setHeader(
       'Set-Cookie',
