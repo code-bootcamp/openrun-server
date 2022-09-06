@@ -9,6 +9,7 @@ import {
 import { Server } from 'socket.io';
 import { Repository } from 'typeorm';
 import { User } from '../users/entities/user.entity';
+import { ChatService } from './chat.service';
 import { ChatMessage } from './entities/chatMessage.entity';
 import { ChatRoom } from './entities/chatRoom.entity';
 
@@ -23,6 +24,8 @@ export class ChatGateway {
 
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
+
+    private readonly chatService: ChatService,
   ) {}
   @WebSocketServer()
   server: Server;
@@ -51,6 +54,9 @@ export class ChatGateway {
     const user = await this.usersRepository.findOne({
       where: { nickName: nickname },
     });
+
+    // this.chatService.findOne()
+
     console.log(room);
     await this.chatMessageRepository.save({
       message: message,
