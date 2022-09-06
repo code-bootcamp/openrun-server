@@ -35,6 +35,13 @@ export class UsersService {
     });
   }
 
+  findAllAdmin() {
+    return this.userRepository.find({
+      where: { isAdmin: true },
+      relations: ['bankAccount'],
+    });
+  }
+
   async create({ _user, hashedPwd: password }) {
     //User 데이터 저장
     const userResult = await this.userRepository.save({
@@ -159,6 +166,17 @@ export class UsersService {
     if (result) {
       throw new UnprocessableEntityException('이미 사용중인 닉네임입니다.');
     }
+  }
+
+  async checkIsAdmin({ email }) {
+    const result = await this.userRepository.findOne({
+      where: { email, isAdmin: true },
+    });
+
+    if (!result) {
+      throw new UnprocessableEntityException('해당 유저는 관리자가 아닙니다.');
+    }
+    return true;
   }
 
   async encryptPassword({ password }) {
