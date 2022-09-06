@@ -25,14 +25,14 @@ export class AuthsService {
       { secret: 'myRefreshKey', expiresIn: '2w' },
     );
     //배포용
-    // res.setHeader(
-    //   'Set-Cookie',
-    //   `refreshToken=${refreshToken}; path=/; domain=.openrunbackend.shop; SameSite=None; Secure; httpOnly;`,
-    // );
-    // res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.setHeader(
+      'Set-Cookie',
+      `refreshToken=${refreshToken}; path=/; domain=.openrunbackend.shop; SameSite=None; Secure; httpOnly;`,
+    );
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
 
     //개발용
-    res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`);
+    // res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`);
   }
 
   getAccessToken({ user }) {
