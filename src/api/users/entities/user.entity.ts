@@ -58,7 +58,7 @@ export class User {
   point: number;
 
   @Min(0)
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'float' })
   @Field(() => Float)
   rating: number;
 

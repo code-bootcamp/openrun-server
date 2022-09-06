@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { BankAccountsService } from '../bankAccounts/bankAccounts.service';
 import { BankAccount } from '../bankAccounts/entities/ bankAccount.entity';
 import { IamportsService } from '../iamport/iamport.service';
+import { Runner } from '../runners/entities/runner.entity';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { Payment } from './entities/payment.entity';
@@ -15,6 +16,7 @@ import { PaymentsService } from './payments.service';
       Payment, //
       User,
       BankAccount,
+      Runner,
     ]),
   ],
   providers: [

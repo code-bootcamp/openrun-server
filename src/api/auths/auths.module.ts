@@ -8,6 +8,7 @@ import { JwtKakaoStrategy } from 'src/commons/auth/jwt-social-kakao.strategy';
 import { JwtNaverStrategy } from 'src/commons/auth/jwt-social-naver.strategy';
 import { BankAccountsService } from '../bankAccounts/bankAccounts.service';
 import { BankAccount } from '../bankAccounts/entities/ bankAccount.entity';
+import { Runner } from '../runners/entities/runner.entity';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { AuthsController } from './auths.controller';
@@ -17,7 +18,11 @@ import { AuthsService } from './auths.service';
 @Module({
   imports: [
     JwtModule.register({}), //
-    TypeOrmModule.forFeature([User, BankAccount]),
+    TypeOrmModule.forFeature([
+      User, //
+      BankAccount,
+      Runner,
+    ]),
   ],
   providers: [
     JwtAccessStrategy,
