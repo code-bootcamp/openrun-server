@@ -13,7 +13,7 @@ export class FileService {
 
     const result = await new Promise((resolve, reject) => {
       const fname = `profile/${getToday()}/${uuidv4()}/origin/${file.filename}`;
-      console.log(`fname = ${fname}`);
+      // console.log(`fname = ${fname}`); //추후 이미지 업로드를 대비하여 남겨놓음
       file
         .createReadStream()
         .pipe(storage.file(fname).createWriteStream())
