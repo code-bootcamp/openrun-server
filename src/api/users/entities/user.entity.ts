@@ -103,4 +103,10 @@ export class User {
   @OneToOne(() => BankAccount)
   @Field(() => BankAccount)
   bankAccount: BankAccount;
+
+  @Field(() => Int)
+  boardTotal: number;
+
+  @Field(() => Int)
+  inquiryTotal: number;
 }

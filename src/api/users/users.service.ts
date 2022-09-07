@@ -35,6 +35,13 @@ export class UsersService {
     });
   }
 
+  findOneById({ userId }) {
+    return this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['bankAccount'],
+    });
+  }
+
   findAllAdmin() {
     return this.userRepository.find({
       where: { isAdmin: true },
@@ -155,7 +162,7 @@ export class UsersService {
     if (result.rating !== newRate) {
       throw new NotFoundException('별점 반영에 실패하였습니다.');
     } else {
-      return result;
+      return true;
     }
   }
 
