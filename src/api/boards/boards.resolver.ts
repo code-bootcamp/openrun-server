@@ -2,7 +2,6 @@ import { UseGuards } from '@nestjs/common';
 import { Resolver, Query, Mutation, Args, Context } from '@nestjs/graphql';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { IContext } from 'src/commons/types/type';
-
 import { BoardsService } from './boards.service';
 import { CreateBoardInput } from './dto/createBoard.input';
 import { updateBoardInput } from './dto/updateBoard.input';
@@ -24,6 +23,14 @@ export class BoardsResolver {
       //
       return this.boardsService.findAllbyLimit();
   }
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => [Board])
+  fetchWriteBoards(
+    @Context() context: IContext, //
+  ) {
+    const user = context.req.user;
+    return this.boardsService.findAllbyUser({ email: user.email });
+  }
 
   @Query(() => Board)
   fetchBoard(
@@ -42,6 +49,7 @@ export class BoardsResolver {
 
     return this.boardsService.create({ createBoardInput, email: user.email });
   }
+
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Board)
   async updateBoard(

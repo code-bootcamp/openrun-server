@@ -48,12 +48,6 @@ export class BoardsService {
 
     // const resultCategory = await this.categoriesService.findOne({ name });
 
-    //게시물 등록할 유저를 찾아와서 유저가 게시물 작성 할 때 입력할 포인트가 충분한지 확인 해줘야함.
-    const curPoint = await this.userService.findOne({ email });
-
-    console.log('=========================');
-    console.log(curPoint);
-    console.log('=========================');
     const resultPoint = await this.userService.updatePoint({
       resultUser,
       price,
@@ -165,6 +159,21 @@ export class BoardsService {
       },
     });
     return resultBoards;
+  }
+
+  async findAllbyUser({ email }) {
+    const user = await this.userService.findOne({
+      email,
+    });
+    console.log({ email });
+
+    const result = await this.boardRepository.find({
+      relations: ['user'],
+      where: { user: { email: user.email } },
+    });
+    console.log(result);
+
+    return result;
   }
 
   async delete({ boardId }) {
