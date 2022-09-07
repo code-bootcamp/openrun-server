@@ -50,6 +50,14 @@ import { ChatModule } from './api/chat/chat.module';
         origin: 'http://localhost:3000',
         credentials: true,
         exposedHeaders: ['Set-Cookie', 'Cookie'],
+        methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+        allowedHeaders: [
+          'Access-Control-Allow-Headers',
+          'Authorization',
+          'X-Requested-With',
+          'Content-Type',
+          'Accept',
+        ],
       },
     }),
     TypeOrmModule.forRoot({

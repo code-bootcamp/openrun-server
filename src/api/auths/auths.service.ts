@@ -27,7 +27,10 @@ export class AuthsService {
     //배포용
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000'); //프론트와 연결
     res.setHeader('Access-Control-Allow-Credentials', 'true'); //credential 함께 allow
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'); //method 지정
+    res.setHeader(
+      'Access-Control-Allow-Methods',
+      'GET, HEAD, POST, OPTIONS, PUT',
+    ); //method 지정
     res.setHeader(
       'Access-Control-Allow-Headers',
       'Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With, Origin, Accept, Access-Control-Request-Method, Access-Control-Request-Headers',
