@@ -14,10 +14,6 @@ import {
 export class ChatRoom {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => String)
-  id: string;
-
-  @PrimaryGeneratedColumn('uuid')
-  @Field(() => String)
   room: string;
 
   @ManyToOne(() => User)

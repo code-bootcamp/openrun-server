@@ -78,11 +78,9 @@ export class Board {
   @Field(() => Date, { nullable: true, name: 'dueDate' })
   dueDate: Date;
 
-  @Column({ nullable: true })
   @Field(() => String, { nullable: true, name: 'eventDay' })
   eventDay: string;
 
-  @Column({ nullable: true })
   @Field(() => String, { nullable: true, name: 'eventTime' })
   eventTime: string;
 
