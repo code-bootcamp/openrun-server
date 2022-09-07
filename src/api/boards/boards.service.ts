@@ -167,6 +167,13 @@ export class BoardsService {
     return resultBoards;
   }
 
+  findAllByWriteUser({ userId }) {
+    return this.boardRepository.find({
+      where: { user: { id: userId } },
+      relations: ['user'],
+    });
+  }
+
   async delete({ boardId }) {
     const board = await this.boardRepository.findOne({
       where: { id: boardId },
