@@ -161,7 +161,7 @@ export class UsersService {
     if (result.rating !== newRate) {
       throw new NotFoundException('별점 반영에 실패하였습니다.');
     } else {
-      return true;
+      return result;
     }
   }
 
