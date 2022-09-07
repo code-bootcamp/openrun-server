@@ -34,8 +34,7 @@ export class PaymentHistory {
   @Field(() => User)
   user: User;
 
-  @JoinColumn()
-  @OneToOne(() => Board)
+  @ManyToOne(() => Board)
   @Field(() => Board)
   board: Board;
 }

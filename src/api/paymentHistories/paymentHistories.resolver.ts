@@ -1,7 +1,8 @@
 import { NotFoundException, UseGuards } from '@nestjs/common';
-import { Context, Int, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { IContext } from 'src/commons/types/type';
+import { BoardsService } from '../boards/boards.service';
 import { UsersService } from '../users/users.service';
 import { PaymentHistory } from './entities/paymentHistory.entity';
 import { PaymentHistoriesService } from './paymentHistories.service';
@@ -11,6 +12,7 @@ export class PaymentHistoriesResolver {
   constructor(
     private readonly usersService: UsersService, //
     private readonly paymentHistoriesService: PaymentHistoriesService,
+    private readonly boardsService: BoardsService,
   ) {}
 
   @UseGuards(GqlAuthAccessGuard)
@@ -39,5 +41,26 @@ export class PaymentHistoriesResolver {
     if (!findUser.isAdmin) throw new NotFoundException('관리자가 아닙니다.');
 
     return (await this.paymentHistoriesService.findAll()).length;
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => PaymentHistory)
+  async test(
+    @Context() context: IContext, //
+    @Args('boardId') boardId: string,
+  ) {
+    const user = await this.usersService.findOne({
+      email: context.req.user.email,
+    });
+    const board = await this.boardsService.findOne({
+      boardId,
+    });
+
+    return this.paymentHistoriesService.create({
+      user,
+      board,
+      price: board.price,
+      flag: true,
+    });
   }
 }
