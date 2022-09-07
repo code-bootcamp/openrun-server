@@ -1,4 +1,4 @@
-import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MoreThan, Repository } from 'typeorm';
 import { Image } from '../images/entities/image.entity';
@@ -36,7 +36,6 @@ export class BoardsService {
       image,
       location,
       price,
-      ...board
     } = createBoardInput;
 
     const resultUser = await this.userService.findOne({
@@ -136,7 +135,7 @@ export class BoardsService {
     });
     return resultBoard;
   }
-  async findAllbyCurrent() {
+  async findAllbyCurrent({ page }) {
     const today = new Date();
 
     const resultBoards = await this.boardRepository.find({
@@ -145,11 +144,13 @@ export class BoardsService {
       where: {
         dueDate: MoreThan(today),
       },
+      take: 10,
+      skip: page || 1,
     });
     console.log(resultBoards);
     return resultBoards;
   }
-  async findAllbyLimit() {
+  async findAllbyLimit({ page }) {
     const today = new Date();
     const resultBoards = await this.boardRepository.find({
       relations: ['category', 'location', 'image', 'user'],
@@ -157,11 +158,13 @@ export class BoardsService {
       where: {
         dueDate: MoreThan(today),
       },
+      take: 10,
+      skip: page || 1,
     });
     return resultBoards;
   }
 
-  async findAllbyUser({ email }) {
+  async findAllbyUser({ email, page }) {
     const user = await this.userService.findOne({
       email,
     });
@@ -170,6 +173,8 @@ export class BoardsService {
     const result = await this.boardRepository.find({
       relations: ['user'],
       where: { user: { email: user.email } },
+      take: 10,
+      skip: page || 1,
     });
     console.log(result);
 
@@ -186,7 +191,7 @@ export class BoardsService {
       id: board.location.id,
     });
 
-    const resultImage = await this.imagesService.deleteImages({
+    await this.imagesService.deleteImages({
       url: board.image,
     });
 
