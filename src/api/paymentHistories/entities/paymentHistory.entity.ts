@@ -18,6 +18,10 @@ export class PaymentHistory {
   @Field(() => String)
   id: string;
 
+  @Column()
+  @Field(() => String)
+  price: number;
+
   @Column({ nullable: true })
   @Field(() => String)
   status: string;

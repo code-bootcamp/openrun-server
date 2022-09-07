@@ -13,10 +13,22 @@ export class PaymentHistoriesService {
   findAllByUser({ user }) {
     return this.paymentHistoryRepository.find({
       where: { user: { id: user.id } },
+      relations: {
+        board: true,
+      },
     });
   }
 
   findAll() {
     return this.paymentHistoryRepository.find();
   }
+
+  async findOne({ boardId, userId }) {
+    const result = await this.paymentHistoryRepository.findOne({
+      where: { board: { id: boardId }, user: { id: userId } },
+    });
+    return result;
+  }
+
+  // create({ user, board, price }) {}
 }
