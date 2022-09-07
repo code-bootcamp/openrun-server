@@ -9,7 +9,9 @@ import { Category } from '../categories/entities/category.entity';
 import { FileService } from '../file/file.service';
 import { Image } from '../images/entities/image.entity';
 import { ImagesService } from '../images/images.service';
+import { Inquiry } from '../inquiries/entities/inquiry.entity';
 import { Location } from '../locations/entities/location.entity';
+import { Payment } from '../payments/entities/payment.entity';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { Runner } from './entities/runner.entity';
@@ -26,6 +28,8 @@ import { RunnersService } from './runners.service';
       Location,
       Category,
       BankAccount,
+      Inquiry,
+      Payment,
     ]),
   ],
   providers: [

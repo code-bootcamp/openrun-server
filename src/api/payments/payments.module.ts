@@ -2,7 +2,9 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BankAccountsService } from '../bankAccounts/bankAccounts.service';
 import { BankAccount } from '../bankAccounts/entities/ bankAccount.entity';
+import { Board } from '../boards/entities/board.entity';
 import { IamportsService } from '../iamport/iamport.service';
+import { Inquiry } from '../inquiries/entities/inquiry.entity';
 import { Runner } from '../runners/entities/runner.entity';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
@@ -17,6 +19,8 @@ import { PaymentsService } from './payments.service';
       User,
       BankAccount,
       Runner,
+      Board,
+      Inquiry,
     ]),
   ],
   providers: [

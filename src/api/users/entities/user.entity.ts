@@ -108,9 +108,13 @@ export class User {
   @Field(() => BankAccount)
   bankAccount: BankAccount;
 
-  @Field(() => Int)
+  //관리자 페이지를 위한 total
+  @Field(() => Int, { defaultValue: 0 })
   boardTotal: number;
 
-  @Field(() => Int)
+  @Field(() => Int, { defaultValue: 0 })
   inquiryTotal: number;
+
+  @Field(() => Int, { defaultValue: 0 })
+  paymentTotal: number;
 }
