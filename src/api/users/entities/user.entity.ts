@@ -66,6 +66,10 @@ export class User {
   @Field(() => String)
   profileImg: string;
 
+  @Column({ nullable: true })
+  @Field(() => Int)
+  sucessRate: number;
+
   @Min(0)
   @Column({ nullable: true })
   @Field(() => Int)

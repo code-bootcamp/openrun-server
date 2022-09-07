@@ -7,6 +7,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { ChatRoom } from './chatRoom.entity';
 
 @Entity()
 @ObjectType()
@@ -18,9 +19,9 @@ export class ChatMessage {
   @Field(() => String)
   message: string;
 
-  @Column()
-  @Field(() => String)
-  room: string;
+  @ManyToOne(() => ChatRoom)
+  @Field(() => ChatRoom)
+  room: ChatRoom;
 
   @CreateDateColumn()
   @Field(() => Date)
