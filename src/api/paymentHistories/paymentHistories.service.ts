@@ -30,12 +30,16 @@ export class PaymentHistoriesService {
     return result;
   }
 
-  create({ user, board, price }) {
+  create({ user, board, price, flag }) {
     return this.paymentHistoryRepository.save({
       board,
       user,
       price,
-      status: board.user.id === user.id ? 'seller' : 'runner',
+      status: flag
+        ? 'safeMonney'
+        : board.user.id === user.id
+        ? 'seller'
+        : 'runner',
     });
   }
 }
