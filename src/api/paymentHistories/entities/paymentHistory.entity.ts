@@ -1,4 +1,4 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Board } from 'src/api/boards/entities/board.entity';
 import { User } from 'src/api/users/entities/user.entity';
 import {
@@ -19,7 +19,7 @@ export class PaymentHistory {
   id: string;
 
   @Column()
-  @Field(() => String)
+  @Field(() => Int)
   price: number;
 
   @Column({ nullable: true })
