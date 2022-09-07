@@ -42,9 +42,9 @@ export class BoardsService {
     const resultUser = await this.userService.findOne({
       email,
     });
-    if (resultUser.point < price) {
-      throw new UnprocessableEntityException('포인트가 부족합니다');
-    }
+    // if (resultUser.point < price) {
+    //   throw new UnprocessableEntityException('포인트가 부족합니다');
+    // }
 
     // const resultCategory = await this.categoriesService.findOne({ name });
 
