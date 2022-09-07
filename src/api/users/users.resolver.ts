@@ -6,11 +6,15 @@ import { UpdateUserInput } from './dto/updateUser.input';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { IContext } from 'src/commons/types/type';
+import { PaymentHistoriesService } from '../paymentHistories/paymentHistories.service';
+import { BoardsService } from '../boards/boards.service';
 
 @Resolver()
 export class UsersResolver {
   constructor(
     private readonly usersService: UsersService, //
+    private readonly paymentHistoryService: PaymentHistoriesService,
+    private readonly boardsService: BoardsService,
   ) {}
 
   @UseGuards(GqlAuthAccessGuard)
@@ -100,12 +104,41 @@ export class UsersResolver {
 
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Boolean) //굳이 user를 반환해줘야하나..?(여기서는 runner를 점수매기는 것이기 때문에 user필요없을 듯)
-  createRating(
+  async createRating(
     @Args('boardId') boardId: string,
     @Args('rate') rate: number, //
+    @Context() context: IContext,
   ) {
-    //boardId로 runner찾기
-    //temporary로 하나로 합쳐놓음
-    return this.usersService.updateRate({ boardId, rate });
+    //boardId로 runner찾아서 rating 세팅
+    const updatedRunner = await this.usersService.updateRate({ boardId, rate });
+
+    //현재 user정보를 통하여 find paymentHistory해서 price받아오고 아래에 넘겨주기
+    const email = context.req.user.email;
+    const user = await this.usersService.findOne({ email });
+
+    const payment = await this.paymentHistoryService.findOne({
+      boardId,
+      userId: user.id,
+    });
+
+    //Runner에 point 넘겨주기
+    const result = await this.usersService.updatePoint({
+      resultUser: updatedRunner,
+      price: payment.price,
+      flag: true,
+    });
+
+    //board찾기(paymentHistory를 위한)
+    const board = await this.boardsService.findOne({ boardId });
+
+    //create paymentHistory(runner의 paymentHistory)
+    await this.paymentHistoryService.create({
+      board: board,
+      user: updatedRunner,
+      price: payment.price,
+      flag: true,
+    });
+
+    return result.affected;
   }
 }
