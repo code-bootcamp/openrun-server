@@ -12,6 +12,7 @@ import { ImagesService } from '../images/images.service';
 import { Inquiry } from '../inquiries/entities/inquiry.entity';
 import { InquiriesService } from '../inquiries/inquiries.service';
 import { Location } from '../locations/entities/location.entity';
+import { Payment } from '../payments/entities/payment.entity';
 import { Runner } from '../runners/entities/runner.entity';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
@@ -31,6 +32,7 @@ import { InquiriesAnswerService } from './inquiriesAnswer.service';
       Category,
       BankAccount,
       Runner,
+      Payment,
     ]),
   ],
   providers: [

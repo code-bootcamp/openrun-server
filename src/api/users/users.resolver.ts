@@ -6,22 +6,26 @@ import { UpdateUserInput } from './dto/updateUser.input';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { IContext } from 'src/commons/types/type';
-import { PaymentHistoriesService } from '../paymentHistories/paymentHistories.service';
-import { BoardsService } from '../boards/boards.service';
 import { RunnersService } from '../runners/runners.service';
 
 @Resolver()
 export class UsersResolver {
   constructor(
     private readonly usersService: UsersService, //
-    private readonly paymentHistoryService: PaymentHistoriesService,
-    private readonly boardsService: BoardsService,
     private readonly runnersService: RunnersService,
   ) {}
 
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => [User])
-  fetchUsers() {
+  async fetchUsers(
+    @Context() context: IContext, //
+  ) {
+    const email = context.req.user.email;
+
+    //관리자인지 확인
+    await this.usersService.checkIsAdmin({ email });
+
+    //가공된 데이터 리턴
     return this.usersService.findAll();
   }
 

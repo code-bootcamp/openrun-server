@@ -9,6 +9,9 @@ import { BankAccountsService } from '../bankAccounts/bankAccounts.service';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { Runner } from '../runners/entities/runner.entity';
+import { Board } from '../boards/entities/board.entity';
+import { Inquiry } from '../inquiries/entities/inquiry.entity';
+import { Payment } from '../payments/entities/payment.entity';
 
 @Injectable()
 export class UsersService {
@@ -20,12 +23,47 @@ export class UsersService {
 
     @InjectRepository(Runner)
     private readonly runnerRepository: Repository<Runner>, // temporary
+
+    //findAll에서 데이터를 가공하기 위해
+    @InjectRepository(Board)
+    private readonly boardRepository: Repository<Board>,
+    @InjectRepository(Inquiry)
+    private readonly inquiryRepository: Repository<Inquiry>,
+    @InjectRepository(Payment)
+    private readonly paymentRepository: Repository<Payment>,
   ) {}
 
-  findAll() {
-    return this.userRepository.find({
+  async findAll() {
+    const users = await this.userRepository.find({
       relations: ['bankAccount'],
     });
+
+    const data = await Promise.all(
+      users.map(async (ele) => {
+        const boardTotal = await this.boardRepository.count({
+          where: { user: { id: ele.id } },
+        });
+
+        const inquiryTotal = await this.inquiryRepository.count({
+          where: { user: { id: ele.id } },
+          relations: ['user'],
+        });
+
+        const paymentTotal = await this.paymentRepository.count({
+          where: { user: { id: ele.id } },
+          relations: ['user'],
+        });
+
+        return {
+          ...ele,
+          boardTotal: boardTotal,
+          inquiryTotal: inquiryTotal,
+          paymentTotal: paymentTotal,
+        };
+      }),
+    );
+
+    return data;
   }
 
   async findOne({ email }) {

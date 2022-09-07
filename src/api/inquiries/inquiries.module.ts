@@ -10,6 +10,7 @@ import { FileService } from '../file/file.service';
 import { Image } from '../images/entities/image.entity';
 import { ImagesService } from '../images/images.service';
 import { Location } from '../locations/entities/location.entity';
+import { Payment } from '../payments/entities/payment.entity';
 import { Runner } from '../runners/entities/runner.entity';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
@@ -28,6 +29,7 @@ import { InquiriesService } from './inquiries.service';
       Location,
       Category,
       Runner,
+      Payment,
     ]),
   ],
   providers: [
