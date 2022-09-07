@@ -17,18 +17,18 @@ export class InquiriesService {
   ) {}
 
   findAll() {
-    // return this.inquiryRepository.find({
-    //   relations: {
-    //     user: {
-    //       cardInfo: true,
-    //     },
-    //     board: {
-    //       category: true,
-    //       user: true,
-    //       location: true,
-    //     },
-    //   },
-    // });
+    return this.inquiryRepository.find({
+      relations: {
+        user: {
+          bankAccount: true,
+        },
+        board: {
+          category: true,
+          user: true,
+          location: true,
+        },
+      },
+    });
   }
 
   async findUserInquiry({ user }) {

@@ -55,7 +55,7 @@ export class ChatResolver {
 
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => [ChatMessage])
-  fetchLogs(
+  fetchChatLogs(
     @Args('room') room: string, //
   ) {
     return this.chatService.load({ room });

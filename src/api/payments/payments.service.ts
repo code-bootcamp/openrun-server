@@ -62,7 +62,10 @@ export class PaymentsService {
 
     try {
       const user = await queryRunner.manager.findOne(User, {
-        where: { id: _user },
+        where: { id: _user.id },
+        relations: {
+          bankAccount: true,
+        },
         lock: { mode: 'pessimistic_write' },
       });
 
