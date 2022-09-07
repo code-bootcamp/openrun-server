@@ -13,6 +13,7 @@ import { Location } from '../locations/entities/location.entity';
 import { PaymentHistory } from '../paymentHistories/entities/paymentHistory.entity';
 import { PaymentHistoriesService } from '../paymentHistories/paymentHistories.service';
 import { Runner } from '../runners/entities/runner.entity';
+import { RunnersService } from '../runners/runners.service';
 import { User } from './entities/user.entity';
 import { UsersResolver } from './users.resolver';
 import { UsersService } from './users.service';
@@ -39,6 +40,7 @@ import { UsersService } from './users.service';
     CategoriesService,
     ImagesService,
     FileService,
+    RunnersService,
   ],
 })
 export class UsersModule {}

@@ -8,6 +8,7 @@ import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { IContext } from 'src/commons/types/type';
 import { PaymentHistoriesService } from '../paymentHistories/paymentHistories.service';
 import { BoardsService } from '../boards/boards.service';
+import { RunnersService } from '../runners/runners.service';
 
 @Resolver()
 export class UsersResolver {
@@ -15,6 +16,7 @@ export class UsersResolver {
     private readonly usersService: UsersService, //
     private readonly paymentHistoryService: PaymentHistoriesService,
     private readonly boardsService: BoardsService,
+    private readonly runnersService: RunnersService,
   ) {}
 
   @UseGuards(GqlAuthAccessGuard)
@@ -109,8 +111,14 @@ export class UsersResolver {
     @Args('rate') rate: number, //
     @Context() context: IContext,
   ) {
+    //runner찾기
+    const runner = await this.runnersService.findRunner({ boardId });
+
     //boardId로 runner찾아서 rating 세팅
-    const updatedRunner = await this.usersService.updateRate({ boardId, rate });
+    const updatedRunner = await this.usersService.updateRate({
+      rate,
+      runner,
+    });
 
     //현재 user정보를 통하여 find paymentHistory해서 price받아오고 아래에 넘겨주기
     const email = context.req.user.email;
