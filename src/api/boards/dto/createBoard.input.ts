@@ -24,8 +24,8 @@ export class CreateBoardInput {
   @Field(() => Date, { nullable: true, name: 'dueDate' })
   dueDate: Date;
 
-  @Field(() => Date, { nullable: true, name: 'eventDay' })
-  eventDay: Date;
+  @Field(() => String, { nullable: true, name: 'eventDay' })
+  eventDay: string;
 
   @Field(() => String, { nullable: true, name: 'eventTime' })
   eventTime: string;
