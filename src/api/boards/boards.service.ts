@@ -158,7 +158,11 @@ export class BoardsService {
   async delete({ boardId }) {
     const board = await this.boardRepository.findOne({
       where: { id: boardId },
-      relations: ['image'],
+      relations: ['image', 'location'],
+    });
+
+    await this.locationRepository.softDelete({
+      id: board.location.id,
     });
 
     const resultImage = await this.imagesService.deleteImages({
