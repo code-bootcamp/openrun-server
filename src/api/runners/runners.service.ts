@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Board, BOARD_STATUS_ENUM } from '../boards/entities/board.entity';
 import { Runner } from './entities/runner.entity';
 
 @Injectable()
@@ -11,12 +10,12 @@ export class RunnersService {
     private readonly runnerRepository: Repository<Runner>, //
   ) {}
 
-  create({ user, board }) {
-    return this.runnerRepository.save({
-      isChecked: false,
-      user,
-      board,
+  async findRunner({ boardId }) {
+    const runner = await this.runnerRepository.findOne({
+      where: { board: { id: boardId }, isChecked: true },
+      relations: ['user', 'board'],
     });
+    return runner;
   }
 
   async findAllByBoard({ boardId }) {
@@ -39,6 +38,14 @@ export class RunnersService {
     });
     console.log('runner: ', result);
     return result;
+  }
+
+  create({ user, board }) {
+    return this.runnerRepository.save({
+      isChecked: false,
+      user,
+      board,
+    });
   }
 
   async updateIsChecked({ runner }) {

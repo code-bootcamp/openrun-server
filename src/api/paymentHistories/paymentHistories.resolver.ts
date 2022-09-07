@@ -10,7 +10,7 @@ import { PaymentHistoriesService } from './paymentHistories.service';
 export class PaymentHistoriesResolver {
   constructor(
     private readonly usersService: UsersService, //
-    private readonly paymentHistoiesService: PaymentHistoriesService,
+    private readonly paymentHistoriesService: PaymentHistoriesService,
   ) {}
 
   @UseGuards(GqlAuthAccessGuard)
@@ -24,7 +24,7 @@ export class PaymentHistoriesResolver {
       email: user.email,
     });
 
-    return this.paymentHistoiesService.findAllByUser({ user: findUser });
+    return this.paymentHistoriesService.findAllByUser({ user: findUser });
   }
 
   @UseGuards(GqlAuthAccessGuard)
@@ -38,6 +38,6 @@ export class PaymentHistoriesResolver {
 
     if (!findUser.isAdmin) throw new NotFoundException('관리자가 아닙니다.');
 
-    return (await this.paymentHistoiesService.findAll()).length;
+    return (await this.paymentHistoriesService.findAll()).length;
   }
 }
