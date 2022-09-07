@@ -136,13 +136,7 @@ export class UsersService {
     return result.affected;
   }
 
-  async updateRate({ boardId, rate }) {
-    //temporary - runner찾기
-    const runner = await this.runnerRepository.findOne({
-      where: { board: { id: boardId }, isChecked: true },
-      relations: ['user', 'board'],
-    });
-
+  async updateRate({ rate, runner }) {
     //rating 평균값 계산
     let newRate = 0;
     if (runner.user.rating > 0) {
