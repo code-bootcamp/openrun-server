@@ -48,6 +48,7 @@
     "cache-manager-redis-store": "^2.0.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
+    "coolsms-node-sdk": "^2.0.1",
     "dotenv": "^16.0.1",
     "get-nestjs-endpoint": "^1.0.3",
     "graphql": "^16.5.0",
