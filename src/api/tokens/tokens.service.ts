@@ -83,4 +83,14 @@ export class TokensService {
       return true;
     }
   }
+
+  async checkIsExist({ phone }) {
+    const existUser = await this.findOne({ phone });
+    if (existUser) {
+      await this.tokenRepository.save({
+        ...existUser,
+        isAuth: false,
+      });
+    }
+  }
 }

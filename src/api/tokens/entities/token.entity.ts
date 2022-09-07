@@ -1,20 +1,16 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
 
 @Entity()
 @ObjectType()
 export class Token {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn()
   @Field(() => String)
-  id: string;
+  phone: string;
 
   @Column({ default: false })
   @Field(() => Boolean)
   isAuth: boolean;
-
-  @Column()
-  @Field(() => String)
-  phone: string;
 
   @Column()
   @Field(() => String)

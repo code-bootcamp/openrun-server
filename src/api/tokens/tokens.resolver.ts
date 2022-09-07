@@ -11,6 +11,9 @@ export class TokensResolver {
   async sendTokenToPhone(
     @Args('phone') phone: string, //
   ) {
+    //기존에 등록된 번호인지 확인
+    await this.tokensService.checkIsExist({ phone });
+
     //전화번호 유효성 확인
     this.tokensService.checkPhoneLength({ phone });
 
