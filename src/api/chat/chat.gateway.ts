@@ -60,7 +60,7 @@ export class ChatGateway {
     console.log(room);
     await this.chatMessageRepository.save({
       message: message,
-      room: room,
+      room: { room },
       user: user,
     });
     console.log(`${client.id} : ${data}`);

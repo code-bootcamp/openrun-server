@@ -3,7 +3,7 @@ import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { IContext } from 'src/commons/types/type';
 import { BoardsService } from '../boards/boards.service';
-import { Board, BOARD_STATUS_ENUM } from '../boards/entities/board.entity';
+import { BOARD_STATUS_ENUM } from '../boards/entities/board.entity';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { Runner } from './entities/runner.entity';
@@ -37,6 +37,11 @@ export class RunnersResolver {
 
     const board = await this.boardsService.findOne({ boardId });
 
+    const safetyMonney = board.price * 0.1;
+
+    if (findUser.point < safetyMonney)
+      throw new NotFoundException('보증금이 부족합니다.');
+
     return this.runnersService.create({ user: findUser, board });
   }
 
@@ -56,6 +61,13 @@ export class RunnersResolver {
       userId,
       boardId,
     });
+
+    const user = await this.usersService.findOneById({ userId });
+
+    const safetyMonney = board.price * 0.1;
+
+    if (user.point < safetyMonney)
+      throw new NotFoundException('러너가 보유한 보증금이 모자릅니다.');
 
     if (runner.isChecked)
       throw new NotFoundException('이미 신청한 게시물 입니다.');
