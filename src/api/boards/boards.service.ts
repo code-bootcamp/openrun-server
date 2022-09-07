@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MoreThan, Repository } from 'typeorm';
 import { Image } from '../images/entities/image.entity';
@@ -42,13 +42,25 @@ export class BoardsService {
     const resultUser = await this.userService.findOne({
       email,
     });
+    if (resultUser.point < price) {
+      throw new UnprocessableEntityException('포인트가 부족합니다');
+    }
+
     // const resultCategory = await this.categoriesService.findOne({ name });
 
+    //게시물 등록할 유저를 찾아와서 유저가 게시물 작성 할 때 입력할 포인트가 충분한지 확인 해줘야함.
+    const curPoint = await this.userService.findOne({ email });
+
+    console.log('=========================');
+    console.log(curPoint);
+    console.log('=========================');
     const resultPoint = await this.userService.updatePoint({
       resultUser,
       price,
       flag: false,
     });
+
+    console.log(resultPoint);
 
     const resultLocation = await this.locationRepository.save({
       ...location,
