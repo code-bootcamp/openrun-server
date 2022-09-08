@@ -33,53 +33,53 @@ registerEnumType(USER_LOGINTYPE_ENUM, {
 @ObjectType()
 export class User {
   @PrimaryGeneratedColumn('uuid')
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   id: string;
 
   @Column({ unique: true })
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   email: string;
 
   @Column({ nullable: true })
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   password: string;
 
   @Column({ unique: true })
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   nickName: string;
 
   @Column({ nullable: true })
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   phone: string;
 
   @Min(0)
   @Column({ nullable: true })
-  @Field(() => Int)
+  @Field(() => Int, { nullable: true })
   point: number;
 
   @Min(0)
   @Column({ nullable: true, type: 'float' })
-  @Field(() => Float)
+  @Field(() => Float, { nullable: true })
   rating: number;
 
   @Column({ nullable: true })
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   profileImg: string;
 
   @Column({ nullable: true })
-  @Field(() => Int)
+  @Field(() => Int, { nullable: true })
   sucessRate: number;
 
   @Min(0)
   @Column({ nullable: true })
-  @Field(() => Int)
+  @Field(() => Int, { nullable: true })
   report: number;
 
   @Column({
     default: false, //
     nullable: true,
   })
-  @Field(() => Boolean)
+  @Field(() => Boolean, { nullable: true })
   isAdmin: boolean;
 
   @Column({
@@ -88,33 +88,33 @@ export class User {
     default: USER_LOGINTYPE_ENUM.BASIC,
     nullable: true,
   })
-  @Field(() => USER_LOGINTYPE_ENUM)
+  @Field(() => USER_LOGINTYPE_ENUM, { nullable: true })
   loginType: string;
 
   @CreateDateColumn()
-  @Field(() => Date)
+  @Field(() => Date, { nullable: true })
   createdAt: Date;
 
   @UpdateDateColumn()
-  @Field(() => Date)
+  @Field(() => Date, { nullable: true })
   updatedAt: Date;
 
   @DeleteDateColumn()
-  @Field(() => Date)
+  @Field(() => Date, { nullable: true })
   deleteAt: Date;
 
   @JoinColumn()
   @OneToOne(() => BankAccount)
-  @Field(() => BankAccount)
+  @Field(() => BankAccount, { nullable: true })
   bankAccount: BankAccount;
 
   //관리자 페이지를 위한 total
-  @Field(() => Int, { defaultValue: 0 })
+  @Field(() => Int, { defaultValue: 0, nullable: true })
   boardTotal: number;
 
-  @Field(() => Int, { defaultValue: 0 })
+  @Field(() => Int, { defaultValue: 0, nullable: true })
   inquiryTotal: number;
 
-  @Field(() => Int, { defaultValue: 0 })
+  @Field(() => Int, { defaultValue: 0, nullable: true })
   paymentTotal: number;
 }
