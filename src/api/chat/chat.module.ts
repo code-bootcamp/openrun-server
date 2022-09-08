@@ -11,6 +11,7 @@ import { Image } from '../images/entities/image.entity';
 import { ImagesService } from '../images/images.service';
 import { Inquiry } from '../inquiries/entities/inquiry.entity';
 import { Location } from '../locations/entities/location.entity';
+import { PaymentHistoriesService } from '../paymentHistories/paymentHistories.service';
 import { Payment } from '../payments/entities/payment.entity';
 import { Runner } from '../runners/entities/runner.entity';
 import { User } from '../users/entities/user.entity';
