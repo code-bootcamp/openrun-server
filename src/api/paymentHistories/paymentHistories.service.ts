@@ -36,7 +36,7 @@ export class PaymentHistoriesService {
       user,
       price,
       status: flag
-        ? 'safeMonney'
+        ? 'safeMoney'
         : board.user.id === user.id
         ? 'seller'
         : 'runner',

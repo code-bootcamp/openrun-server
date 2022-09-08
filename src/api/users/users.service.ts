@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  NotFoundException,
-  UnprocessableEntityException,
-} from '@nestjs/common';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BankAccountsService } from '../bankAccounts/bankAccounts.service';
@@ -12,6 +8,7 @@ import { Runner } from '../runners/entities/runner.entity';
 import { Board } from '../boards/entities/board.entity';
 import { Inquiry } from '../inquiries/entities/inquiry.entity';
 import { Payment } from '../payments/entities/payment.entity';
+import { PaymentHistory } from '../paymentHistories/entities/paymentHistory.entity';
 
 @Injectable()
 export class UsersService {
@@ -23,6 +20,9 @@ export class UsersService {
 
     @InjectRepository(Runner)
     private readonly runnerRepository: Repository<Runner>, // temporary
+
+    @InjectRepository(PaymentHistory)
+    private readonly paymentHistoryRepository: Repository<PaymentHistory>,
 
     //findAll에서 데이터를 가공하기 위해
     @InjectRepository(Board)
@@ -176,12 +176,23 @@ export class UsersService {
     }
   }
 
+  async updateRates({ runner, successRate, rating }) {
+    //runner rating 반영
+    const result = await this.userRepository.save({
+      ...runner.user,
+      successRate,
+      rating,
+    });
+
+    return result;
+  }
+
   async delete({ email }) {
     const result = await this.userRepository.softDelete({ email });
     return result.affected;
   }
 
-  async updateRate({ rate, runner }) {
+  async calculateRate({ rate, runner }) {
     //rating 평균값 계산
     let newRate = 0;
     if (runner.user.rating > 0) {
@@ -190,18 +201,25 @@ export class UsersService {
       newRate = rate;
     }
 
-    //runner rating 반영
-    const result = await this.userRepository.save({
-      ...runner.user,
-      rating: newRate,
+    return newRate;
+  }
+
+  async calculateSuccessRate({ runner }) {
+    //유저가 거래한 총 횟수 구하기
+    const totalAdopted = await this.runnerRepository.count({
+      where: { user: { id: runner.user.id } },
+      relations: ['user'],
     });
 
-    //데이터 반영 확인 후 return
-    if (result.rating !== newRate) {
-      throw new NotFoundException('별점 반영에 실패하였습니다.');
-    } else {
-      return true;
-    }
+    //성공한 거래 횟수 구하기
+    const successTotal = await this.paymentHistoryRepository.count({
+      where: { user: { id: runner.user.id }, status: 'safeMoney' },
+      relations: ['user'],
+    });
+
+    //성공률 계산
+    const successRate = (1 / totalAdopted) * successTotal * 100;
+    return successRate;
   }
 
   async checkIsUserAvailable({ email }) {
