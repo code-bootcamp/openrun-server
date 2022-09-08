@@ -42,7 +42,7 @@ export class Board {
   id: string;
 
   @Column()
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   title: string;
 
   @Column({ nullable: true })
@@ -63,7 +63,7 @@ export class Board {
   price: number;
 
   @CreateDateColumn()
-  @Field(() => Date)
+  @Field(() => Date, { nullable: true })
   createdAt: Date;
 
   @UpdateDateColumn()
@@ -71,7 +71,7 @@ export class Board {
   updatedAt: Date;
 
   @DeleteDateColumn()
-  @Field(() => Date)
+  @Field(() => Date, { nullable: true })
   deletedAt: Date;
 
   @Column({ nullable: true })
@@ -85,24 +85,24 @@ export class Board {
   eventTime: string;
 
   @ManyToOne(() => User)
-  @Field(() => User)
+  @Field(() => User, { nullable: true })
   user: User;
 
   @ManyToOne(() => Category)
-  @Field(() => Category)
+  @Field(() => Category, { nullable: true })
   category: Category;
 
   @JoinColumn()
   @OneToOne(() => Location)
-  @Field(() => Location)
+  @Field(() => Location, { nullable: true })
   location: Location;
 
   @OneToMany(() => Image, (image) => image.board)
-  @Field(() => [Image])
+  @Field(() => [Image], { nullable: true })
   image: Image[];
 
   @JoinColumn()
   @OneToOne(() => ChatRoom)
-  @Field(() => ChatRoom)
+  @Field(() => ChatRoom, { nullable: true })
   chatRoom: ChatRoom;
 }
