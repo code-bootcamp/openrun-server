@@ -35,6 +35,7 @@ export class ChatGateway {
   @SubscribeMessage('message')
   connectSomeone(@MessageBody() data: string, @ConnectedSocket() client) {
     const [nickname, room] = data;
+    console.log(data);
     console.log(`${nickname}님이 코드: ${room}방에 접속했습니다.`);
     const comeOn = `${nickname}님이 입장했습니다.`;
     this.server.emit('comeOn' + room, comeOn);
@@ -51,6 +52,7 @@ export class ChatGateway {
   @SubscribeMessage('send')
   async sendMessage(@MessageBody() data: string, @ConnectedSocket() client) {
     const [room, nickname, message] = data;
+    console.log(data);
     const user = await this.usersRepository.findOne({
       where: { nickName: nickname },
     });
