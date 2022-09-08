@@ -39,9 +39,9 @@ export class ReportsService {
     return result;
   }
 
-  async findAll({ email }) {
+  async findAll({}) {
     const result = await this.reportRepository.find({
-      where: { user: { email } },
+      order: { createdAt: 'DESC' },
     });
     return result;
   }
