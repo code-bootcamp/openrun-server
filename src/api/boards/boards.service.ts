@@ -145,7 +145,7 @@ export class BoardsService {
         dueDate: MoreThan(today),
       },
       take: 10,
-      skip: page || 1,
+      skip: page ? (page - 1) * 10 : 0,
     });
     console.log(resultBoards);
     return resultBoards;
@@ -159,7 +159,7 @@ export class BoardsService {
         dueDate: MoreThan(today),
       },
       take: 10,
-      skip: page || 1,
+      skip: page ? (page - 1) * 10 : 0,
     });
     return resultBoards;
   }
@@ -173,8 +173,9 @@ export class BoardsService {
     const result = await this.boardRepository.find({
       relations: ['user'],
       where: { user: { email: user.email } },
+      order: { updatedAt: 'DESC' },
       take: 10,
-      skip: page || 1,
+      skip: page ? (page - 1) * 10 : 0,
     });
     console.log(result);
 
