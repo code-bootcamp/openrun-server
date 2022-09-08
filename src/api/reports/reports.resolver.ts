@@ -21,10 +21,13 @@ export class ReportsResolver {
   ) {}
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => [Report])
-  fetchReports(
+  async fetchReports(
     @Context() context: IContext, //
   ) {
     const email = context.req.user.email;
+
+    await this.usersService.checkIsAdmin({ email });
+
     return this.reportsService.findAll({ email });
   }
 
