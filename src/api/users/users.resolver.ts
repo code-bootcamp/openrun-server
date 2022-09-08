@@ -133,7 +133,7 @@ export class UsersResolver {
     //   boardId,
     //   userId: user.id,
     // });
-
+    // boardId 찾기 -- 포인트 계산 -- usersService에 포인트 업데이트(러너한테 ) -- paymentHistory (러너한테)기록 남기기 그럼 끝 // CompleteBusiness
     // //Runner에 point 넘겨주기
     // const result = await this.usersService.updatePoint({
     //   resultUser: updatedRunner,

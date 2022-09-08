@@ -67,4 +67,12 @@ export class BoardsResolver {
   ) {
     return this.boardsService.delete({ boardId });
   }
+
+  //   @Query(() => [Board])
+  //   test(
+  //     @Args('keyword') keyword: string, //
+  //   ) {
+  //     return this.boardsService.findLocation({ keyword });
+  //   }
+  //
 }

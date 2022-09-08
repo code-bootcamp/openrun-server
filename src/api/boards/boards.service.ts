@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { MoreThan, Repository } from 'typeorm';
+import { Like, MoreThan, Repository } from 'typeorm';
 import { Image } from '../images/entities/image.entity';
 import { User } from '../users/entities/user.entity';
 import { Board, BOARD_STATUS_ENUM } from './entities/board.entity';
@@ -9,6 +9,7 @@ import { Category } from '../categories/entities/category.entity';
 import { UsersService } from '../users/users.service';
 import { CategoriesService } from '../categories/categories.service';
 import { ImagesService } from '../images/images.service';
+import { ChatRoom } from '../chat/entities/chatRoom.entity';
 // import { Category } from '../categories/entities/category.entity';
 
 @Injectable()
@@ -181,6 +182,16 @@ export class BoardsService {
 
     return result;
   }
+
+  // async findLocation({ keyword }) {
+  //   const result = await this.boardRepository.find({
+  //     relations: ['category', 'location', 'image', 'user'],
+  //     where: {},
+  //   });
+
+  //   console.log('============================');
+  //   return result;
+  // }
 
   async delete({ boardId }) {
     const board = await this.boardRepository.findOne({
