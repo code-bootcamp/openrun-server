@@ -117,13 +117,22 @@ export class UsersResolver {
     //runner찾기
     const runner = await this.runnersService.findRunner({ boardId });
 
-    //boardId로 runner찾아서 rating 세팅
-    const result = await this.usersService.updateRate({
-      rate,
+    //성공률 계산 -> ((1/유저가 거래한 총 횟수)* 성공한 거래 횟수) *100(백분율)
+    const successRate = await this.usersService.calculateSuccessRate({
       runner,
     });
 
-    return result;
+    //rating 계산
+    const rating = await this.usersService.calculateRate({ rate, runner });
+
+    //boardId로 runner찾아서 rating 세팅
+    const result = await this.usersService.updateRates({
+      runner,
+      successRate,
+      rating,
+    });
+
+    return result ? true : false;
 
     //현재 user정보를 통하여 find paymentHistory해서 price받아오고 아래에 넘겨주기
     // const email = context.req.user.email;

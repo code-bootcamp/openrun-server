@@ -91,6 +91,16 @@ export class User {
   @Field(() => USER_LOGINTYPE_ENUM, { nullable: true })
   loginType: string;
 
+  @Column({
+    nullable: true,
+  })
+  @Field(() => Date, { nullable: true })
+  loginDate: Date;
+
+  @Column({ nullable: true })
+  @Field(() => Int, { nullable: true })
+  successRate: number;
+
   @CreateDateColumn()
   @Field(() => Date, { nullable: true })
   createdAt: Date;
