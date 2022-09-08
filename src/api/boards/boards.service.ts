@@ -10,6 +10,8 @@ import { UsersService } from '../users/users.service';
 import { CategoriesService } from '../categories/categories.service';
 import { ImagesService } from '../images/images.service';
 import { ChatRoom } from '../chat/entities/chatRoom.entity';
+import { PaymentHistory } from '../paymentHistories/entities/paymentHistory.entity';
+import { PaymentHistoriesService } from '../paymentHistories/paymentHistories.service';
 // import { Category } from '../categories/entities/category.entity';
 
 @Injectable()
@@ -28,6 +30,7 @@ export class BoardsService {
     private readonly userService: UsersService,
     private readonly categoriesService: CategoriesService,
     private readonly imagesService: ImagesService,
+    private readonly paymentHistoriesService: PaymentHistoriesService,
   ) {}
 
   //게시물 등록
@@ -93,6 +96,12 @@ export class BoardsService {
     });
     console.log('맵 아래');
 
+    const resultPaymentHistory = await this.paymentHistoriesService.create({
+      board: result,
+      user: resultUser,
+      price: price,
+      flag: false,
+    });
     return {
       ...result,
       image: resultImage,
