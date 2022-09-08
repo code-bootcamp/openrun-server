@@ -14,10 +14,11 @@ export class ChatService {
     private readonly chatMessageRepository: Repository<ChatMessage>,
   ) {}
 
-  async create({ curUser, hostUser, board }) {
+  async create({ room, host, runner, board }) {
     const result = await this.chatRoomRepository.save({
-      seller: hostUser,
-      runner: curUser,
+      room: room,
+      seller: host,
+      runner: runner,
       board: board,
     });
     console.log(result);
@@ -46,6 +47,12 @@ export class ChatService {
         runner: true,
         board: true,
       },
+    });
+  }
+
+  findAllUser({ email }) {
+    return this.chatRoomRepository.find({
+      where: { runner: { email: email } } || { seller: { email: email } },
     });
   }
 }

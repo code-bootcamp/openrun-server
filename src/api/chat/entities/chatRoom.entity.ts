@@ -6,13 +6,13 @@ import {
   JoinColumn,
   ManyToOne,
   OneToOne,
-  PrimaryGeneratedColumn,
+  PrimaryColumn,
 } from 'typeorm';
 
 @Entity()
 @ObjectType()
 export class ChatRoom {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn()
   @Field(() => String)
   room: string;
 
