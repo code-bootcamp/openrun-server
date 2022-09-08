@@ -1,5 +1,5 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Resolver, Query, Int } from '@nestjs/graphql';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { IContext } from 'src/commons/types/type';
 import { BoardsService } from '../boards/boards.service';
@@ -14,6 +14,17 @@ export class InterestsResolver {
     private readonly boardsService: BoardsService,
     private readonly interestsService: InterestsService,
   ) {}
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => [Interest])
+  async fetchInterestBoards(
+    @Context() context: IContext, //
+    @Args({ name: 'page', nullable: true, type: () => Int }) page: number,
+  ) {
+    const user = context.req.user;
+
+    return this.interestsService.findInterests({ email: user.email, page });
+  }
 
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Interest)
