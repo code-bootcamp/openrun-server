@@ -115,10 +115,20 @@ export class BoardsService {
     const newBoard = await this.boardRepository.findOne({
       where: { id: boardId },
     });
+
+    let dueDate = new Date(
+      `${updateBoardInput.eventDay} ${updateBoardInput.eventTime}`,
+    );
+
+    if (!updateBoardInput.eventDay || !updateBoardInput.eventTime) {
+      dueDate = newBoard.dueDate;
+    }
+
     const result = {
       ...newBoard,
       id: boardId,
       ...updateBoardInput,
+      dueDate: dueDate,
     };
     return await this.boardRepository.save(result);
   }

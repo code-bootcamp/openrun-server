@@ -1,10 +1,4 @@
-import {
-  Field,
-  Float,
-  Int,
-  ObjectType,
-  registerEnumType,
-} from '@nestjs/graphql';
+import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Category } from 'src/api/categories/entities/category.entity';
 import { ChatRoom } from 'src/api/chat/entities/chatRoom.entity';
 import { Image } from 'src/api/images/entities/image.entity';
@@ -77,12 +71,6 @@ export class Board {
   @Column({ nullable: true })
   @Field(() => Date, { nullable: true, name: 'dueDate' })
   dueDate: Date;
-
-  @Field(() => String, { nullable: true, name: 'eventDay' })
-  eventDay: string;
-
-  @Field(() => String, { nullable: true, name: 'eventTime' })
-  eventTime: string;
 
   @ManyToOne(() => User)
   @Field(() => User, { nullable: true })
