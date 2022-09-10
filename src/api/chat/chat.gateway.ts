@@ -51,6 +51,10 @@ export class ChatGateway {
       where: { id: runnerId },
     });
 
+    const isRunner = await this.usersRepository.findOne({
+      where: { nickName },
+    });
+
     const board = await this.boardsService.findOne({
       boardId,
     });
@@ -75,7 +79,7 @@ export class ChatGateway {
         room: true,
         user: true,
       },
-      where: { room: { room: room.room }, user: { nickName } },
+      where: { room: { room: room.room } } && { user: { nickName } },
     });
 
     const findRunnerMessage = await this.chatMessageRepository.findOne({
@@ -83,8 +87,12 @@ export class ChatGateway {
         room: true,
         user: true,
       },
-      where: { room: { room: room.room }, user: { id: runnerId } },
+      where: { room: { room: room.room } } && { user: { id: runnerId } },
     });
+
+    console.log('==============', findSellerMessage);
+
+    console.log('==============', findRunnerMessage);
 
     const comeOn = `${nickName}님이 입장했습니다.`;
 
@@ -96,7 +104,15 @@ export class ChatGateway {
       });
 
       this.server.emit('first' + boardId, [comeOn, nickName]);
-    } else if (!findRunnerMessage) {
+
+      this.wsClients.push(client);
+
+      console.log(`${nickName}님이 코드: ${room.room}방에 접속했습니다.`);
+
+      return;
+    }
+
+    if (!findRunnerMessage && isRunner.id !== host.id) {
       this.chatMessageRepository.save({
         message: comeOn,
         room,
@@ -104,11 +120,16 @@ export class ChatGateway {
       });
 
       this.server.emit('first' + boardId, [comeOn, nickName]);
+
+      this.wsClients.push(client);
+
+      console.log(`${nickName}님이 코드: ${room.room}방에 접속했습니다.`);
+
+      return;
+    } else {
+      this.wsClients.push(client);
+      console.log(`${nickName}님이 코드: ${room.room}방에 접속했습니다.`);
     }
-
-    console.log(`${nickName}님이 코드: ${room.room}방에 접속했습니다.`);
-
-    this.wsClients.push(client);
   }
 
   // private broadcast(event, client, message: any) {
@@ -125,13 +146,21 @@ export class ChatGateway {
   async sendMessage(@MessageBody() data: string, @ConnectedSocket() client) {
     const [room, nickname, message] = data;
 
+    console.log('================', room);
+
     const user = await this.usersRepository.findOne({
       where: { nickName: nickname },
     });
 
     const findRoom = await this.chatRoomRepository.findOne({
       where: { room: room },
+      relations: {
+        runner: true,
+        seller: true,
+      },
     });
+
+    console.log('==========', findRoom);
 
     await this.chatMessageRepository.save({
       message: message,

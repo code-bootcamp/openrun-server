@@ -33,6 +33,10 @@ export class ChatService {
         user: {
           bankAccount: true,
         },
+        room: {
+          runner: true,
+          seller: true,
+        },
       },
     });
 
