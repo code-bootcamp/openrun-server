@@ -26,10 +26,13 @@ export class PaymentsService {
     return result;
   }
 
-  async findPointCharge({ id }) {
+  async findPointCharge({ id, page }) {
     const result = await this.paymentRepository.find({
       where: { user: { id: id } },
+      order: { createdAt: 'DESC' },
       relations: ['user'],
+      take: 10,
+      skip: page ? (page - 1) * 10 : 0,
     });
 
     return result;
