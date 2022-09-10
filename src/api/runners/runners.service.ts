@@ -13,7 +13,18 @@ export class RunnersService {
   async findRunner({ boardId }) {
     const runner = await this.runnerRepository.findOne({
       where: { board: { id: boardId }, isChecked: true },
-      relations: ['user', 'board'],
+      relations: {
+        user: {
+          bankAccount: true,
+        },
+        board: {
+          category: true,
+          user: true,
+          location: true,
+          image: true,
+          chatRoom: true,
+        },
+      },
     });
     return runner;
   }
@@ -22,10 +33,19 @@ export class RunnersService {
     const result = await this.runnerRepository.find({
       where: { board: { id: boardId } },
       relations: {
-        user: true,
+        user: {
+          bankAccount: true,
+        },
+        board: {
+          category: true,
+          user: true,
+          location: true,
+          image: true,
+          chatRoom: true,
+        },
       },
     });
-    return result.map((el) => el.user);
+    return result;
   }
 
   async findOneByBoardUser({ boardId, userId }) {
