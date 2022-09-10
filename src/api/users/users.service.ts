@@ -113,6 +113,22 @@ export class UsersService {
     return userResult;
   }
 
+  //개발용 creatUser
+  async createForAdmin({ _user, hashedPwd: password }) {
+    const { point, rating, report, successRate, ...user } = _user;
+
+    //User 데이터 저장
+    const userResult = await this.userRepository.save({
+      ...user,
+      password,
+      point,
+      rating,
+      report,
+      successRate,
+    });
+    return userResult;
+  }
+
   async createSocialUser({ _user, loginType }) {
     //User 데이터 저장(Social Login용)
     return this.userRepository.save({
@@ -232,12 +248,14 @@ export class UsersService {
     }
   }
 
+  /* 닉네임 unique값이 풀리면서 로직 삭제
   async checkIsNickNameAvailable({ nickName }) {
     const result = await this.userRepository.findOne({ where: { nickName } });
     if (result) {
       throw new UnprocessableEntityException('이미 사용중인 닉네임입니다.');
     }
   }
+  */
 
   async checkIsAdmin({ email }) {
     const result = await this.userRepository.findOne({
