@@ -7,6 +7,7 @@ import { UseGuards } from '@nestjs/common';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { IContext } from 'src/commons/types/type';
 import { RunnersService } from '../runners/runners.service';
+import { CreateAdminInput } from './dto/createAdmin.input';
 
 @Resolver()
 export class UsersResolver {
@@ -77,10 +78,10 @@ export class UsersResolver {
       email: createUserInput.email,
     });
 
-    //닉네임이 존재하는지 확인
-    await this.usersService.checkIsNickNameAvailable({
-      nickName: createUserInput.nickName,
-    });
+    //닉네임이 존재하는지 확인 -> unique값이 풀리면서 삭제 예정
+    // await this.usersService.checkIsNickNameAvailable({
+    //   nickName: createUserInput.nickName,
+    // });
 
     //패스워드 Encrypt
     const { password, ...user } = createUserInput;
@@ -88,6 +89,27 @@ export class UsersResolver {
 
     //유저 생성
     return this.usersService.create({
+      _user: user,
+      hashedPwd,
+    });
+  }
+
+  //createAdmin : 관리자 계정 생성
+  @Mutation(() => User)
+  async createAdmin(
+    @Args('createAdminInput') createAdminInput: CreateAdminInput, //
+  ) {
+    //유저가 존재하는지 확인
+    await this.usersService.checkIsUserAvailable({
+      email: createAdminInput.email,
+    });
+
+    //패스워드 Encrypt
+    const { password, ...user } = createAdminInput;
+    const hashedPwd = await this.usersService.encryptPassword({ password });
+
+    //유저 생성
+    return this.usersService.createForAdmin({
       _user: user,
       hashedPwd,
     });
