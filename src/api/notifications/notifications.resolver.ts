@@ -10,25 +10,7 @@ import { NotificationsService } from './notifications.service';
 export class NotificationsResolver {
   constructor(
     private readonly notificationsService: NotificationsService, //
-    private readonly usersService: UsersService,
   ) {}
-
-  @UseGuards(GqlAuthAccessGuard)
-  @Query(() => Int)
-  async fetchNotiCount(
-    @Context() context: IContext, //
-  ) {
-    const email = context.req.user.email;
-
-    //유저 찾기
-    const user = await this.usersService.findOne({ email });
-
-    //유저의 마지막 로그인 날짜가 오늘보다 이전이라면 보드를 체크하여 예정된 일정의 3일 전인 게 있다면 repository에 save
-    //알림 업데이트 확인
-
-    //새로운 알림이 있는지 확인
-    const number = await this.notificationsService.countByUser({ user });
-  }
 
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => [Notification])
@@ -38,9 +20,17 @@ export class NotificationsResolver {
     const email = context.req.user.email;
 
     //유저 찾기
-    const user = await this.usersService.findOne({ email });
+    const runner = await this.notificationsService.findRunner({ email });
 
-    //유저의 알림 데이터 가져오기
-    return this.notificationsService.findAllByUser({ user });
+    //D-day 구하기
+    const today = new Date();
+    console.log(today, runner.board.dueDate);
+    console.log(today.getTime(), runner.board.dueDate.getTime());
+    const temp = runner.board.dueDate.getTime() - today.getTime();
+    console.log('temp = ', temp);
+    const test = new Date(temp);
+    console.log('test = ', test.toDateString());
+
+    //기존에 데이터가 있는지 확인하고 없으면 새로 생성, 있으면 update & isNew에 표시해주기
   }
 }

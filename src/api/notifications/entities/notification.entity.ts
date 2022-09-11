@@ -1,6 +1,14 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { Board } from 'src/api/boards/entities/board.entity';
 import { User } from 'src/api/users/entities/user.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -20,4 +28,9 @@ export class Notification {
   @ManyToOne(() => User, { nullable: true })
   @Field(() => User, { nullable: true })
   user: User;
+
+  @JoinColumn()
+  @OneToOne(() => Board)
+  @Field(() => Board, { nullable: true })
+  board: Board;
 }
