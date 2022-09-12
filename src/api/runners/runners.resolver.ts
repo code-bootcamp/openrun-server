@@ -37,9 +37,9 @@ export class RunnersResolver {
 
     const board = await this.boardsService.findOne({ boardId });
 
-    const safetyMonney = board.price * 0.1;
+    const safetyMoney = board.price * 0.1;
 
-    if (findUser.point < safetyMonney)
+    if (findUser.point < safetyMoney)
       throw new NotFoundException('보증금이 부족합니다.');
 
     return this.runnersService.create({ user: findUser, board });
@@ -64,9 +64,9 @@ export class RunnersResolver {
 
     const user = await this.usersService.findOneById({ userId });
 
-    const safetyMonney = board.price * 0.1;
+    const safetyMoney = board.price * 0.1;
 
-    if (user.point < safetyMonney)
+    if (user.point < safetyMoney)
       throw new NotFoundException('러너가 보유한 보증금이 모자릅니다.');
 
     if (runner.isChecked)

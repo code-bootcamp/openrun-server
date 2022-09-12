@@ -12,6 +12,7 @@ import { ImagesService } from '../images/images.service';
 import { ChatRoom } from '../chat/entities/chatRoom.entity';
 import { PaymentHistory } from '../paymentHistories/entities/paymentHistory.entity';
 import { PaymentHistoriesService } from '../paymentHistories/paymentHistories.service';
+import { Runner } from '../runners/entities/runner.entity';
 // import { Category } from '../categories/entities/category.entity';
 
 @Injectable()
@@ -27,6 +28,8 @@ export class BoardsService {
     private readonly locationRepository: Repository<Location>,
     @InjectRepository(Category)
     private readonly categoryRepository: Repository<Category>,
+    @InjectRepository(Runner)
+    private readonly runnerRepository: Repository<Runner>,
     private readonly userService: UsersService,
     private readonly categoriesService: CategoriesService,
     private readonly imagesService: ImagesService,
@@ -130,6 +133,24 @@ export class BoardsService {
     });
     return result;
   }
+  async updateToFinish({ board }) {
+    const result = await this.boardRepository.save({
+      ...board,
+      status: BOARD_STATUS_ENUM.FINISHED,
+    });
+    return result;
+  }
+  // async updatePointToRunner({ runner, price }) {
+  //   return this.userRepository.update({ email: runner.email });
+  // }
+
+  // async updateFinish({ board, runnerId}) {
+  //   const updateStatus = await this.boardRepository.save({
+  //     ...board,
+  //     status: BOARD_STATUS_ENUM.FINISHED,
+  //   });
+  //   const runner = await this.runner;
+  // }
 
   //상세페이지
   async findOne({ boardId }) {

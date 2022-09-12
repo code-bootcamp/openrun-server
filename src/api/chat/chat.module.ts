@@ -11,6 +11,7 @@ import { Image } from '../images/entities/image.entity';
 import { ImagesService } from '../images/images.service';
 import { Inquiry } from '../inquiries/entities/inquiry.entity';
 import { Location } from '../locations/entities/location.entity';
+import { PaymentHistory } from '../paymentHistories/entities/paymentHistory.entity';
 import { PaymentHistoriesService } from '../paymentHistories/paymentHistories.service';
 import { Payment } from '../payments/entities/payment.entity';
 import { Runner } from '../runners/entities/runner.entity';
@@ -36,6 +37,7 @@ import { ChatRoom } from './entities/chatRoom.entity';
       Runner,
       Inquiry,
       Payment,
+      PaymentHistory,
     ]),
   ],
   providers: [
@@ -48,6 +50,7 @@ import { ChatRoom } from './entities/chatRoom.entity';
     CategoriesService,
     ImagesService,
     FileService,
+    PaymentHistoriesService,
   ],
 })
 export class ChatModule {}

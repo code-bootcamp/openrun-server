@@ -12,6 +12,8 @@ import { ImagesService } from '../images/images.service';
 import { Inquiry } from '../inquiries/entities/inquiry.entity';
 import { InquiriesService } from '../inquiries/inquiries.service';
 import { Location } from '../locations/entities/location.entity';
+import { PaymentHistory } from '../paymentHistories/entities/paymentHistory.entity';
+import { PaymentHistoriesService } from '../paymentHistories/paymentHistories.service';
 import { Payment } from '../payments/entities/payment.entity';
 import { Runner } from '../runners/entities/runner.entity';
 import { User } from '../users/entities/user.entity';
@@ -33,6 +35,7 @@ import { InquiriesAnswerService } from './inquiriesAnswer.service';
       BankAccount,
       Runner,
       Payment,
+      PaymentHistory,
     ]),
   ],
   providers: [
@@ -45,6 +48,7 @@ import { InquiriesAnswerService } from './inquiriesAnswer.service';
     CategoriesService,
     ImagesService,
     FileService,
+    PaymentHistoriesService,
   ],
 })
 export class InquiriesAnswerModule {}
