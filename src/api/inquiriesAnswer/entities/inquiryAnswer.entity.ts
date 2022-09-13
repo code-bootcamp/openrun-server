@@ -18,15 +18,15 @@ export class InquiryAnswer {
   id: string;
 
   @Column({ nullable: true })
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   contents: string;
 
   @JoinColumn()
   @OneToOne(() => Inquiry)
-  @Field(() => Inquiry)
+  @Field(() => Inquiry, { nullable: true })
   inquiry: Inquiry;
 
   @CreateDateColumn()
-  @Field(() => Date)
+  @Field(() => Date, { nullable: true })
   createdAt: Date;
 }

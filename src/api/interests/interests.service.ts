@@ -36,4 +36,16 @@ export class InterestsService {
     console.log(result);
     return result;
   }
+
+  async findInterest({ user, board }) {
+    return await this.interestRepository.findOne({
+      where: { user: { id: user.id }, board: { id: board.id } },
+    });
+  }
+
+  delete({ interest }) {
+    this.interestRepository.delete({
+      id: interest.id,
+    });
+  }
 }

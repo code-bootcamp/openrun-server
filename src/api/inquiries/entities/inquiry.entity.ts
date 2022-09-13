@@ -17,26 +17,26 @@ export class Inquiry {
   id: string;
 
   @Column({ nullable: true })
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   type: string; //추후에 type지정하여 ENUM 작업해줘야함!(아직 유형 미정)
 
   @Column({ nullable: true })
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   title: string;
 
   @Column({ nullable: true })
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   contents: string;
 
   @ManyToOne(() => User)
-  @Field(() => User)
+  @Field(() => User, { nullable: true })
   user: User;
 
   @ManyToOne(() => Board)
-  @Field(() => Board)
+  @Field(() => Board, { nullable: true })
   board: Board;
 
   @CreateDateColumn()
-  @Field(() => Date)
+  @Field(() => Date, { nullable: true })
   createdAt: Date;
 }

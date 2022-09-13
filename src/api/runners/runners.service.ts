@@ -29,6 +29,24 @@ export class RunnersService {
     return runner;
   }
 
+  async findRunnerByBoard({ boardId, user }) {
+    return await this.runnerRepository.findOne({
+      where: { board: { id: boardId }, user: { id: user.id } },
+      relations: {
+        user: {
+          bankAccount: true,
+        },
+        board: {
+          category: true,
+          user: true,
+          location: true,
+          image: true,
+          chatRoom: true,
+        },
+      },
+    });
+  }
+
   async findAllByBoard({ boardId }) {
     const result = await this.runnerRepository.find({
       where: { board: { id: boardId } },
