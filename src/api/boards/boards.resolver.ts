@@ -71,7 +71,6 @@ export class BoardsResolver {
       throw new NotFoundException('이미 거래완료된 게시물 입니다.');
 
     //   러너 정보 Get
-    console.log('============', board);
     const runner = await this.runnersService.findRunner({ boardId });
 
     //러너 포인트 업데이트
