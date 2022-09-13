@@ -23,14 +23,9 @@ export class NotificationsResolver {
     const runner = await this.notificationsService.findRunner({ email });
 
     //D-day 구하기
-    const today = new Date();
-    console.log(today, runner.board.dueDate);
-    console.log(today.getTime(), runner.board.dueDate.getTime());
-    const temp = runner.board.dueDate.getTime() - today.getTime();
-    console.log('temp = ', temp);
-    const test = new Date(temp);
-    console.log('test = ', test.toDateString());
+    const contents = await this.notificationsService.getDday({ runner });
 
     //기존에 데이터가 있는지 확인하고 없으면 새로 생성, 있으면 update & isNew에 표시해주기
+    return await this.notificationsService.create({ runner, contents });
   }
 }
