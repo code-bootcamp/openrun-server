@@ -34,7 +34,7 @@ import { NotificationsModule } from './api/notifications/notifications.module';
     InquiriesModule,
     InquiriesAnswerModule,
     InterestsModule,
-    // NotificationsModule,
+    NotificationsModule,
     PaymentHistoriesModule,
     PaymentsModule,
     ReportsModule,
