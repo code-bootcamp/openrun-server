@@ -21,6 +21,7 @@ export class NotificationsResolver {
 
     //유저 찾기
     const runner = await this.notificationsService.findRunner({ email });
+    console.log('runner = ', runner);
 
     //D-day 구하기
     const contents = await this.notificationsService.getDday({ runner });
