@@ -211,8 +211,6 @@ export class BoardsService {
   //     relations: ['category', 'location', 'image', 'user'],
   //     where: {},
   //   });
-
-  //   console.log('============================');
   //   return result;
   // }
 
@@ -222,12 +220,13 @@ export class BoardsService {
     await queryRunner.startTransaction('SERIALIZABLE');
 
     try {
-      const board = await this.boardRepository.findOne({
+      const board = await queryRunner.manager.findOne(Board, {
         where: { id: boardId },
         relations: ['image', 'location'],
+        lock: { mode: 'pessimistic_write' },
       });
 
-      await this.locationRepository.softDelete({
+      await queryRunner.manager.softDelete(Location, {
         id: board.location.id,
       });
 
@@ -237,7 +236,10 @@ export class BoardsService {
         });
       }
 
-      const result = await this.boardRepository.softDelete({ id: boardId });
+      const result = await queryRunner.manager.softDelete(Board, {
+        id: boardId,
+      });
+
       await queryRunner.commitTransaction();
       return result.affected ? true : false;
     } catch (error) {
