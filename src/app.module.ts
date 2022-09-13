@@ -21,6 +21,7 @@ import { RedisClientOptions } from 'redis';
 import * as redisStore from 'cache-manager-redis-store';
 import { FileModule } from './api/file/file.module';
 import { ChatModule } from './api/chat/chat.module';
+import { NotificationsModule } from './api/notifications/notifications.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { ChatModule } from './api/chat/chat.module';
     InquiriesModule,
     InquiriesAnswerModule,
     InterestsModule,
+    NotificationsModule,
     PaymentHistoriesModule,
     PaymentsModule,
     ReportsModule,

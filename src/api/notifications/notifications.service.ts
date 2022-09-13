@@ -25,7 +25,7 @@ export class NotificationsService {
   findRunner({ email }) {
     return this.runnerRepository.find({
       where: {
-        user: { email },
+        user: { email: email },
         board: { status: BOARD_STATUS_ENUM.INPROGRESS },
       },
       relations: ['user', 'board'],
@@ -35,52 +35,53 @@ export class NotificationsService {
   getDday({ runner }) {
     //D-day 구하기
     const now = new Date();
+    const nowYear = now.getFullYear();
+    const nowMonth = now.getMonth() + 1;
+    const nowDate = now.getDate();
 
     return runner.map((ele) => {
       let contents = '';
-      const diffTime = ele.board.dueDate.getTime() - now.getTime();
-      if (diffTime < 0 && diffTime > 60 * 60 * 24 * 4) {
-        //이미 지났거나 D-day가 4일 이상 남았을 경우
-        contents = '';
-      } else if (diffTime > 60 * 60 * 24 * 3) {
-        //3일 남았을 경우
-        contents = '러닝 3일 전입니다.';
-      } else if (diffTime > 60 * 60 * 24 * 2) {
-        //2일 남았을 경우
-        contents = '러닝 2일 전입니다.';
-      } else if (diffTime > 60 * 60 * 24 * 1) {
-        //1일 남았을 경우
-        contents = '러닝 1일 전입니다.';
-      } else {
-        //D-day
-        contents = '오늘이 바로 러닝데이!!';
+
+      const dueYear = ele.board.dueDate.getFullYear();
+      const dueMonth = ele.board.dueDate.getMonth() + 1;
+      const dueDate = ele.board.dueDate.getDate();
+
+      if (dueYear === nowYear && dueMonth === nowMonth) {
+        if (dueDate - 3 === nowDate) {
+          //3일 남았을 경우
+          contents = '러닝 3일 전입니다.';
+        } else if (dueDate - 2 === nowDate) {
+          //2일 남았을 경우
+          contents = '러닝 2일 전입니다.';
+        } else if (dueDate - 1 === nowDate) {
+          //1일 남았을 경우
+          contents = '러닝 1일 전입니다.';
+        } else if (dueDate === nowDate) {
+          //D-day
+          contents = '오늘이 바로 러닝데이!!';
+        }
       }
+
+      // const diffTime = ele.board.dueDate.getTime() - now.getTime();
+      // if (diffTime < 0 || diffTime > 60 * 60 * 24 * 4 * 1000) {
+      //   //이미 지났거나 D-day가 4일 이상 남았을 경우
+      //   contents = '';
+      // } else if (diffTime > 60 * 60 * 24 * 3 * 1000) {
+      //   //3일 남았을 경우
+      //   contents = '러닝 3일 전입니다.';
+      // } else if (diffTime > 60 * 60 * 24 * 2 * 1000) {
+      //   //2일 남았을 경우
+      //   contents = '러닝 2일 전입니다.';
+      // } else if (diffTime > 60 * 60 * 24 * 1 * 1000) {
+      //   //1일 남았을 경우
+      //   contents = '러닝 1일 전입니다.';
+      // } else {
+      //   //D-day
+      //   contents = '오늘이 바로 러닝데이!!';
+      // }
+      console.log('contents = ', contents);
       return contents;
     });
-
-    // for (let i = 0; i < runner.length; i++) {
-    //   let contents = '';
-    //   const diffTime = runner[i].board.dueDate.getTime() - now.getTime();
-    //   if (diffTime < 0 && diffTime > 60 * 60 * 24 * 4) {
-    //     //이미 지났거나 D-day가 4일 이상 남았을 경우
-    //     continue;
-    //   } else if (diffTime > 60 * 60 * 24 * 3) {
-    //     //3일 남았을 경우
-    //     contents = '러닝 3일 전입니다.';
-    //   } else if (diffTime > 60 * 60 * 24 * 2) {
-    //     //2일 남았을 경우
-    //     contents = '러닝 2일 전입니다.';
-    //   } else if (diffTime > 60 * 60 * 24 * 1) {
-    //     //1일 남았을 경우
-    //     contents = '러닝 1일 전입니다.';
-    //   } else {
-    //     //D-day
-    //     contents = '오늘이 바로 러닝데이!!';
-    //   }
-    // }
-
-    // const test = new Date(temp);
-    // console.log('test = ', test.toDateString());
   }
 
   async create({ runner, contents }) {
