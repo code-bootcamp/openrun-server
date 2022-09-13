@@ -27,7 +27,7 @@ export class InterestsResolver {
   }
 
   @UseGuards(GqlAuthAccessGuard)
-  @Mutation(() => Interest)
+  @Mutation(() => Boolean)
   async addInterestList(
     @Args('boardId') boardId: string,
     @Context() context: IContext,
@@ -38,6 +38,17 @@ export class InterestsResolver {
 
     const findBoard = await this.boardsService.findOne({ boardId });
 
-    return this.interestsService.create({ user: findUser, board: findBoard });
+    const findInterest = await this.interestsService.findInterest({
+      user: findUser,
+      board: findBoard,
+    });
+
+    if (findInterest) {
+      this.interestsService.delete({ interest: findInterest });
+      return false;
+    }
+
+    this.interestsService.create({ user: findUser, board: findBoard });
+    return true;
   }
 }

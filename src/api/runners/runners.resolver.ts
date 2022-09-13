@@ -35,6 +35,13 @@ export class RunnersResolver {
 
     const findUser = await this.usersService.findOne({ email: user.email });
 
+    const findRunner = await this.runnersService.findRunnerByBoard({
+      boardId,
+      user: findUser,
+    });
+
+    if (findRunner) throw new NotFoundException('이미 신청한 게시물입니다.');
+
     const board = await this.boardsService.findOne({ boardId });
 
     const safetyMoney = board.price * 0.1;
