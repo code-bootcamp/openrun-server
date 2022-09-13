@@ -25,18 +25,21 @@ export class Payment {
   impUid: string;
 
   @Column({ type: 'enum', enum: PAYMENT_STATUS_ENUM })
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   status: string;
 
   @Column({ nullable: true })
-  @Field(() => Int)
+  @Field(() => Int, { nullable: true })
   amount: number;
 
+  @Field(() => Int, { nullable: true })
+  count: number;
+
   @ManyToOne(() => User)
-  @Field(() => User)
+  @Field(() => User, { nullable: true })
   user: User;
 
   @CreateDateColumn()
-  @Field(() => Date)
+  @Field(() => Date, { nullable: true })
   createdAt: Date;
 }

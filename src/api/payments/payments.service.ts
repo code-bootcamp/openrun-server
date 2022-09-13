@@ -39,22 +39,29 @@ export class PaymentsService {
   }
 
   async findTotalAmount() {
-    const payment = await this.paymentRepository.find({
-      where: { status: PAYMENT_STATUS_ENUM.PAYMENT },
+    const result = await this.paymentRepository.find({
+      order: { createdAt: 'ASC' },
     });
-    const cancel = await this.paymentRepository.find({
-      where: { status: PAYMENT_STATUS_ENUM.CANCEL },
+    const obj = {};
+    result.forEach((el) => {
+      const id = JSON.stringify(el.createdAt).slice(1, 11);
+      if (!obj[id]) {
+        obj[id] = [
+          {
+            id: id,
+            amount: el.amount,
+            count: 1,
+          },
+        ];
+      } else {
+        obj[id][0].amount = obj[id][0].amount + el.amount;
+        obj[id][0].count = obj[id][0].count + 1;
+      }
     });
 
-    const plus = payment.reduce((acc, cur) => {
-      return acc + cur.amount;
-    }, 0);
+    const arr = Object.values(obj).map((el) => el[0]);
 
-    const minus = cancel.reduce((acc, cur) => {
-      return acc + cur.amount;
-    }, 0);
-
-    return plus + minus;
+    return arr;
   }
 
   async create({ impUid, amount, user: _user }) {
