@@ -69,6 +69,20 @@ export class UsersResolver {
     return this.usersService.findNumberOfUsers();
   }
 
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => [User])
+  async fetchUsersCountByDate(
+    @Context() context: IContext, //
+  ) {
+    const email = context.req.user.email;
+
+    //admin 여부 확인
+    await this.usersService.checkIsAdmin({ email });
+
+    //날짜별 생성된 유저 수 출력
+    return this.usersService.findNumberOfUsersByDate();
+  }
+
   @Mutation(() => User)
   async createUser(
     @Args('createUserInput') createUserInput: CreateUserInput, //
