@@ -140,6 +140,6 @@ export class AuthsService {
 
     //로그인
     this.setRefreshToken({ user, res });
-    res.redirect('http://localhost:5500/frontend/login/index.html');
+    res.redirect('http://localhost:3000/myPage/');
   }
 }

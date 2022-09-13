@@ -15,7 +15,7 @@ export class JwtKakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
     return {
       email: profile._json.kakao_account.email,
       password: 'socialLogin',
-      nickName: '', //profile._json.kakao_account.profile.nickname
+      nickName: profile._json.kakao_account.profile.nickname,
       phone: '',
       profileImg: profile._json.kakao_account.profile.thumbnail_image_url,
     };
