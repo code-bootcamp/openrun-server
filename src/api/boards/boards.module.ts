@@ -42,7 +42,7 @@ import { Board } from './entities/board.entity';
   ],
 
   providers: [
-    BoardsResolver, //
+    BoardsResolver,
     BoardsService,
     UsersService,
     BankAccountsService,
