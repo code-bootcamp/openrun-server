@@ -9,6 +9,7 @@ import { IContext } from 'src/commons/types/type';
 import { IamportsService } from '../iamport/iamport.service';
 import { UsersService } from '../users/users.service';
 import { Payment, PAYMENT_STATUS_ENUM } from './entities/payment.entity';
+import { PaymentByDate } from './entities/paymentByDate';
 import { PaymentsService } from './payments.service';
 
 @Resolver()
@@ -37,7 +38,7 @@ export class PaymentsResolver {
     return result;
   }
 
-  @Query(() => Int)
+  @Query(() => [PaymentByDate])
   fetchPayments() {
     return this.paymentsService.findTotalAmount();
   }
