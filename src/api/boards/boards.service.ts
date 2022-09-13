@@ -118,10 +118,20 @@ export class BoardsService {
     const newBoard = await this.boardRepository.findOne({
       where: { id: boardId },
     });
+
+    let dueDate = new Date(
+      `${updateBoardInput.eventDay} ${updateBoardInput.eventTime}`,
+    );
+
+    if (!updateBoardInput.eventDay || !updateBoardInput.eventTime) {
+      dueDate = newBoard.dueDate;
+    }
+
     const result = {
       ...newBoard,
       id: boardId,
       ...updateBoardInput,
+      dueDate: dueDate,
     };
     return await this.boardRepository.save(result);
   }
@@ -233,9 +243,11 @@ export class BoardsService {
       id: board.location.id,
     });
 
-    await this.imagesService.deleteImages({
-      url: board.image,
-    });
+    if (!board.image[0].url.includes('default.img')) {
+      await this.imagesService.deleteImages({
+        url: board.image,
+      });
+    }
 
     const result = await this.boardRepository.softDelete({ id: boardId });
 
