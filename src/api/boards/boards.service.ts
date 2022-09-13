@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Like, MoreThan, Repository } from 'typeorm';
+import { DataSource, MoreThan, Repository } from 'typeorm';
 import { Image } from '../images/entities/image.entity';
 import { User } from '../users/entities/user.entity';
 import { Board, BOARD_STATUS_ENUM } from './entities/board.entity';
@@ -9,8 +9,6 @@ import { Category } from '../categories/entities/category.entity';
 import { UsersService } from '../users/users.service';
 import { CategoriesService } from '../categories/categories.service';
 import { ImagesService } from '../images/images.service';
-import { ChatRoom } from '../chat/entities/chatRoom.entity';
-import { PaymentHistory } from '../paymentHistories/entities/paymentHistory.entity';
 import { PaymentHistoriesService } from '../paymentHistories/paymentHistories.service';
 import { Runner } from '../runners/entities/runner.entity';
 // import { Category } from '../categories/entities/category.entity';
@@ -34,6 +32,7 @@ export class BoardsService {
     private readonly categoriesService: CategoriesService,
     private readonly imagesService: ImagesService,
     private readonly paymentHistoriesService: PaymentHistoriesService,
+    private readonly connection: DataSource,
   ) {}
 
   //게시물 등록
@@ -60,8 +59,6 @@ export class BoardsService {
       flag: false,
     });
 
-    console.log(resultPoint);
-
     const resultLocation = await this.locationRepository.save({
       ...location,
     });
@@ -77,7 +74,6 @@ export class BoardsService {
     if (!createBoardInput.eventDay || !createBoardInput.eventTime) {
       dueDate = new Date('2023');
     }
-    console.log('===========', dueDate);
 
     const result = await this.boardRepository.save({
       ...createBoardInput,
@@ -150,17 +146,6 @@ export class BoardsService {
     });
     return result;
   }
-  // async updatePointToRunner({ runner, price }) {
-  //   return this.userRepository.update({ email: runner.email });
-  // }
-
-  // async updateFinish({ board, runnerId}) {
-  //   const updateStatus = await this.boardRepository.save({
-  //     ...board,
-  //     status: BOARD_STATUS_ENUM.FINISHED,
-  //   });
-  //   const runner = await this.runner;
-  // }
 
   //상세페이지
   async findOne({ boardId }) {
@@ -209,7 +194,6 @@ export class BoardsService {
     const user = await this.userService.findOne({
       email,
     });
-    console.log({ email });
 
     const result = await this.boardRepository.find({
       relations: ['user'],
@@ -218,7 +202,6 @@ export class BoardsService {
       take: 10,
       skip: page ? (page - 1) * 10 : 0,
     });
-    console.log(result);
 
     return result;
   }
@@ -228,29 +211,41 @@ export class BoardsService {
   //     relations: ['category', 'location', 'image', 'user'],
   //     where: {},
   //   });
-
-  //   console.log('============================');
   //   return result;
   // }
 
   async delete({ boardId }) {
-    const board = await this.boardRepository.findOne({
-      where: { id: boardId },
-      relations: ['image', 'location'],
-    });
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction('SERIALIZABLE');
 
-    await this.locationRepository.softDelete({
-      id: board.location.id,
-    });
-
-    if (!board.image[0].url.includes('default.img')) {
-      await this.imagesService.deleteImages({
-        url: board.image,
+    try {
+      const board = await queryRunner.manager.findOne(Board, {
+        where: { id: boardId },
+        relations: ['image', 'location'],
+        lock: { mode: 'pessimistic_write' },
       });
+
+      await queryRunner.manager.softDelete(Location, {
+        id: board.location.id,
+      });
+
+      if (!board.image[0].url.includes('default.img')) {
+        await this.imagesService.deleteImages({
+          url: board.image,
+        });
+      }
+
+      const result = await queryRunner.manager.softDelete(Board, {
+        id: boardId,
+      });
+
+      await queryRunner.commitTransaction();
+      return result.affected ? true : false;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+    } finally {
+      await queryRunner.release();
     }
-
-    const result = await this.boardRepository.softDelete({ id: boardId });
-
-    return result.affected ? true : false;
   }
 }
