@@ -14,6 +14,7 @@ import { PaymentHistory } from '../paymentHistories/entities/paymentHistory.enti
 import { PaymentHistoriesService } from '../paymentHistories/paymentHistories.service';
 import { Payment } from '../payments/entities/payment.entity';
 import { Runner } from '../runners/entities/runner.entity';
+import { RunnersService } from '../runners/runners.service';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { BoardsResolver } from './boards.resolver';
@@ -41,7 +42,7 @@ import { Board } from './entities/board.entity';
   ],
 
   providers: [
-    BoardsResolver, //
+    BoardsResolver,
     BoardsService,
     UsersService,
     BankAccountsService,
