@@ -16,26 +16,26 @@ export class Location {
   @Column({
     nullable: true,
   })
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   address: string;
 
   @Column({ nullable: true })
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   addressDetail: string;
 
   @Column({ nullable: true })
-  @Field(() => Float)
+  @Field(() => Float, { nullable: true })
   lat: number;
 
   @Column({ nullable: true })
-  @Field(() => Float)
+  @Field(() => Float, { nullable: true })
   lng: number;
 
   @Column({ nullable: true })
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   zipcode: string;
 
   @DeleteDateColumn()
-  @Field(() => Date)
+  @Field(() => Date, { nullable: true })
   deletedAt: Date;
 }
