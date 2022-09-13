@@ -23,6 +23,7 @@ export class PaymentsResolver {
   @Query(() => [Payment])
   async fetchPointChargeHistory(
     @Context() context: IContext, //
+    @Args({ name: 'page', nullable: true, type: () => Int }) page: number,
   ) {
     const user = context.req.user;
 
@@ -30,6 +31,7 @@ export class PaymentsResolver {
 
     const result = await this.paymentsService.findPointCharge({
       id: isUser.id,
+      page,
     });
 
     return result;

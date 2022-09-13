@@ -21,9 +21,6 @@ export class CreateBoardInput {
   @Field(() => String, { nullable: true, name: 'category' })
   category: string;
 
-  @Field(() => Date, { nullable: true, name: 'dueDate' })
-  dueDate: Date;
-
   @Field(() => String, { nullable: true, name: 'eventDay' })
   eventDay: string;
 

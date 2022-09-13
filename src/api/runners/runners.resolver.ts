@@ -18,7 +18,7 @@ export class RunnersResolver {
   ) {}
 
   @UseGuards(GqlAuthAccessGuard)
-  @Query(() => [User])
+  @Query(() => [Runner])
   fetchRunnerByBoard(
     @Args('boardId') boardId: string, //
   ) {

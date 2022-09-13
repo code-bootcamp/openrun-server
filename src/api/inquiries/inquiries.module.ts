@@ -13,6 +13,7 @@ import { Location } from '../locations/entities/location.entity';
 import { PaymentHistory } from '../paymentHistories/entities/paymentHistory.entity';
 import { PaymentHistoriesService } from '../paymentHistories/paymentHistories.service';
 import { Payment } from '../payments/entities/payment.entity';
+import { PaymentsService } from '../payments/payments.service';
 import { Runner } from '../runners/entities/runner.entity';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';

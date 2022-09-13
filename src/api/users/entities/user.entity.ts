@@ -44,7 +44,7 @@ export class User {
   @Field(() => String, { nullable: true })
   password: string;
 
-  @Column({ unique: true })
+  @Column({ nullable: true })
   @Field(() => String, { nullable: true })
   nickName: string;
 
@@ -53,12 +53,12 @@ export class User {
   phone: string;
 
   @Min(0)
-  @Column({ nullable: true })
+  @Column({ nullable: true, default: 0 })
   @Field(() => Int, { nullable: true })
   point: number;
 
   @Min(0)
-  @Column({ nullable: true, type: 'float' })
+  @Column({ nullable: true, type: 'float', default: 0 })
   @Field(() => Float, { nullable: true })
   rating: number;
 
@@ -66,12 +66,8 @@ export class User {
   @Field(() => String, { nullable: true })
   profileImg: string;
 
-  @Column({ nullable: true })
-  @Field(() => Int, { nullable: true })
-  sucessRate: number;
-
   @Min(0)
-  @Column({ nullable: true })
+  @Column({ nullable: true, default: 0 })
   @Field(() => Int, { nullable: true })
   report: number;
 
@@ -90,6 +86,16 @@ export class User {
   })
   @Field(() => USER_LOGINTYPE_ENUM, { nullable: true })
   loginType: string;
+
+  @Column({
+    nullable: true,
+  })
+  @Field(() => Date, { nullable: true })
+  loginDate: Date;
+
+  @Column({ nullable: true, default: 0 })
+  @Field(() => Int, { nullable: true })
+  successRate: number;
 
   @CreateDateColumn()
   @Field(() => Date, { nullable: true })
