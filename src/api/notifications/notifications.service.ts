@@ -91,11 +91,20 @@ export class NotificationsService {
         continue;
       }
 
+      //기존 notification 찾기 및 기존 contents와 같다면 skip
       const prevContent = await this.findOne({
         user: runner[i].user,
         board: runner[i].board,
       });
+
       if (prevContent) {
+        //기존 데이터와 같다면 skip
+        if (prevContent.contents === contents[i]) {
+          result.push(prevContent);
+          continue;
+        }
+
+        //기존 notification을 update
         const updatedContent = await this.notificationRepository.save({
           ...prevContent,
           contents: contents[i],
@@ -103,6 +112,7 @@ export class NotificationsService {
         });
         result.push(updatedContent);
       } else {
+        //새로운 notification 생성
         const newContent = await this.notificationRepository.save({
           contents: contents[i],
           isNew: true,
