@@ -50,7 +50,6 @@ import { Board } from './entities/board.entity';
     ImagesService,
     FileService,
     PaymentHistoriesService,
-    RunnersService,
   ],
 })
 export class BoardsModule {}
