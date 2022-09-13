@@ -186,7 +186,7 @@ export class BoardsService {
         dueDate: MoreThan(today),
       },
       take: 10,
-      skip: page ? (page - 1) * 10 : 0,
+      skip: page ? (page - 1) * 12 : 0,
     });
     console.log(resultBoards);
     return resultBoards;
@@ -200,7 +200,7 @@ export class BoardsService {
         dueDate: MoreThan(today),
       },
       take: 10,
-      skip: page ? (page - 1) * 10 : 0,
+      skip: page ? (page - 1) * 12 : 0,
     });
     return resultBoards;
   }
