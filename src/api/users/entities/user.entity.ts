@@ -7,7 +7,6 @@ import {
 } from '@nestjs/graphql';
 import {
   Column,
-  CreateDateColumn,
   DeleteDateColumn,
   Entity,
   JoinColumn,
@@ -97,7 +96,8 @@ export class User {
   @Field(() => Int, { nullable: true })
   successRate: number;
 
-  @CreateDateColumn()
+  // @CreateDateColumn()
+  @Column({ nullable: true })
   @Field(() => Date, { nullable: true })
   createdAt: Date;
 
@@ -123,4 +123,7 @@ export class User {
 
   @Field(() => Int, { defaultValue: 0, nullable: true })
   paymentTotal: number;
+
+  @Field(() => Int, { defaultValue: 0, nullable: true })
+  countByDate: number;
 }

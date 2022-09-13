@@ -101,7 +101,21 @@ export class UsersService {
     return this.userRepository.count();
   }
 
+  async findNumberOfUsersByDate() {
+    const result = await this.userRepository
+      .createQueryBuilder('user')
+      .select('user.createdAt AS createdAt')
+      .addSelect('COUNT(*) AS countByDate')
+      .groupBy('user.createdAt')
+      .getRawMany();
+
+    return result;
+  }
+
   async create({ _user, hashedPwd: password }) {
+    const now = new Date();
+    now.setHours(0, 0, 0, 0);
+
     //User 데이터 저장
     const userResult = await this.userRepository.save({
       ..._user,
@@ -109,6 +123,7 @@ export class UsersService {
       point: 0,
       rating: 0,
       report: 0,
+      createdAt: now,
     });
     return userResult;
   }
