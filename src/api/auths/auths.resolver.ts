@@ -51,7 +51,11 @@ export class AuthsResolver {
     const refreshToken = context.req.headers['cookie'].split('=')[1];
 
     //Token검증 및 Redis저장
-    return this.authsService.checkAndSaveToken({ accessToken, refreshToken });
+    return this.authsService.checkAndSaveToken({
+      accessToken,
+      refreshToken, //
+      res: context.res,
+    });
   }
 
   @UseGuards(GqlAuthRefreshGuard)

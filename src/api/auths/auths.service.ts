@@ -57,7 +57,7 @@ export class AuthsService {
     return accessToken;
   }
 
-  async checkAndSaveToken({ accessToken, refreshToken }) {
+  async checkAndSaveToken({ accessToken, refreshToken, res }) {
     try {
       //현재 시간
       const currentTime = new Date();
@@ -94,6 +94,26 @@ export class AuthsService {
           ttl: leftRefreshSec,
         },
       );
+
+      //쿠키에서 refreshToken 삭제
+      //배포용
+      res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000'); //프론트와 연결
+      res.setHeader('Access-Control-Allow-Credentials', 'true'); //credential 함께 allow
+      res.setHeader(
+        'Access-Control-Allow-Methods',
+        'GET, HEAD, POST, OPTIONS, PUT',
+      ); //method 지정
+      res.setHeader(
+        'Access-Control-Allow-Headers',
+        'Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With, Origin, Accept, Access-Control-Request-Method, Access-Control-Request-Headers',
+      );
+      res.setHeader(
+        'Set-Cookie',
+        `refreshToken=deleted; path=/; domain=.openrunbackend.shop; SameSite=None; Secure; httpOnly; Max-Age=0;`,
+      );
+
+      //개발용
+      // res.setHeader('Set-Cookie', `refreshToken=deleted; path=/; Max-Age=0;`);
 
       //Redis에 올바르게 저장되었는지 검증
       if (accessResult === 'OK' && refreshResult === 'OK') {

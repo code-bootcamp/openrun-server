@@ -1,4 +1,9 @@
-import { CACHE_MANAGER, Inject, UnauthorizedException } from '@nestjs/common';
+import {
+  CACHE_MANAGER,
+  Inject,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Cache } from 'cache-manager';
 import { Strategy } from 'passport-jwt';
@@ -25,7 +30,7 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
     //redis에 refreshToken이 있는지 확인(데이터가 있다면 로그아웃된 계정)
     const refreshAccess = await this.cacheManager.get(refreshToken);
     if (refreshAccess) {
-      throw new UnauthorizedException('이미 로그아웃된 계정입니다.');
+      throw new NotFoundException('이미 로그아웃된 계정입니다.');
     }
 
     return {
