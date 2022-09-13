@@ -170,36 +170,9 @@ export class UsersResolver {
 
     return result ? true : false;
 
-    //현재 user정보를 통하여 find paymentHistory해서 price받아오고 아래에 넘겨주기
-    // const email = context.req.user.email;
-    // const user = await this.usersService.findOne({ email });
-
-    // const payment = await this.paymentHistoryService.findOne({
-    //   boardId,
-    //   userId: user.id,
-    // });
     // 1. 상태를 거래완료로 바꿀 게시물 boardId 찾기
     //2. 포인트 계산 ( 보증금을 채택된 러너에게 의뢰비랑 함께 돌려주기 )-- usersService에 포인트 업데이트(러너한테 )
     //3.  paymentHistory (러너한테)기록 남기기
     //4.  상태 변경
-    // //Runner에 point 넘겨주기
-    // const result = await this.usersService.updatePoint({
-    //   resultUser: updatedRunner,
-    //   price: payment.price,
-    //   flag: true,
-    // });
-
-    // //board찾기(paymentHistory를 위한)
-    // const board = await this.boardsService.findOne({ boardId });
-
-    // //create paymentHistory(runner의 paymentHistory)
-    // await this.paymentHistoryService.create({
-    //   board: board,
-    //   user: updatedRunner,
-    //   price: payment.price,
-    //   flag: true,
-    // });
-
-    // return result.affected;
   }
 }
