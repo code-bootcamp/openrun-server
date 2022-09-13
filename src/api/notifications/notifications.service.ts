@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BOARD_STATUS_ENUM } from '../boards/entities/board.entity';
@@ -79,7 +79,6 @@ export class NotificationsService {
       //   //D-day
       //   contents = '오늘이 바로 러닝데이!!';
       // }
-      console.log('contents = ', contents);
       return contents;
     });
   }
@@ -92,7 +91,7 @@ export class NotificationsService {
         continue;
       }
 
-      const prevContent = this.findOne({
+      const prevContent = await this.findOne({
         user: runner[i].user,
         board: runner[i].board,
       });
@@ -114,5 +113,25 @@ export class NotificationsService {
       }
     }
     return result;
+  }
+
+  async update({ email }) {
+    const notifications = await this.notificationRepository.find({
+      where: { user: { email } }, //
+      relations: ['user', 'board'],
+    });
+
+    notifications.every(async (ele) => {
+      const result = await this.notificationRepository.update(
+        { id: ele.id },
+        { isNew: false },
+      );
+      if (!result.affected) {
+        throw new NotFoundException(
+          '알림을 정상적으로 업데이트하지 못하였습니다.',
+        );
+      }
+    });
+    return true;
   }
 }
