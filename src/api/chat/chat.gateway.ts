@@ -1,3 +1,4 @@
+import { NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   ConnectedSocket,
@@ -42,6 +43,12 @@ export class ChatGateway {
     const findChatRoom = await this.chatService.findOne({
       boardId,
     });
+
+    if (
+      findChatRoom.seller.nickName !== nickName &&
+      findChatRoom.runner.nickName !== nickName
+    )
+      throw new NotFoundException('다른 유저가 들어갈 수 없습니다.');
 
     const host = await this.usersRepository.findOne({
       where: { nickName },
@@ -142,7 +149,17 @@ export class ChatGateway {
   async sendMessage(@MessageBody() data: string, @ConnectedSocket() client) {
     const [room, nickname, message] = data;
 
-    console.log('================', room);
+    const boardId = room.slice(5);
+
+    const findChatRoom = await this.chatService.findOne({
+      boardId,
+    });
+
+    if (
+      findChatRoom.seller.nickName !== nickname &&
+      findChatRoom.runner.nickName !== nickname
+    )
+      throw new NotFoundException('다른 유저는 채팅을 칠 수 없습니다.');
 
     const user = await this.usersRepository.findOne({
       where: { nickName: nickname },

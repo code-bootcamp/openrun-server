@@ -57,8 +57,14 @@ export class RunnersResolver {
   async adoptRunner(
     @Args('userId') userId: string, //
     @Args('boardId') boardId: string,
+    @Context() context: IContext,
   ) {
     const board = await this.boardsService.findOne({ boardId });
+
+    if (board.user.email !== context.req.user.email)
+      throw new NotFoundException(
+        '게시글을 작성한 유저만이 채택을 할 수 있습니다.',
+      );
 
     if (board.status === BOARD_STATUS_ENUM.INPROGRESS)
       throw new NotFoundException('이미 진행중인 게시물입니다.');

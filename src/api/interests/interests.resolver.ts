@@ -27,6 +27,16 @@ export class InterestsResolver {
   }
 
   @UseGuards(GqlAuthAccessGuard)
+  @Query(() => [String])
+  fetchInterestBoardId(
+    @Context() context: IContext, //
+  ) {
+    return this.interestsService.findInterestsId({
+      email: context.req.user.email,
+    });
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Boolean)
   async addInterestList(
     @Args('boardId') boardId: string,
