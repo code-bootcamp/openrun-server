@@ -24,7 +24,10 @@ export class BoardsResolver {
 
   @Query(() => [Board])
   async fetchBoards(
-    @Args({ name: 'search', nullable: true }) search: string,
+    @Args({ name: 'direcion', nullable: true, defaultValue: '' })
+    direcion: string,
+    @Args({ name: 'search', nullable: true })
+    search: string,
     @Args('dateType') dateType: string, //
     @Args({ name: 'page', nullable: true, type: () => Int }) page: number, //
   ) {
@@ -32,43 +35,60 @@ export class BoardsResolver {
       if (search) {
         const elasticResult = await this.elasticsearchService.search({
           index: 'board',
-          _source: [
-            'id', //
-            'title',
-            'contents',
-          ],
           query: {
-            match: {
-              title: search,
+            bool: {
+              must: [
+                direcion && {
+                  term: { address: direcion },
+                },
+                {
+                  term: { title: search },
+                },
+              ],
             },
           },
+          sort: [
+            {
+              updatedAt: 'desc',
+            },
+          ],
         });
+
+        const result = elasticResult.hits.hits;
+        console.log(result);
+        return this.boardsService.elasticResult({ result });
       }
 
-      return this.boardsService.findAllbyCurrent({ page });
+      return this.boardsService.findAllbyCurrent({ page, direcion });
     }
     if (dateType === '마감 임박순') {
       if (search) {
         const elasticResult = await this.elasticsearchService.search({
           index: 'board',
-          // _source: [
-          //   'id', //
-          //   'title',
-          //   'contents',
-          // ],
           query: {
-            // match: {
-            //   title: search,
-            // },
-            term: { title: search },
+            bool: {
+              must: [
+                direcion && {
+                  term: { address: direcion },
+                },
+                {
+                  term: { title: search },
+                },
+              ],
+            },
           },
+          sort: [
+            {
+              dueDate: 'asc',
+            },
+          ],
         });
-        console.log(elasticResult.hits.hits);
+
         const result = elasticResult.hits.hits;
         return this.boardsService.elasticResult({ result });
       }
 
-      return this.boardsService.findAllbyLimit({ page });
+      return this.boardsService.findAllbyLimit({ page, direcion });
     }
   }
 

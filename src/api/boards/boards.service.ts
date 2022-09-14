@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, MoreThan, Repository } from 'typeorm';
+import { DataSource, Like, MoreThan, Repository } from 'typeorm';
 import { Image } from '../images/entities/image.entity';
 import { User } from '../users/entities/user.entity';
 import { Board, BOARD_STATUS_ENUM } from './entities/board.entity';
@@ -180,13 +180,14 @@ export class BoardsService {
     });
     return resultBoard;
   }
-  async findAllbyCurrent({ page }) {
+  async findAllbyCurrent({ page, direcion }) {
     const today = new Date();
 
     const resultBoards = await this.boardRepository.find({
       relations: ['category', 'location', 'image', 'user'],
       order: { updatedAt: 'DESC' },
       where: {
+        location: { address: Like(`%${direcion}%`) },
         dueDate: MoreThan(today),
       },
       take: 12,
@@ -194,12 +195,13 @@ export class BoardsService {
     });
     return resultBoards;
   }
-  async findAllbyLimit({ page }) {
+  async findAllbyLimit({ page, direcion }) {
     const today = new Date();
     const resultBoards = await this.boardRepository.find({
       relations: ['category', 'location', 'image', 'user'],
       order: { dueDate: 'ASC' },
       where: {
+        location: { address: Like(`%${direcion}%`) },
         dueDate: MoreThan(today),
       },
       take: 12,
@@ -271,6 +273,7 @@ export class BoardsService {
     return result.map((ele) => {
       const createdAt = new Date(ele['_source'].createdAt);
       const duedate = new Date(ele['_source'].dueDate);
+      const updatedAt = new Date(ele['_source'].updatedAt * 1000.019481);
 
       return this.boardRepository.create({
         id: ele['_source'].id,
@@ -280,6 +283,8 @@ export class BoardsService {
         status: ele['_source'].status,
         createdAt: createdAt,
         dueDate: duedate,
+        updatedAt: updatedAt,
+
         location: {
           address: ele['_source'].address,
           addressDetail: ele['_source'].addressDetail,
