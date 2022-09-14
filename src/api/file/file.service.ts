@@ -68,17 +68,12 @@ export class FileService {
         keyFilename: process.env.GOOGLE_BUCKET_KEY_FILENAME,
       }).bucket(process.env.GOOGLE_BUCKET);
 
-      const results = await Promise.all(
-        url.map(
-          (ele) =>
-            new Promise((resolve) => {
-              storage.file(ele.url).delete();
-              resolve(true);
-            }),
-        ),
-      );
+      const result = await new Promise((resolve) => {
+        storage.file(url).delete();
+        resolve(true);
+      });
 
-      return results;
+      return result;
     } catch (error) {
       throw new NotFoundException('이미지 삭제 도중 오류가 발생하였습니다.');
     }
