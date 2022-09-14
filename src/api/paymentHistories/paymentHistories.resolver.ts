@@ -19,6 +19,7 @@ export class PaymentHistoriesResolver {
   @Query(() => [PaymentHistory])
   async fetchPaymentHistory(
     @Context() context: IContext, //
+    @Args({ name: 'page', nullable: true, type: () => Int }) page: number,
   ) {
     const user = context.req.user;
 
@@ -26,7 +27,7 @@ export class PaymentHistoriesResolver {
       email: user.email,
     });
 
-    return this.paymentHistoriesService.findAllByUser({ user: findUser });
+    return this.paymentHistoriesService.findAllByUser({ user: findUser, page });
   }
 
   @UseGuards(GqlAuthAccessGuard)

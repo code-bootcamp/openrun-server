@@ -90,10 +90,6 @@ export class ChatGateway {
       where: { room: { room: room.room } } && { user: { id: runnerId } },
     });
 
-    console.log('==============', findSellerMessage);
-
-    console.log('==============', findRunnerMessage);
-
     const comeOn = `${nickName}님이 입장했습니다.`;
 
     if (!findSellerMessage) {
