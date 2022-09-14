@@ -14,6 +14,7 @@ export class PaymentHistoriesService {
     return this.paymentHistoryRepository.find({
       where: { user: { id: user.id } },
       relations: {
+        user: true,
         board: true,
       },
       take: 10,
