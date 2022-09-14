@@ -10,12 +10,14 @@ export class PaymentHistoriesService {
     private readonly paymentHistoryRepository: Repository<PaymentHistory>,
   ) {}
 
-  findAllByUser({ user }) {
+  findAllByUser({ user, page }) {
     return this.paymentHistoryRepository.find({
       where: { user: { id: user.id } },
       relations: {
         board: true,
       },
+      take: 10,
+      skip: page ? (page - 1) * 10 : 0,
     });
   }
 
