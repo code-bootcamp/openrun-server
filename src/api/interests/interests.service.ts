@@ -37,6 +37,22 @@ export class InterestsService {
     return result;
   }
 
+  async findInterestsId({ email }) {
+    const result = await this.interestRepository.find({
+      relations: {
+        user: true,
+        board: true,
+      },
+      where: { user: { email } },
+      select: {
+        board: {
+          id: true,
+        },
+      },
+    });
+    return result.map((el) => el.board.id);
+  }
+
   async findInterest({ user, board }) {
     return await this.interestRepository.findOne({
       where: { user: { id: user.id }, board: { id: board.id } },
