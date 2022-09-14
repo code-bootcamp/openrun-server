@@ -15,7 +15,6 @@ import { ReportsModule } from './api/reports/reports.module';
 import { RunnersModule } from './api/runners/runners.module';
 import { TokensModule } from './api/tokens/tokens.module';
 import { UsersModule } from './api/users/users.module';
-import { EventsModule } from './api/events/events.module';
 import { AuthsModule } from './api/auths/auths.module';
 import { RedisClientOptions } from 'redis';
 import * as redisStore from 'cache-manager-redis-store';
@@ -29,7 +28,6 @@ import { NotificationsModule } from './api/notifications/notifications.module';
     BoardsModule,
     CategoriesModule,
     ChatModule,
-    EventsModule,
     FileModule,
     InquiriesModule,
     InquiriesAnswerModule,

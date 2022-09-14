@@ -244,17 +244,17 @@ export class BoardsService {
         id: board.location.id,
       });
 
-      status = '[3]image - delete'; //for debug
+      status = '[3]board - softdelete'; //for debug
+      const result = await queryRunner.manager.softDelete(Board, {
+        id: boardId,
+      });
+
+      status = '[4]image - delete'; //for debug
       if (!board.image[0].url.includes('default.img')) {
         await this.imagesService.deleteImages({
           url: board.image,
         });
       }
-
-      status = '[4]board - softdelete'; //for debug
-      const result = await queryRunner.manager.softDelete(Board, {
-        id: boardId,
-      });
 
       await queryRunner.commitTransaction();
       return result.affected ? true : false;
