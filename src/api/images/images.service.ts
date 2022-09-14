@@ -24,9 +24,6 @@ export class ImagesService {
   }
 
   async deleteImages({ url }) {
-    //Google bucket에서 넘겨받은 파일들 삭제
-    await this.fileService.delete({ url });
-
     //image 데이터 softDelete
     url.forEach(async (ele) => {
       const result = await this.imageRepository.delete({ url: ele.url });
@@ -36,6 +33,9 @@ export class ImagesService {
         );
       }
     });
+
+    //Google bucket에서 넘겨받은 파일들 삭제
+    await this.fileService.delete({ url });
 
     return true;
   }
