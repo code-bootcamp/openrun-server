@@ -21,6 +21,7 @@ import * as redisStore from 'cache-manager-redis-store';
 import { FileModule } from './api/file/file.module';
 import { ChatModule } from './api/chat/chat.module';
 import { NotificationsModule } from './api/notifications/notifications.module';
+import { EventsModule } from './api/events/events.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { NotificationsModule } from './api/notifications/notifications.module';
     RunnersModule,
     TokensModule,
     UsersModule,
+    EventsModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),

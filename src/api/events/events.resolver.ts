@@ -9,13 +9,6 @@ export class EventsResolver {
     private readonly eventsService: EventsService, //
   ) {}
 
-  @Query(() => [[Event]])
-  fetchEvents(
-    @Args({ name: 'search', nullable: true }) search: string, //
-  ) {
-    return this.eventsService.findAllByOld({ search });
-  }
-
   @Query(() => Event)
   fetchEvent(
     @Args('eventId') eventId: string, //
