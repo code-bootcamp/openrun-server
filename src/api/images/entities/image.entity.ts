@@ -5,7 +5,6 @@ import {
   DeleteDateColumn,
   Entity,
   JoinColumn,
-  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -22,9 +21,4 @@ export class Image {
   })
   @Field(() => String, { nullable: true, name: 'url' })
   url: string;
-
-  @JoinColumn()
-  @OneToOne(() => Board)
-  @Field(() => Board, { nullable: true })
-  board: Board;
 }

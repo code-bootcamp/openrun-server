@@ -11,6 +11,7 @@ import { CategoriesService } from '../categories/categories.service';
 import { ImagesService } from '../images/images.service';
 import { PaymentHistoriesService } from '../paymentHistories/paymentHistories.service';
 import { Runner } from '../runners/entities/runner.entity';
+import e from 'express';
 // import { Category } from '../categories/entities/category.entity';
 
 @Injectable()
@@ -75,25 +76,25 @@ export class BoardsService {
       dueDate = new Date('2023');
     }
 
+    let img = image;
+
+    if (!image) {
+      img = 'default.img';
+    }
+
+    const resultImage = await this.imagesService.createImage({
+      image: img,
+    });
+    console.log('맵 아래');
+
     const result = await this.boardRepository.save({
       ...createBoardInput,
       dueDate: dueDate,
       location: resultLocation,
       category: resultCategory,
       user: resultUser,
+      image: resultImage,
     });
-
-    let img;
-
-    if (!image) {
-      img = ['default.img'];
-    }
-
-    const resultImage = await this.imagesService.createImages({
-      board: result,
-      image: image ? image : img,
-    });
-    console.log('맵 아래');
 
     await this.paymentHistoriesService.create({
       board: result,
@@ -250,8 +251,8 @@ export class BoardsService {
       });
 
       status = '[4]image - delete'; //for debug
-      if (!board.image[0].url.includes('default.img')) {
-        await this.imagesService.deleteImages({
+      if (!board.image.url.includes('default.img')) {
+        await this.imagesService.deleteImage({
           url: board.image,
         });
       }
@@ -264,5 +265,35 @@ export class BoardsService {
     } finally {
       await queryRunner.release();
     }
+  }
+
+  elasticResult({ result }) {
+    return result.map((ele) => {
+      const createdAt = new Date(ele['_source'].createdAt);
+      const duedate = new Date(ele['_source'].dueDate);
+
+      return this.boardRepository.create({
+        id: ele['_source'].id,
+        title: ele['_source'].title,
+        contents: ele['_source'].contents,
+        price: ele['_source'].price,
+        status: ele['_source'].status,
+        createdAt: createdAt,
+        dueDate: duedate,
+        location: {
+          address: ele['_source'].address,
+          addressDetail: ele['_source'].addressDetail,
+        },
+        image: {
+          url: ele['_source'].url,
+        },
+        category: {
+          name: ele['_source'].name,
+        },
+        user: {
+          nickName: ele['_source'].nickName,
+        },
+      });
+    });
   }
 }

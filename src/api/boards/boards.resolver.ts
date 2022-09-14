@@ -1,6 +1,7 @@
 import { NotFoundException, UseGuards } from '@nestjs/common';
 import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { Resolver, Query, Mutation, Args, Context, Int } from '@nestjs/graphql';
+import { title } from 'process';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { IContext } from 'src/commons/types/type';
 import { PaymentHistoriesService } from '../paymentHistories/paymentHistories.service';
@@ -42,7 +43,6 @@ export class BoardsResolver {
             },
           },
         });
-        console.log('==============', elasticResult.hits.hits);
       }
 
       return this.boardsService.findAllbyCurrent({ page });
@@ -51,18 +51,23 @@ export class BoardsResolver {
       if (search) {
         const elasticResult = await this.elasticsearchService.search({
           index: 'board',
-          _source: [
-            'id', //
-            'title',
-            'contents',
-          ],
+          // _source: [
+          //   'id', //
+          //   'title',
+          //   'contents',
+          // ],
           query: {
-            match: {
-              title: search,
-            },
+            // match: {
+            //   title: search,
+            // },
+            term: { title: search },
           },
         });
+        console.log(elasticResult.hits.hits);
+        const result = elasticResult.hits.hits;
+        return this.boardsService.elasticResult({ result });
       }
+
       return this.boardsService.findAllbyLimit({ page });
     }
   }

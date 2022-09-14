@@ -15,8 +15,8 @@ export class CreateBoardInput {
   @Field(() => LocationInput, { nullable: true, name: 'location' })
   location: LocationInput;
 
-  @Field(() => [String], { nullable: true, name: 'image' })
-  image: string[];
+  @Field(() => String, { nullable: true, name: 'image' })
+  image: string;
 
   @Field(() => String, { nullable: true, name: 'category' })
   category: string;

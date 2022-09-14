@@ -85,12 +85,13 @@ export class Board {
   @Field(() => Location, { nullable: true })
   location: Location;
 
-  @OneToMany(() => Image, (image) => image.board)
-  @Field(() => [Image], { nullable: true })
-  image: Image[];
-
   @JoinColumn()
   @OneToOne(() => ChatRoom)
   @Field(() => ChatRoom, { nullable: true })
   chatRoom: ChatRoom;
+
+  @JoinColumn()
+  @OneToOne(() => Image)
+  @Field(() => Image, { nullable: true })
+  image: Image;
 }
