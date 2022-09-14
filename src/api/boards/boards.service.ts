@@ -95,7 +95,7 @@ export class BoardsService {
     });
     console.log('맵 아래');
 
-    const resultPaymentHistory = await this.paymentHistoriesService.create({
+    await this.paymentHistoriesService.create({
       board: result,
       user: resultUser,
       price: price,
@@ -170,10 +170,9 @@ export class BoardsService {
       where: {
         dueDate: MoreThan(today),
       },
-      take: 10,
+      take: 12,
       skip: page ? (page - 1) * 12 : 0,
     });
-    console.log(resultBoards);
     return resultBoards;
   }
   async findAllbyLimit({ page }) {
@@ -184,7 +183,7 @@ export class BoardsService {
       where: {
         dueDate: MoreThan(today),
       },
-      take: 10,
+      take: 12,
       skip: page ? (page - 1) * 12 : 0,
     });
     return resultBoards;
@@ -205,14 +204,6 @@ export class BoardsService {
 
     return result;
   }
-
-  // async findLocation({ keyword }) {
-  //   const result = await this.boardRepository.find({
-  //     relations: ['category', 'location', 'image', 'user'],
-  //     where: {},
-  //   });
-  //   return result;
-  // }
 
   async delete({ boardId }) {
     const queryRunner = this.connection.createQueryRunner();
