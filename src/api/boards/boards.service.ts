@@ -113,6 +113,13 @@ export class BoardsService {
   async update({ boardId, updateBoardInput }) {
     const newBoard = await this.boardRepository.findOne({
       where: { id: boardId },
+      relations: {
+        category: true,
+        location: true,
+        chatRoom: true,
+        user: true,
+        image: true,
+      },
     });
 
     let dueDate = new Date(
@@ -123,11 +130,22 @@ export class BoardsService {
       dueDate = newBoard.dueDate;
     }
 
+    let category = await this.categoryRepository.findOne({
+      where: { name: updateBoardInput.category },
+    });
+
+    if (!updateBoardInput.category) {
+      category = newBoard.category;
+    }
+
+    console.log(newBoard);
+
     const result = {
       ...newBoard,
       id: boardId,
       ...updateBoardInput,
       dueDate: dueDate,
+      category: category,
     };
     return await this.boardRepository.save(result);
   }
