@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, MoreThan, Repository } from 'typeorm';
 import { Image } from '../images/entities/image.entity';
@@ -210,23 +210,30 @@ export class BoardsService {
     await queryRunner.connect();
     await queryRunner.startTransaction('SERIALIZABLE');
 
+    //temporary for debug
+    let status = '';
+
     try {
+      status = '[1]board - findOne'; //for debug
       const board = await queryRunner.manager.findOne(Board, {
         where: { id: boardId },
         relations: ['image', 'location'],
         lock: { mode: 'pessimistic_write' },
       });
 
+      status = '[2]location - softdelete'; //for debug
       await queryRunner.manager.softDelete(Location, {
         id: board.location.id,
       });
 
+      status = '[3]image - delete'; //for debug
       if (!board.image[0].url.includes('default.img')) {
         await this.imagesService.deleteImages({
           url: board.image,
         });
       }
 
+      status = '[4]board - softdelete'; //for debug
       const result = await queryRunner.manager.softDelete(Board, {
         id: boardId,
       });
@@ -235,6 +242,7 @@ export class BoardsService {
       return result.affected ? true : false;
     } catch (error) {
       await queryRunner.rollbackTransaction();
+      throw new NotFoundException(`ERROR!!! ${status}`);
     } finally {
       await queryRunner.release();
     }
