@@ -1,5 +1,5 @@
 {
-  "template": "template_event",
+  "template": "template_board",
   "index_patterns": ["*"],
   "settings": {
     "analysis": {
@@ -22,29 +22,11 @@
     "properties": {
       "id": {
         "type": "text"
-      },
-      "contents": {
-        "type": "text"
-      },
-      "title": {
-        "type": "text",
-        "analyzer": "my_ngram_analyzer"
-      },
-      "location": {
-        "type": "text"
-      },
-      "image": {
-        "type": "text"
-      },
-      "fakeData": {
-        "type": "text"
-      },
-      "createdAt": {
-        "type": "long"
-      },
-      "period": {
-        "type": "text"
       }
+    },
+    "title": {
+      "type": "text",
+      "analyzer": "my_ngram_analyzer"
     }
   }
 }

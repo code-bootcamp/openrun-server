@@ -1,4 +1,5 @@
 import { NotFoundException, UseGuards } from '@nestjs/common';
+import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { Resolver, Query, Mutation, Args, Context, Int } from '@nestjs/graphql';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { IContext } from 'src/commons/types/type';
@@ -17,19 +18,53 @@ export class BoardsResolver {
     private readonly runnersService: RunnersService,
     private readonly usersService: UsersService,
     private readonly paymentHistoriesService: PaymentHistoriesService,
+    private readonly elasticsearchService: ElasticsearchService,
   ) {}
 
   @Query(() => [Board])
-  fetchBoards(
+  async fetchBoards(
+    @Args({ name: 'search', nullable: true }) search: string,
     @Args('dateType') dateType: string, //
     @Args({ name: 'page', nullable: true, type: () => Int }) page: number, //
   ) {
-    if (dateType === '최신순')
-      //
+    if (dateType === '최신순') {
+      if (search) {
+        const elasticResult = await this.elasticsearchService.search({
+          index: 'board',
+          _source: [
+            'id', //
+            'title',
+            'contents',
+          ],
+          query: {
+            match: {
+              title: search,
+            },
+          },
+        });
+        console.log('==============', elasticResult.hits.hits);
+      }
+
       return this.boardsService.findAllbyCurrent({ page });
-    if (dateType === '마감 임박순')
-      //
+    }
+    if (dateType === '마감 임박순') {
+      if (search) {
+        const elasticResult = await this.elasticsearchService.search({
+          index: 'board',
+          _source: [
+            'id', //
+            'title',
+            'contents',
+          ],
+          query: {
+            match: {
+              title: search,
+            },
+          },
+        });
+      }
       return this.boardsService.findAllbyLimit({ page });
+    }
   }
 
   @UseGuards(GqlAuthAccessGuard)
@@ -111,11 +146,4 @@ export class BoardsResolver {
   ) {
     return this.boardsService.delete({ boardId });
   }
-
-  // @Query(() => [Board])
-  // test(
-  //   @Args('keyword') keyword: string, //
-  // ) {
-  //   return this.boardsService.findLocation({ keyword });
-  // }
 }
