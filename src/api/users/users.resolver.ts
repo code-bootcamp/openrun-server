@@ -8,7 +8,6 @@ import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { IContext } from 'src/commons/types/type';
 import { RunnersService } from '../runners/runners.service';
 import { CreateAdminInput } from './dto/createAdmin.input';
-import { NotFoundError } from 'rxjs';
 
 @Resolver()
 export class UsersResolver {
