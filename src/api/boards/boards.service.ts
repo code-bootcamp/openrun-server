@@ -11,7 +11,8 @@ import { CategoriesService } from '../categories/categories.service';
 import { ImagesService } from '../images/images.service';
 import { PaymentHistoriesService } from '../paymentHistories/paymentHistories.service';
 import { Runner } from '../runners/entities/runner.entity';
-import e from 'express';
+import { PaymentHistory } from '../paymentHistories/entities/paymentHistory.entity';
+
 // import { Category } from '../categories/entities/category.entity';
 
 @Injectable()
@@ -38,6 +39,10 @@ export class BoardsService {
 
   //게시물 등록
   async create({ createBoardInput, email }) {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction('SERIALIZABLE');
+
     const {
       category, //
       image,
@@ -59,8 +64,10 @@ export class BoardsService {
       price,
       flag: false,
     });
+    if (!resultPoint.affected)
+      throw new NotFoundException('포인트 업데이트에 실패하였습니다.');
 
-    const resultLocation = await this.locationRepository.save({
+    const resultLocation = await queryRunner.manager.save(Location, {
       ...location,
     });
 
@@ -88,12 +95,13 @@ export class BoardsService {
       img = 'default.img';
     }
 
-    const resultImage = await this.imagesService.createImage({
-      image: img,
+    const resultImage = await queryRunner.manager.save(Image, {
+      url: img,
     });
+
     console.log('맵 아래');
 
-    const result = await this.boardRepository.save({
+    const result = await queryRunner.manager.save(Board, {
       ...createBoardInput,
       dueDate: dueDate,
       location: resultLocation,
@@ -102,12 +110,13 @@ export class BoardsService {
       image: resultImage,
     });
 
-    await this.paymentHistoriesService.create({
+    const allResult = await queryRunner.manager.save(PaymentHistory, {
       board: result,
       user: resultUser,
       price: price,
-      flag: false,
+      status: result.user.id === resultUser.id ? 'seller' : 'runner',
     });
+
     return {
       ...result,
       image: resultImage,
@@ -144,9 +153,6 @@ export class BoardsService {
     if (!updateBoardInput.category) {
       category = newBoard.category;
     }
-
-    console.log(newBoard);
-
     const result = {
       ...newBoard,
       id: boardId,
