@@ -3,11 +3,12 @@ import { CreateUserInput } from './dto/createUser.input';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
 import { UpdateUserInput } from './dto/updateUser.input';
-import { UseGuards } from '@nestjs/common';
+import { NotFoundException, UseGuards } from '@nestjs/common';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { IContext } from 'src/commons/types/type';
 import { RunnersService } from '../runners/runners.service';
 import { CreateAdminInput } from './dto/createAdmin.input';
+import { NotFoundError } from 'rxjs';
 
 @Resolver()
 export class UsersResolver {
@@ -108,7 +109,7 @@ export class UsersResolver {
     });
   }
 
-  //createAdmin : 관리자 계정 생성
+  //createAdmin : 관리자 계정 생성(개발용)
   @Mutation(() => User)
   async createAdmin(
     @Args('createAdminInput') createAdminInput: CreateAdminInput, //
@@ -135,6 +136,27 @@ export class UsersResolver {
     @Args('updateUserInput') updateUserInput: UpdateUserInput, //
   ) {
     return this.usersService.updateUser({ updateUserInput });
+  }
+
+  //updateUserPoint : 해당한 계정에 포인트 충전(개발용)
+  @Mutation(() => User)
+  async updateUserPoint(
+    @Args('email') email: string, //
+    @Args('point') point: number,
+  ) {
+    const resultUser = await this.usersService.findOne({ email });
+
+    const result = await this.usersService.updatePoint({
+      resultUser,
+      price: point,
+      flag: true,
+    });
+
+    if (result.affected) {
+      return this.usersService.findOne({ email });
+    } else {
+      throw new NotFoundException('포인트 업데이트에 실패하였습니다.');
+    }
   }
 
   @UseGuards(GqlAuthAccessGuard)

@@ -195,11 +195,13 @@ export class UsersService {
 
   updatePoint({ resultUser, price, flag }) {
     if (flag) {
+      //충전(true)
       return this.userRepository.update(
         { email: resultUser.email },
         { point: resultUser.point + price },
       );
     } else {
+      //차감(false)
       return this.userRepository.update(
         { email: resultUser.email },
         { point: resultUser.point - price },
