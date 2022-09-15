@@ -131,6 +131,8 @@ export class UsersService {
   //개발용 creatUser
   async createForAdmin({ _user, hashedPwd: password }) {
     const { point, rating, report, successRate, ...user } = _user;
+    const now = new Date();
+    now.setHours(0, 0, 0, 0);
 
     //User 데이터 저장
     const userResult = await this.userRepository.save({
@@ -140,6 +142,7 @@ export class UsersService {
       rating,
       report,
       successRate,
+      createdAt: now,
     });
     return userResult;
   }
