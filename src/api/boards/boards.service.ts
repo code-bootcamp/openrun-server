@@ -221,13 +221,24 @@ export class BoardsService {
       email,
     });
 
-    const result = await this.boardRepository.find({
+    const boards = await this.boardRepository.find({
       relations: ['user'],
       where: { user: { email: user.email } },
       order: { updatedAt: 'DESC' },
       take: 10,
       skip: page ? (page - 1) * 10 : 0,
     });
+
+    const result = await Promise.all(
+      boards.map((el) => {
+        return new Promise(async (resolve) => {
+          const count = await this.runnerRepository.count({
+            where: { board: { id: el.id } },
+          });
+          resolve({ ...el, runnerTotal: count });
+        });
+      }),
+    );
 
     return result;
   }

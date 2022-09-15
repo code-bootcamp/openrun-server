@@ -94,4 +94,7 @@ export class Board {
   @OneToOne(() => Image)
   @Field(() => Image, { nullable: true })
   image: Image;
+
+  @Field(() => Int, { nullable: true })
+  runnerTotal: number;
 }
