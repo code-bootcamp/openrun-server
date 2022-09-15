@@ -12,6 +12,7 @@ import { ImagesService } from '../images/images.service';
 import { PaymentHistoriesService } from '../paymentHistories/paymentHistories.service';
 import { Runner } from '../runners/entities/runner.entity';
 import { PaymentHistory } from '../paymentHistories/entities/paymentHistory.entity';
+import { FileService } from '../file/file.service';
 
 // import { Category } from '../categories/entities/category.entity';
 
@@ -35,6 +36,7 @@ export class BoardsService {
     private readonly imagesService: ImagesService,
     private readonly paymentHistoriesService: PaymentHistoriesService,
     private readonly connection: DataSource,
+    private readonly filesService: FileService,
   ) {}
 
   //게시물 등록
@@ -42,125 +44,170 @@ export class BoardsService {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction('SERIALIZABLE');
+    try {
+      const {
+        category, //
+        image,
+        location,
+        price,
+      } = createBoardInput;
 
-    const {
-      category, //
-      image,
-      location,
-      price,
-    } = createBoardInput;
+      const resultUser = await this.userService.findOne({
+        email,
+      });
+      // if (resultUser.point < price) {
+      //   throw new UnprocessableEntityException('포인트가 부족합니다');
+      // }
 
-    const resultUser = await this.userService.findOne({
-      email,
-    });
-    // if (resultUser.point < price) {
-    //   throw new UnprocessableEntityException('포인트가 부족합니다');
-    // }
+      // const resultCategory = await this.categoriesService.findOne({ name });
 
-    // const resultCategory = await this.categoriesService.findOne({ name });
+      const resultPoint = await this.userService.updatePoint({
+        resultUser,
+        price,
+        flag: false,
+      });
+      if (!resultPoint.affected)
+        throw new NotFoundException('포인트 업데이트에 실패하였습니다.');
 
-    const resultPoint = await this.userService.updatePoint({
-      resultUser,
-      price,
-      flag: false,
-    });
-    if (!resultPoint.affected)
-      throw new NotFoundException('포인트 업데이트에 실패하였습니다.');
+      const resultLocation = await queryRunner.manager.save(Location, {
+        ...location,
+      });
 
-    const resultLocation = await queryRunner.manager.save(Location, {
-      ...location,
-    });
+      const resultCategory = await this.categoriesService.findOne({
+        categoryName: category,
+      });
 
-    const resultCategory = await this.categoriesService.findOne({
-      categoryName: category,
-    });
+      let dueDate = new Date(
+        `${createBoardInput.eventDay} ${createBoardInput.eventTime}`,
+      );
 
-    let dueDate = new Date(
-      `${createBoardInput.eventDay} ${createBoardInput.eventTime}`,
-    );
-
-    if (!createBoardInput.eventDay || !createBoardInput.eventTime) {
-      dueDate = new Date('2023');
-    }
-
-    let img;
-
-    if (image) {
-      if (!image[0]) {
-        img = 'default.img';
-      } else {
-        img = image[0];
+      if (!createBoardInput.eventDay || !createBoardInput.eventTime) {
+        dueDate = new Date('2023');
       }
-    } else {
-      img = 'default.img';
+
+      let img;
+
+      if (image) {
+        if (!image[0]) {
+          img = 'default.img';
+        } else {
+          img = image[0];
+        }
+      } else {
+        img = 'default.img';
+      }
+
+      const resultImage = await queryRunner.manager.save(Image, {
+        url: img,
+      });
+
+      console.log('맵 아래');
+
+      const result = await queryRunner.manager.save(Board, {
+        ...createBoardInput,
+        dueDate: dueDate,
+        location: resultLocation,
+        category: resultCategory,
+        user: resultUser,
+        image: resultImage,
+      });
+
+      const allResult = await queryRunner.manager.save(PaymentHistory, {
+        board: result,
+        user: resultUser,
+        price: price,
+        status: result.user.id === resultUser.id ? 'seller' : 'runner',
+      });
+      await queryRunner.commitTransaction();
+      return {
+        ...result,
+        image: resultImage,
+        location: resultLocation,
+        category: resultCategory,
+        user: resultUser,
+      };
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+    } finally {
+      await queryRunner.release();
     }
-
-    const resultImage = await queryRunner.manager.save(Image, {
-      url: img,
-    });
-
-    console.log('맵 아래');
-
-    const result = await queryRunner.manager.save(Board, {
-      ...createBoardInput,
-      dueDate: dueDate,
-      location: resultLocation,
-      category: resultCategory,
-      user: resultUser,
-      image: resultImage,
-    });
-
-    const allResult = await queryRunner.manager.save(PaymentHistory, {
-      board: result,
-      user: resultUser,
-      price: price,
-      status: result.user.id === resultUser.id ? 'seller' : 'runner',
-    });
-
-    return {
-      ...result,
-      image: resultImage,
-      location: resultLocation,
-      category: resultCategory,
-      user: resultUser,
-    };
   }
 
   async update({ boardId, updateBoardInput }) {
-    const newBoard = await this.boardRepository.findOne({
-      where: { id: boardId },
-      relations: {
-        category: true,
-        location: true,
-        chatRoom: true,
-        user: true,
-        image: true,
-      },
-    });
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction('SERIALIZABLE');
 
-    let dueDate = new Date(
-      `${updateBoardInput.eventDay} ${updateBoardInput.eventTime}`,
-    );
+    try {
+      const newBoard = await this.boardRepository.findOne({
+        where: { id: boardId },
+        relations: {
+          category: true,
+          location: true,
+          chatRoom: true,
+          user: true,
+          image: true,
+        },
+      });
 
-    if (!updateBoardInput.eventDay || !updateBoardInput.eventTime) {
-      dueDate = newBoard.dueDate;
+      const { image, ...rest } = updateBoardInput;
+
+      let img;
+
+      if (image) {
+        if (!image[0]) {
+          img = 'default.img';
+        } else {
+          img = image[0];
+        }
+      } else {
+        img = 'default.img';
+      }
+
+      const newImage = await queryRunner.manager.save(Image, {
+        ...newBoard.image,
+        url: img,
+      });
+
+      let dueDate = new Date(
+        `${updateBoardInput.eventDay} ${updateBoardInput.eventTime}`,
+      );
+
+      if (!updateBoardInput.eventDay || !updateBoardInput.eventTime) {
+        dueDate = newBoard.dueDate;
+      }
+
+      let category = await this.categoryRepository.findOne({
+        where: { name: updateBoardInput.category },
+      });
+
+      if (!updateBoardInput.category) {
+        category = newBoard.category;
+      }
+
+      const result = {
+        ...newBoard,
+        id: boardId,
+        ...updateBoardInput,
+        dueDate: dueDate,
+        category: category,
+        image: newImage,
+      };
+      const boardResult = await queryRunner.manager.save(Board, result);
+
+      if (img !== 'default.img')
+        await this.filesService.delete({
+          url: newBoard.image.url,
+        });
+
+      await queryRunner.commitTransaction();
+
+      return boardResult;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+    } finally {
+      await queryRunner.release();
     }
-
-    let category = await this.categoryRepository.findOne({
-      where: { name: updateBoardInput.category },
-    });
-
-    if (!updateBoardInput.category) {
-      category = newBoard.category;
-    }
-    const result = {
-      ...newBoard,
-      id: boardId,
-      ...updateBoardInput,
-      dueDate: dueDate,
-      category: category,
-    };
-    return await this.boardRepository.save(result);
   }
 
   async updateStatus({ board }) {
