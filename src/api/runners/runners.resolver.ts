@@ -26,6 +26,12 @@ export class RunnersResolver {
   }
 
   @UseGuards(GqlAuthAccessGuard)
+  @Query(() => User)
+  async fetchRunner(@Args('boardId') boardId: string) {
+    return (await this.runnersService.findRunner({ boardId })).user;
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Runner)
   async applyRunner(
     @Args('boardId') boardId: string, //
