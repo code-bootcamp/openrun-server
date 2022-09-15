@@ -76,9 +76,9 @@ export class BoardsService {
       dueDate = new Date('2023');
     }
 
-    let img = image;
+    let img = image[0];
 
-    if (!image) {
+    if (!image[0]) {
       img = 'default.img';
     }
 
