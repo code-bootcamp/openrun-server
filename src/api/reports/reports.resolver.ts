@@ -38,11 +38,31 @@ export class ReportsResolver {
     @Context() context: IContext,
   ) {
     const user = context.req.user;
+
+    this.boardsService.updateStatusReporting({
+      boardId: createReportInput.boardId,
+    });
+
     return this.reportsService.create({
       createReportInput,
       email: user.email,
     });
   }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => Boolean)
+  async completeReport(
+    @Context() context: IContext, //
+    @Args('boardId') boardId: string,
+  ) {
+    const user = context.req.user;
+
+    await this.usersService.checkIsAdmin({ email: user.email });
+
+    return (await this.boardsService.updateStatusCompleted({ boardId }))
+      .affected;
+  }
+
   @Mutation(() => Boolean)
   deleteReport(
     @Args('reportId') reportId: string, //
