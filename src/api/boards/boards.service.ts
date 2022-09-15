@@ -318,4 +318,36 @@ export class BoardsService {
       });
     });
   }
+
+  async updateStatusReporting({ boardId }) {
+    const findBoard = await this.boardRepository.findOne({
+      where: { id: boardId },
+    });
+
+    this.boardRepository.update(
+      {
+        id: boardId,
+      },
+      {
+        ...findBoard,
+        status: BOARD_STATUS_ENUM.REPORTING,
+      },
+    );
+  }
+
+  async updateStatusCompleted({ boardId }) {
+    const findBoard = await this.boardRepository.findOne({
+      where: { id: boardId },
+    });
+
+    return this.boardRepository.update(
+      {
+        id: boardId,
+      },
+      {
+        ...findBoard,
+        status: BOARD_STATUS_ENUM.COMPLETED,
+      },
+    );
+  }
 }

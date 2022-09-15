@@ -22,6 +22,8 @@ export enum BOARD_STATUS_ENUM {
   RECRUITING = '모집중',
   INPROGRESS = '진행중',
   FINISHED = '완료',
+  REPORTING = '신고진행중',
+  COMPLETED = '처리완료',
 }
 
 registerEnumType(BOARD_STATUS_ENUM, {
