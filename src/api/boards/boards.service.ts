@@ -14,8 +14,6 @@ import { Runner } from '../runners/entities/runner.entity';
 import { PaymentHistory } from '../paymentHistories/entities/paymentHistory.entity';
 import { FileService } from '../file/file.service';
 
-// import { Category } from '../categories/entities/category.entity';
-
 @Injectable()
 export class BoardsService {
   constructor(
@@ -100,8 +98,6 @@ export class BoardsService {
       const resultImage = await queryRunner.manager.save(Image, {
         url: img,
       });
-
-      console.log('맵 아래');
 
       const result = await queryRunner.manager.save(Board, {
         ...createBoardInput,

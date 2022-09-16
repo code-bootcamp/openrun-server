@@ -61,24 +61,6 @@ export class NotificationsService {
           contents = '오늘이 바로 러닝데이!!';
         }
       }
-
-      // const diffTime = ele.board.dueDate.getTime() - now.getTime();
-      // if (diffTime < 0 || diffTime > 60 * 60 * 24 * 4 * 1000) {
-      //   //이미 지났거나 D-day가 4일 이상 남았을 경우
-      //   contents = '';
-      // } else if (diffTime > 60 * 60 * 24 * 3 * 1000) {
-      //   //3일 남았을 경우
-      //   contents = '러닝 3일 전입니다.';
-      // } else if (diffTime > 60 * 60 * 24 * 2 * 1000) {
-      //   //2일 남았을 경우
-      //   contents = '러닝 2일 전입니다.';
-      // } else if (diffTime > 60 * 60 * 24 * 1 * 1000) {
-      //   //1일 남았을 경우
-      //   contents = '러닝 1일 전입니다.';
-      // } else {
-      //   //D-day
-      //   contents = '오늘이 바로 러닝데이!!';
-      // }
       return contents;
     });
   }
