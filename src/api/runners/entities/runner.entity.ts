@@ -11,14 +11,14 @@ export class Runner {
   id: string;
 
   @Column({ default: false })
-  @Field(() => Boolean)
+  @Field(() => Boolean, { nullable: true })
   isChecked: boolean;
 
   @ManyToOne(() => User)
-  @Field(() => User)
+  @Field(() => User, { nullable: true })
   user: User;
 
   @ManyToOne(() => Board)
-  @Field(() => Board)
+  @Field(() => Board, { nullable: true })
   board: Board;
 }

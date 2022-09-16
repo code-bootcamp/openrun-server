@@ -324,6 +324,22 @@ export class BoardsService {
     return result;
   }
 
+  findBoardProcessing({ email }) {
+    return this.boardRepository.find({
+      relations: {
+        user: {
+          bankAccount: true,
+        },
+        location: true,
+        image: true,
+        chatRoom: true,
+        category: true,
+      },
+      where: { user: { email: email }, status: BOARD_STATUS_ENUM.INPROGRESS },
+      order: { updatedAt: 'ASC' },
+    });
+  }
+
   async delete({ boardId }) {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
