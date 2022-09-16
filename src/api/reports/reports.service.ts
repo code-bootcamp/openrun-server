@@ -37,6 +37,7 @@ export class ReportsService {
   async findAll({}) {
     const result = await this.reportRepository.find({
       order: { createdAt: 'DESC' },
+      relations: ['board'],
     });
     return result;
   }
