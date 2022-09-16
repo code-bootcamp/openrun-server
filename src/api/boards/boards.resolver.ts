@@ -116,6 +116,16 @@ export class BoardsResolver {
   }
 
   @UseGuards(GqlAuthAccessGuard)
+  @Query(() => [Board])
+  fetchBoardProcessingByUser(
+    @Context() context: IContext, //
+  ) {
+    const user = context.req.user;
+
+    return this.boardsService.findBoardProcessing({ email: user.email });
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Board)
   createBoard(
     @Args('createBoardInput') createBoardInput: CreateBoardInput, //

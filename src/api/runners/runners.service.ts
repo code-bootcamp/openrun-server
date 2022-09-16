@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { BOARD_STATUS_ENUM } from '../boards/entities/board.entity';
 import { Runner } from './entities/runner.entity';
 
 @Injectable()
@@ -76,6 +77,29 @@ export class RunnersService {
     });
     console.log('runner: ', result);
     return result;
+  }
+
+  findRunnerProcessing({ email }) {
+    return this.runnerRepository.find({
+      relations: {
+        user: {
+          bankAccount: true,
+        },
+        board: {
+          category: true,
+          user: true,
+          location: true,
+          image: true,
+          chatRoom: true,
+        },
+      },
+      where: {
+        user: { email: email },
+        isChecked: true,
+        board: { status: BOARD_STATUS_ENUM.INPROGRESS },
+      },
+      order: { board: { updatedAt: 'ASC' } },
+    });
   }
 
   create({ user, board }) {

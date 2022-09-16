@@ -32,6 +32,16 @@ export class RunnersResolver {
   }
 
   @UseGuards(GqlAuthAccessGuard)
+  @Query(() => [Runner])
+  fetchRuunerProcessingByUser(
+    @Context() context: IContext, //
+  ) {
+    const user = context.req.user;
+
+    return this.runnersService.findRunnerProcessing({ email: user.email });
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Runner)
   async applyRunner(
     @Args('boardId') boardId: string, //
