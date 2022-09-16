@@ -1,14 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { report } from 'process';
-import { identity } from 'rxjs';
 import { Repository } from 'typeorm';
 import { BoardsService } from '../boards/boards.service';
-import { Board } from '../boards/entities/board.entity';
-import { Image } from '../images/entities/image.entity';
-import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
-import { Report, REPORT_TYPE_ENUM } from './entities/report.entity';
+import { Report } from './entities/report.entity';
 
 @Injectable()
 export class ReportsService {

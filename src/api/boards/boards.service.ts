@@ -112,7 +112,7 @@ export class BoardsService {
         image: resultImage,
       });
 
-      const allResult = await queryRunner.manager.save(PaymentHistory, {
+      await queryRunner.manager.save(PaymentHistory, {
         board: result,
         user: resultUser,
         price: price,
@@ -150,7 +150,7 @@ export class BoardsService {
         },
       });
 
-      const { image, ...rest } = updateBoardInput;
+      const { image } = updateBoardInput;
 
       let img;
 

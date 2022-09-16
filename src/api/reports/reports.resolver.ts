@@ -1,12 +1,8 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { InjectRepository } from '@nestjs/typeorm';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { IContext } from 'src/commons/types/type';
-import { Repository } from 'typeorm';
 import { BoardsService } from '../boards/boards.service';
-import { User } from '../users/entities/user.entity';
-import { UsersResolver } from '../users/users.resolver';
 import { UsersService } from '../users/users.service';
 import { CreateReportInput } from './dto/report.input';
 import { Report } from './entities/report.entity';
