@@ -1,7 +1,6 @@
 import { NotFoundException, UseGuards } from '@nestjs/common';
 import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { Resolver, Query, Mutation, Args, Context, Int } from '@nestjs/graphql';
-import { title } from 'process';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { IContext } from 'src/commons/types/type';
 import { CategoriesService } from '../categories/categories.service';
@@ -143,7 +142,7 @@ export class BoardsResolver {
     //러너 포인트 업데이트
     const returnMoney = board.price * 0.1 + board.price;
 
-    const updatePoint = await this.usersService.updatePoint({
+    await this.usersService.updatePoint({
       resultUser: runner.user,
       price: returnMoney,
       flag: true,
