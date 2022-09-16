@@ -15,7 +15,9 @@ export class PaymentHistoriesService {
       where: { user: { id: user.id } },
       relations: {
         user: true,
-        board: true,
+        board: {
+          user: true,
+        },
       },
       take: 10,
       skip: page ? (page - 1) * 10 : 0,

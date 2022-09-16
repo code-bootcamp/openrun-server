@@ -17,11 +17,11 @@ export class PaymentHistory {
   id: string;
 
   @Column()
-  @Field(() => Int)
+  @Field(() => Int, { nullable: true })
   price: number;
 
   @Column({ nullable: true })
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   status: string;
 
   @CreateDateColumn()
@@ -29,10 +29,10 @@ export class PaymentHistory {
   createdAt: Date;
 
   @ManyToOne(() => User)
-  @Field(() => User)
+  @Field(() => User, { nullable: true })
   user: User;
 
   @ManyToOne(() => Board)
-  @Field(() => Board)
+  @Field(() => Board, { nullable: true })
   board: Board;
 }
