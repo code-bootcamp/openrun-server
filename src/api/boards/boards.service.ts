@@ -241,7 +241,7 @@ export class BoardsService {
     let whereQuery = {};
     if (category !== 'ALL') {
       whereQuery = {
-        location: { address: Like(`%${direcion}%`) },
+        location: { address: Like(`${direcion}%`) },
         dueDate: MoreThan(today),
         category: {
           name: category,
@@ -249,7 +249,7 @@ export class BoardsService {
       };
     } else {
       whereQuery = {
-        location: { address: Like(`%${direcion}%`) },
+        location: { address: Like(`${direcion}%`) },
         dueDate: MoreThan(today),
       };
     }
@@ -274,7 +274,7 @@ export class BoardsService {
     let whereQuery = {};
     if (category !== 'ALL') {
       whereQuery = {
-        location: { address: Like(`%${direcion}%`) },
+        location: { address: Like(`${direcion}%`) },
         dueDate: MoreThan(today),
         category: {
           name: category,
@@ -282,7 +282,7 @@ export class BoardsService {
       };
     } else {
       whereQuery = {
-        location: { address: Like(`%${direcion}%`) },
+        location: { address: Like(`${direcion}%`) },
         dueDate: MoreThan(today),
       };
     }
