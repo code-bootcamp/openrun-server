@@ -1,13 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Board } from 'src/api/boards/entities/board.entity';
-import {
-  Column,
-  DeleteDateColumn,
-  Entity,
-  JoinColumn,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 @ObjectType()
