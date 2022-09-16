@@ -79,8 +79,6 @@ export class ChatGateway {
       room = findChatRoom;
     }
 
-    console.log(room.room);
-
     const findSellerMessage = await this.chatMessageRepository.findOne({
       relations: {
         room: true,
@@ -110,8 +108,6 @@ export class ChatGateway {
 
       this.wsClients.push(client);
 
-      console.log(`${nickName}님이 코드: ${room.room}방에 접속했습니다.`);
-
       return;
     }
 
@@ -126,12 +122,9 @@ export class ChatGateway {
 
       this.wsClients.push(client);
 
-      console.log(`${nickName}님이 코드: ${room.room}방에 접속했습니다.`);
-
       return;
     } else {
       this.wsClients.push(client);
-      console.log(`${nickName}님이 코드: ${room.room}방에 접속했습니다.`);
     }
   }
 
@@ -148,6 +141,8 @@ export class ChatGateway {
   @SubscribeMessage('send')
   async sendMessage(@MessageBody() data: string, @ConnectedSocket() client) {
     const [room, nickname, message] = data;
+
+    console.log(client);
 
     const boardId = room.slice(5);
 
@@ -172,8 +167,6 @@ export class ChatGateway {
         seller: true,
       },
     });
-
-    console.log('==========', findRoom);
 
     await this.chatMessageRepository.save({
       message: message,

@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Event } from './entities/event.entity';
@@ -9,8 +8,6 @@ export class EventsService {
   constructor(
     @InjectRepository(Event)
     private readonly eventRpository: Repository<Event>, //
-
-    private readonly elasticsearchService: ElasticsearchService, //
   ) {}
 
   findOne({ eventId }) {
