@@ -67,10 +67,19 @@ export class UsersService {
   }
 
   async findOne({ email }) {
-    return await this.userRepository.findOne({
+    //현재 로그인한 유저가 작성한 게시글 총 갯수
+    const boardTotal = await this.boardRepository.count({
+      where: { user: { email } },
+    });
+
+    //유저의 정보 출력
+    const result = await this.userRepository.findOne({
       where: { email },
       relations: ['bankAccount'],
     });
+
+    result.boardTotal = boardTotal;
+    return result;
   }
 
   findOneById({ userId }) {
