@@ -239,30 +239,62 @@ export class BoardsService {
     });
     return resultBoard;
   }
-  async findAllbyCurrent({ page, direcion }) {
+  async findAllbyCurrent({ page, direcion, category }) {
     const today = new Date();
+
+    let whereQuery = {};
+    if (category !== 'ALL') {
+      whereQuery = {
+        location: { address: Like(`%${direcion}%`) },
+        dueDate: MoreThan(today),
+        category: {
+          name: category,
+        },
+      };
+    } else {
+      whereQuery = {
+        location: { address: Like(`%${direcion}%`) },
+        dueDate: MoreThan(today),
+      };
+    }
 
     const resultBoards = await this.boardRepository.find({
       relations: ['category', 'location', 'image', 'user'],
       order: { updatedAt: 'DESC' },
-      where: {
-        location: { address: Like(`%${direcion}%`) },
-        dueDate: MoreThan(today),
-      },
+      // where: {
+      //   location: { address: Like(`%${direcion}%`) },
+      //   dueDate: MoreThan(today),
+      //   category: category,
+      // },
+      where: whereQuery,
       take: 12,
       skip: page ? (page - 1) * 12 : 0,
     });
     return resultBoards;
   }
-  async findAllbyLimit({ page, direcion }) {
+  async findAllbyLimit({ page, direcion, category }) {
     const today = new Date();
+
+    let whereQuery = {};
+    if (category !== 'ALL') {
+      whereQuery = {
+        location: { address: Like(`%${direcion}%`) },
+        dueDate: MoreThan(today),
+        category: {
+          name: category,
+        },
+      };
+    } else {
+      whereQuery = {
+        location: { address: Like(`%${direcion}%`) },
+        dueDate: MoreThan(today),
+      };
+    }
+
     const resultBoards = await this.boardRepository.find({
       relations: ['category', 'location', 'image', 'user'],
       order: { dueDate: 'ASC' },
-      where: {
-        location: { address: Like(`%${direcion}%`) },
-        dueDate: MoreThan(today),
-      },
+      where: whereQuery,
       take: 12,
       skip: page ? (page - 1) * 12 : 0,
     });
