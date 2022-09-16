@@ -4,6 +4,7 @@ import { Resolver, Query, Mutation, Args, Context, Int } from '@nestjs/graphql';
 import { title } from 'process';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { IContext } from 'src/commons/types/type';
+import { CategoriesService } from '../categories/categories.service';
 import { PaymentHistoriesService } from '../paymentHistories/paymentHistories.service';
 import { RunnersService } from '../runners/runners.service';
 import { UsersService } from '../users/users.service';
@@ -20,10 +21,12 @@ export class BoardsResolver {
     private readonly usersService: UsersService,
     private readonly paymentHistoriesService: PaymentHistoriesService,
     private readonly elasticsearchService: ElasticsearchService,
+    private readonly categoriesService: CategoriesService,
   ) {}
 
   @Query(() => [Board])
   async fetchBoards(
+    @Args({ name: 'category', nullable: true }) category: string,
     @Args({ name: 'direcion', nullable: true, defaultValue: '' })
     direcion: string,
     @Args({ name: 'search', nullable: true })
@@ -59,7 +62,7 @@ export class BoardsResolver {
         return this.boardsService.elasticResult({ result });
       }
 
-      return this.boardsService.findAllbyCurrent({ page, direcion });
+      return this.boardsService.findAllbyCurrent({ page, direcion, category });
     }
     if (dateType === '마감 임박순') {
       if (search) {
@@ -88,7 +91,7 @@ export class BoardsResolver {
         return this.boardsService.elasticResult({ result });
       }
 
-      return this.boardsService.findAllbyLimit({ page, direcion });
+      return this.boardsService.findAllbyLimit({ page, direcion, category });
     }
   }
 
