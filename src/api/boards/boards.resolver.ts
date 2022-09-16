@@ -55,6 +55,8 @@ export class BoardsResolver {
               updatedAt: 'desc',
             },
           ],
+          size: 12,
+          from: page ? (page - 1) * 12 : 0,
         });
 
         const result = elasticResult.hits.hits;
@@ -85,6 +87,8 @@ export class BoardsResolver {
               dueDate: 'asc',
             },
           ],
+          size: 12,
+          from: page ? (page - 1) * 12 : 0,
         });
 
         const result = elasticResult.hits.hits;
