@@ -17,15 +17,15 @@ export class ChatRoom {
   room: string;
 
   @ManyToOne(() => User)
-  @Field(() => User)
+  @Field(() => User, { nullable: true })
   seller: User;
 
   @ManyToOne(() => User)
-  @Field(() => User)
+  @Field(() => User, { nullable: true })
   runner: User;
 
   @JoinColumn()
   @OneToOne(() => Board)
-  @Field(() => Board)
+  @Field(() => Board, { nullable: true })
   board: Board;
 }
