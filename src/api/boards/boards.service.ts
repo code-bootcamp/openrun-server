@@ -341,6 +341,7 @@ export class BoardsService {
   }
 
   async delete({ boardId }) {
+    //queryRunner 선언
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction('SERIALIZABLE');
@@ -348,35 +349,74 @@ export class BoardsService {
     //temporary for debug
     let status = '';
 
+    //1.PaymentHistory에 남겨진 Board를 찾아 연결(relation) 끊어줌
+    status = '[1]paymentHistory - deleteBoardId'; //for debug
+    const paymentHistories =
+      await this.paymentHistoriesService.findAllByBoardId({
+        boardId,
+      });
+    if (paymentHistories.length > 0) {
+      paymentHistories.forEach(async (ele) => {
+        const temp = await this.paymentHistoriesService.deleteOnlyBoardId({
+          id: ele.id,
+        });
+        console.log('temp = ', temp.affected);
+      });
+    }
+
     try {
-      status = '[1]board - findOne'; //for debug
+      //2.현재 선택된 Board 정보 찾기
+      status = '[2]board - findOne'; //for debug
       const board = await queryRunner.manager.findOne(Board, {
         where: { id: boardId },
         relations: ['image', 'location'],
         lock: { mode: 'pessimistic_write' },
       });
 
-      status = '[2]location - softdelete'; //for debug
+      //3.Board의 Location정보 삭제
+      status = '[3]location - softdelete'; //for debug
       await queryRunner.manager.softDelete(Location, {
         id: board.location.id,
       });
 
-      status = '[3]board - softdelete'; //for debug
+      //4.Board 삭제
+      status = '[4]board - delete'; //for debug
       const result = await queryRunner.manager.softDelete(Board, {
         id: boardId,
       });
 
-      status = '[4]image - delete'; //for debug
+      //5.Image 삭제
+      status = '[5]image - softdelete'; //for debug
+      await queryRunner.manager.softDelete(Image, {
+        id: board.image.id,
+      });
+
+      //6.Image bucket에서 삭제
+      status = '[6]file - delete'; //for debug
       if (!board.image.url.includes('default.img')) {
-        await this.imagesService.deleteImage({
-          url: board.image,
+        await this.filesService.delete({ url: board.image.url });
+      }
+
+      //Transaction 종료
+      await queryRunner.commitTransaction();
+
+      return result.affected ? true : false;
+    } catch (error) {
+      //RollBack 수행
+      await queryRunner.rollbackTransaction();
+
+      // paymentHistory 원상복구
+      if (paymentHistories.length > 0) {
+        paymentHistories.forEach(async (ele) => {
+          const temp = await this.paymentHistoriesService.updateOnlyBoardId({
+            id: ele.id,
+            boardId,
+          });
+
+          console.log('paymentHistory 복구 = ', temp.affected);
         });
       }
 
-      await queryRunner.commitTransaction();
-      return result.affected ? true : false;
-    } catch (error) {
-      await queryRunner.rollbackTransaction();
       throw new NotFoundException(`ERROR!!! ${status}`);
     } finally {
       await queryRunner.release();

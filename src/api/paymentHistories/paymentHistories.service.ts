@@ -47,4 +47,31 @@ export class PaymentHistoriesService {
         : 'runner',
     });
   }
+
+  findAllByBoardId({ boardId }) {
+    return this.paymentHistoryRepository.find({
+      where: { board: { id: boardId } },
+      relations: ['board'],
+    });
+  }
+
+  deleteOnlyBoardId({ id }) {
+    return this.paymentHistoryRepository.update(
+      {
+        id,
+      },
+      { board: null },
+    );
+  }
+
+  updateOnlyBoardId({ id, boardId }) {
+    return this.paymentHistoryRepository.update(
+      {
+        id,
+      },
+      {
+        board: { id: boardId },
+      },
+    );
+  }
 }
