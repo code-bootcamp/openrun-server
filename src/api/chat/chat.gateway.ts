@@ -44,8 +44,6 @@ export class ChatGateway {
       boardId,
     });
 
-    console.log('=========', findChatRoom);
-
     const host = await this.usersRepository.findOne({
       where: { nickName },
     });
@@ -71,13 +69,14 @@ export class ChatGateway {
       findRoom = findChatRoom;
     }
 
-    const isChatRoom = await this.chatService.findOne({
-      boardId,
-    });
+    console.log(
+      '===================findChatRoom===================',
+      findChatRoom,
+    );
 
     if (
-      isChatRoom.seller.nickName !== nickName &&
-      isChatRoom.runner.nickName !== nickName
+      findRoom.seller.nickName !== nickName &&
+      findRoom.runner.nickName !== nickName
     )
       throw new NotFoundException('다른 유저가 들어갈 수 없습니다.');
 
@@ -88,20 +87,14 @@ export class ChatGateway {
       },
       where: {
         room: { room: findRoom.room },
-        user: { nickName: isChatRoom.seller.nickName },
+        user: { nickName: findRoom.seller.nickName },
       },
     });
 
-    const findRunnerMessage = await this.chatMessageRepository.findOne({
-      relations: {
-        room: true,
-        user: true,
-      },
-      where: {
-        room: { room: findRoom.room },
-        user: { nickName: isChatRoom.runner.nickName },
-      },
-    });
+    console.log(
+      '===================findSellerMessage===================',
+      findSellerMessage,
+    );
 
     const comeOn = `${nickName}님이 입장했습니다.`;
 
@@ -119,6 +112,22 @@ export class ChatGateway {
       return;
     }
 
+    const findRunnerMessage = await this.chatMessageRepository.findOne({
+      relations: {
+        room: true,
+        user: true,
+      },
+      where: {
+        room: { room: findRoom.room },
+        user: { nickName: findRoom.runner.nickName },
+      },
+    });
+
+    console.log(
+      '===================findRunnerMessage===================',
+      findRunnerMessage,
+    );
+
     if (!findRunnerMessage) {
       this.chatMessageRepository.save({
         message: comeOn,
@@ -131,8 +140,6 @@ export class ChatGateway {
       this.wsClients.push(client);
 
       return;
-    } else {
-      this.wsClients.push(client);
     }
   }
 
