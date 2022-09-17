@@ -14,7 +14,7 @@ import {
 export class ChatRoom {
   @PrimaryColumn()
   @Field(() => String)
-  room: string;
+  id: string;
 
   @ManyToOne(() => User)
   @Field(() => User, { nullable: true })

@@ -16,12 +16,12 @@ export class ChatService {
 
   async create({ room, host, runner, board }) {
     const result = await this.chatRoomRepository.save({
-      room: room,
+      id: room,
       seller: host,
       runner: runner,
       board: board,
     });
-    console.log(result);
+
     return result;
   }
 
