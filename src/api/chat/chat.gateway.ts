@@ -54,25 +54,21 @@ export class ChatGateway {
       where: { id: runnerId },
     });
 
-    const isRunner = await this.usersRepository.findOne({
-      where: { nickName },
-    });
-
     const board = await this.boardsService.findOne({
       boardId,
     });
 
-    let room;
+    let findRoom;
 
     if (!findChatRoom) {
-      room = await this.chatService.create({
+      findRoom = await this.chatService.create({
         room: 'first' + boardId,
         host,
         runner,
         board,
       });
     } else {
-      room = findChatRoom;
+      findRoom = findChatRoom;
     }
 
     const isChatRoom = await this.chatService.findOne({
@@ -90,7 +86,10 @@ export class ChatGateway {
         room: true,
         user: true,
       },
-      where: { room: { room: room.room }, user: { nickName } },
+      where: {
+        room: { room: findRoom.room },
+        user: { nickName: isChatRoom.seller.nickName },
+      },
     });
 
     const findRunnerMessage = await this.chatMessageRepository.findOne({
@@ -98,7 +97,10 @@ export class ChatGateway {
         room: true,
         user: true,
       },
-      where: { room: { room: room.room }, user: { id: runnerId } },
+      where: {
+        room: { room: findRoom.room },
+        user: { nickName: isChatRoom.runner.nickName },
+      },
     });
 
     const comeOn = `${nickName}님이 입장했습니다.`;
@@ -106,7 +108,7 @@ export class ChatGateway {
     if (!findSellerMessage) {
       this.chatMessageRepository.save({
         message: comeOn,
-        room,
+        room: findRoom,
         user: host,
       });
 
@@ -117,10 +119,10 @@ export class ChatGateway {
       return;
     }
 
-    if (!findRunnerMessage && isRunner.id !== host.id) {
+    if (!findRunnerMessage) {
       this.chatMessageRepository.save({
         message: comeOn,
-        room,
+        room: findRoom,
         user: runner,
       });
 
