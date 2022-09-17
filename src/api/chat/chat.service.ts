@@ -27,7 +27,7 @@ export class ChatService {
 
   async load({ room }) {
     const result = await this.chatMessageRepository.find({
-      where: { room },
+      where: { room: { id: room } },
       order: { createdAt: 'ASC' },
       relations: {
         user: {
