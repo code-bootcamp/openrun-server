@@ -360,7 +360,6 @@ export class BoardsService {
         const temp = await this.paymentHistoriesService.deleteOnlyBoardId({
           id: ele.id,
         });
-        console.log('temp = ', temp.affected);
       });
     }
 
@@ -412,8 +411,6 @@ export class BoardsService {
             id: ele.id,
             boardId,
           });
-
-          console.log('paymentHistory 복구 = ', temp.affected);
         });
       }
 
