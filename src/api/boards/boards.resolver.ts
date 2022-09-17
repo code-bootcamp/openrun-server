@@ -33,6 +33,39 @@ export class BoardsResolver {
     @Args('dateType') dateType: string, //
     @Args({ name: 'page', nullable: true, type: () => Int }) page: number, //
   ) {
+    if (dateType === '전체') {
+      if (search) {
+        const elasticResult = await this.elasticsearchService.search({
+          index: 'board',
+          query: {
+            bool: {
+              must: [
+                direcion !== '전체' &&
+                  direcion && {
+                    term: { address: direcion },
+                  },
+                {
+                  term: { title: search },
+                },
+              ],
+            },
+          },
+          sort: [
+            {
+              updatedAt: 'desc',
+            },
+          ],
+          size: 12,
+          from: page ? (page - 1) * 12 : 0,
+        });
+
+        const result = elasticResult.hits.hits;
+        console.log(result);
+        return this.boardsService.elasticResult({ result });
+      }
+
+      return this.boardsService.findAllbyCurrent({ page, direcion, category });
+    }
     if (dateType === '최신순') {
       if (search) {
         const elasticResult = await this.elasticsearchService.search({
@@ -40,9 +73,10 @@ export class BoardsResolver {
           query: {
             bool: {
               must: [
-                direcion && {
-                  term: { address: direcion },
-                },
+                direcion !== '전체' &&
+                  direcion && {
+                    term: { address: direcion },
+                  },
                 {
                   term: { title: search },
                 },
@@ -72,9 +106,10 @@ export class BoardsResolver {
           query: {
             bool: {
               must: [
-                direcion && {
-                  term: { address: direcion },
-                },
+                direcion !== '전체' &&
+                  direcion && {
+                    term: { address: direcion },
+                  },
                 {
                   term: { title: search },
                 },
