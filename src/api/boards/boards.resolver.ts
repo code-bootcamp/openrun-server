@@ -182,9 +182,22 @@ export class BoardsResolver {
   }
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Boolean)
-  deleteBoard(
+  async deleteBoard(
     @Args('boardId') boardId: string, //
   ) {
-    return this.boardsService.delete({ boardId });
+    //board 삭제
+    const result = await this.boardsService.delete({ boardId });
+
+    //elasticsearch내의 해당 doc 삭제
+    await this.elasticsearchService.deleteByQuery({
+      index: 'board',
+      query: {
+        match: {
+          _id: boardId,
+        },
+      },
+    });
+
+    return result;
   }
 }
