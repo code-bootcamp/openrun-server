@@ -56,7 +56,7 @@ export class ChatService {
 
   findAllUser({ email }) {
     return this.chatRoomRepository.find({
-      where: { runner: { email: email } } || { seller: { email: email } },
+      where: [{ runner: { email: email } }, { seller: { email: email } }],
       relations: {
         runner: {
           bankAccount: true,
