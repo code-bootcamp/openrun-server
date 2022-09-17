@@ -69,10 +69,7 @@ export class ChatGateway {
       findRoom = findChatRoom;
     }
 
-    console.log(
-      '===================findChatRoom===================',
-      findChatRoom,
-    );
+    console.log('===================findChatRoom===================', findRoom);
 
     if (
       findRoom.seller.nickName !== nickName &&
@@ -80,67 +77,72 @@ export class ChatGateway {
     )
       throw new NotFoundException('다른 유저가 들어갈 수 없습니다.');
 
-    const findSellerMessage = await this.chatMessageRepository.find({
-      relations: {
-        room: true,
-        user: true,
-      },
-      where: {
-        room: { room: findRoom.room },
-        user: { nickName: findRoom.seller.nickName },
-      },
-    });
-
-    console.log(
-      '===================findSellerMessage===================',
-      findSellerMessage,
-    );
-
     const comeOn = `${nickName}님이 입장했습니다.`;
 
-    if (findSellerMessage.length === 0) {
-      this.chatMessageRepository.save({
-        message: comeOn,
-        room: findRoom,
-        user: host,
+    if (nickName === findRoom.seller.nickName) {
+      const findSellerMessage = await this.chatMessageRepository.find({
+        relations: {
+          room: true,
+          user: true,
+        },
+        where: {
+          room: { id: findRoom.id },
+          user: { nickName: findRoom.seller.nickName },
+        },
       });
 
-      this.server.emit('first' + boardId, [comeOn, nickName]);
+      console.log(
+        '===================findSellerMessage===================',
+        findSellerMessage,
+      );
 
-      this.wsClients.push(client);
+      if (findSellerMessage.length === 0) {
+        this.chatMessageRepository.save({
+          message: comeOn,
+          room: findRoom,
+          user: host,
+        });
 
-      return;
+        this.server.emit('first' + boardId, [comeOn, nickName]);
+
+        this.wsClients.push(client);
+
+        return;
+      }
     }
 
-    const findRunnerMessage = await this.chatMessageRepository.find({
-      relations: {
-        room: true,
-        user: true,
-      },
-      where: {
-        room: { room: findRoom.room },
-        user: { nickName: findRoom.runner.nickName },
-      },
-    });
-
-    console.log(
-      '===================findRunnerMessage===================',
-      findRunnerMessage,
-    );
-
-    if (findRunnerMessage.length === 0) {
-      this.chatMessageRepository.save({
-        message: comeOn,
-        room: findRoom,
-        user: runner,
+    if (nickName === findRoom.runner.nickName) {
+      const findRunnerMessage = await this.chatMessageRepository.find({
+        relations: {
+          room: true,
+          user: true,
+        },
+        where: {
+          room: { id: findRoom.id },
+          user: { nickName: findRoom.runner.nickName },
+        },
       });
 
-      this.server.emit('first' + boardId, [comeOn, nickName]);
+      console.log(
+        '===================findRunnerMessage===================',
+        findRunnerMessage,
+      );
 
-      this.wsClients.push(client);
+      if (findRunnerMessage.length === 0) {
+        this.chatMessageRepository.save({
+          message: comeOn,
+          room: findRoom,
+          user: runner,
+        });
 
-      return;
+        this.server.emit('first' + boardId, [comeOn, nickName]);
+
+        this.wsClients.push(client);
+
+        return;
+      }
     }
+    // this.wsClients.push(client);
   }
 
   // private broadcast(event, client, message: any) {
@@ -176,7 +178,7 @@ export class ChatGateway {
     });
 
     const findRoom = await this.chatRoomRepository.findOne({
-      where: { room: room },
+      where: { id: room },
       relations: {
         runner: true,
         seller: true,
