@@ -303,7 +303,7 @@ export class BoardsService {
     });
 
     const boards = await this.boardRepository.find({
-      relations: ['user'],
+      relations: ['user', 'image'],
       where: { user: { email: user.email } },
       order: { updatedAt: 'DESC' },
       take: 10,
@@ -357,7 +357,7 @@ export class BoardsService {
       });
     if (paymentHistories.length > 0) {
       paymentHistories.forEach(async (ele) => {
-        const temp = await this.paymentHistoriesService.deleteOnlyBoardId({
+        await this.paymentHistoriesService.deleteOnlyBoardId({
           id: ele.id,
         });
       });
@@ -407,7 +407,7 @@ export class BoardsService {
       // paymentHistory 원상복구
       if (paymentHistories.length > 0) {
         paymentHistories.forEach(async (ele) => {
-          const temp = await this.paymentHistoriesService.updateOnlyBoardId({
+          await this.paymentHistoriesService.updateOnlyBoardId({
             id: ele.id,
             boardId,
           });
