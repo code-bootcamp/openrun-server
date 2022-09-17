@@ -27,7 +27,7 @@ export class InterestsService {
 
   async findInterests({ email, page }) {
     const result = await this.interestRepository.find({
-      relations: ['board', 'user', 'board.user'],
+      relations: ['board', 'user', 'board.user', 'board.image'],
       where: { user: { email } },
       take: 10,
       skip: page ? (page - 1) * 10 : 0,
