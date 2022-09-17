@@ -238,20 +238,15 @@ export class BoardsService {
   async findAllbyCurrent({ page, direcion, category }) {
     const today = new Date();
 
-    let whereQuery = {};
+    //where query문 생성
+    const whereQuery = {
+      dueDate: MoreThan(today),
+    };
     if (category !== 'ALL') {
-      whereQuery = {
-        location: { address: Like(`${direcion}%`) },
-        dueDate: MoreThan(today),
-        category: {
-          name: category,
-        },
-      };
-    } else {
-      whereQuery = {
-        location: { address: Like(`${direcion}%`) },
-        dueDate: MoreThan(today),
-      };
+      whereQuery['category'] = { name: category };
+    }
+    if (direcion !== '전체' && direcion) {
+      whereQuery['location'] = { address: Like(`${direcion}%`) };
     }
 
     const resultBoards = await this.boardRepository.find({
@@ -271,21 +266,32 @@ export class BoardsService {
   async findAllbyLimit({ page, direcion, category }) {
     const today = new Date();
 
-    let whereQuery = {};
+    //where query문 생성
+    const whereQuery = {
+      dueDate: MoreThan(today),
+    };
     if (category !== 'ALL') {
-      whereQuery = {
-        location: { address: Like(`${direcion}%`) },
-        dueDate: MoreThan(today),
-        category: {
-          name: category,
-        },
-      };
-    } else {
-      whereQuery = {
-        location: { address: Like(`${direcion}%`) },
-        dueDate: MoreThan(today),
-      };
+      whereQuery['category'] = { name: category };
     }
+    if (direcion !== '전체' && direcion) {
+      whereQuery['location'] = { address: Like(`${direcion}%`) };
+    }
+
+    // let whereQuery = {};
+    // if (category !== 'ALL') {
+    //   whereQuery = {
+    //     location: { address: Like(`${direcion}%`) },
+    //     dueDate: MoreThan(today),
+    //     category: {
+    //       name: category,
+    //     },
+    //   };
+    // } else {
+    //   whereQuery = {
+    //     location: { address: Like(`${direcion}%`) },
+    //     dueDate: MoreThan(today),
+    //   };
+    // }
 
     const resultBoards = await this.boardRepository.find({
       relations: ['category', 'location', 'image', 'user'],
