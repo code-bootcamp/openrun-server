@@ -192,6 +192,10 @@ export class BoardsResolver {
       price: returnMoney,
       flag: true,
     });
+
+    // 러너 줄서기 건수 업데이트
+    await this.usersService.updateRunnerCount({ user: runner.user });
+
     //상태 업데이트
     const updateStatus = await this.boardsService.updateToFinish({ board });
 
