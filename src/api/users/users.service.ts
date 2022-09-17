@@ -311,4 +311,11 @@ export class UsersService {
     const hashedPwd = await bcrypt.hash(password, 10);
     return hashedPwd;
   }
+
+  updateRunnerCount({ user }) {
+    return this.userRepository.update(
+      { id: user.id },
+      { runnerCount: user.runnerCount + 1 },
+    );
+  }
 }

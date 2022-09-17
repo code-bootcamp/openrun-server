@@ -96,6 +96,10 @@ export class User {
   @Field(() => Int, { nullable: true })
   successRate: number;
 
+  @Column({ nullable: true, default: 0 })
+  @Field(() => Int, { nullable: true })
+  runnerCount: number;
+
   // @CreateDateColumn()
   @Column({ nullable: true })
   @Field(() => Date, { nullable: true })
