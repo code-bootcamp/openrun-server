@@ -34,7 +34,7 @@ export class UsersResolver {
   @Query(() => User)
   fetchLoginUser(@Context() context: IContext) {
     const email = context.req.user.email;
-    return this.usersService.findOne({ email });
+    return this.usersService.findOneForLoginUser({ email });
   }
 
   @Query(() => [User])
