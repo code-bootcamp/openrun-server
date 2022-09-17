@@ -97,10 +97,14 @@ export class ChatGateway {
       );
 
       if (findSellerMessage.length === 0) {
+        const result = await this.usersRepository.findOne({
+          where: { nickName: findRoom.seller.nickName },
+        });
+
         this.chatMessageRepository.save({
           message: comeOn,
           room: findRoom,
-          user: host,
+          user: result,
         });
 
         this.server.emit('first' + boardId, [comeOn, nickName]);
@@ -129,10 +133,14 @@ export class ChatGateway {
       );
 
       if (findRunnerMessage.length === 0) {
+        const result = await this.usersRepository.findOne({
+          where: { nickName: findRoom.runner.nickName },
+        });
+
         this.chatMessageRepository.save({
           message: comeOn,
           room: findRoom,
-          user: runner,
+          user: result,
         });
 
         this.server.emit('first' + boardId, [comeOn, nickName]);
