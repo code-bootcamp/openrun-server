@@ -44,11 +44,7 @@ export class ChatGateway {
       boardId,
     });
 
-    if (
-      findChatRoom.seller.nickName !== nickName &&
-      findChatRoom.runner.nickName !== nickName
-    )
-      throw new NotFoundException('다른 유저가 들어갈 수 없습니다.');
+    console.log('=========', findChatRoom);
 
     const host = await this.usersRepository.findOne({
       where: { nickName },
@@ -79,12 +75,22 @@ export class ChatGateway {
       room = findChatRoom;
     }
 
+    const isChatRoom = await this.chatService.findOne({
+      boardId,
+    });
+
+    if (
+      isChatRoom.seller.nickName !== nickName &&
+      isChatRoom.runner.nickName !== nickName
+    )
+      throw new NotFoundException('다른 유저가 들어갈 수 없습니다.');
+
     const findSellerMessage = await this.chatMessageRepository.findOne({
       relations: {
         room: true,
         user: true,
       },
-      where: { room: { room: room.room } } && { user: { nickName } },
+      where: { room: { room: room.room }, user: { nickName } },
     });
 
     const findRunnerMessage = await this.chatMessageRepository.findOne({
@@ -92,7 +98,7 @@ export class ChatGateway {
         room: true,
         user: true,
       },
-      where: { room: { room: room.room } } && { user: { id: runnerId } },
+      where: { room: { room: room.room }, user: { id: runnerId } },
     });
 
     const comeOn = `${nickName}님이 입장했습니다.`;
