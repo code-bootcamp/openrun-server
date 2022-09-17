@@ -80,7 +80,7 @@ export class ChatGateway {
     )
       throw new NotFoundException('다른 유저가 들어갈 수 없습니다.');
 
-    const findSellerMessage = await this.chatMessageRepository.findOne({
+    const findSellerMessage = await this.chatMessageRepository.find({
       relations: {
         room: true,
         user: true,
@@ -98,7 +98,7 @@ export class ChatGateway {
 
     const comeOn = `${nickName}님이 입장했습니다.`;
 
-    if (!findSellerMessage) {
+    if (findSellerMessage.length === 0) {
       this.chatMessageRepository.save({
         message: comeOn,
         room: findRoom,
@@ -112,7 +112,7 @@ export class ChatGateway {
       return;
     }
 
-    const findRunnerMessage = await this.chatMessageRepository.findOne({
+    const findRunnerMessage = await this.chatMessageRepository.find({
       relations: {
         room: true,
         user: true,
@@ -128,7 +128,7 @@ export class ChatGateway {
       findRunnerMessage,
     );
 
-    if (!findRunnerMessage) {
+    if (findRunnerMessage.length === 0) {
       this.chatMessageRepository.save({
         message: comeOn,
         room: findRoom,
