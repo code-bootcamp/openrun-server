@@ -363,6 +363,22 @@ export class BoardsService {
     });
   }
 
+  findBestOfBoards({ category, page }) {
+    const today = new Date();
+
+    if (!category) category = 'FASHION';
+    return this.boardRepository.find({
+      where: {
+        status: BOARD_STATUS_ENUM.RECRUITING,
+        category: { name: category },
+        dueDate: MoreThan(today),
+      },
+      order: { interestCount: 'DESC' },
+      take: 10,
+      skip: page ? (page - 1) * 10 : 0,
+    });
+  }
+
   async delete({ boardId }) {
     //queryRunner 선언
     const queryRunner = this.connection.createQueryRunner();

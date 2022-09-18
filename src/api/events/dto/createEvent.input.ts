@@ -2,8 +2,11 @@ import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
 export class CreateEventInput {
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   title: string;
+
+  @Field(() => String, { nullable: true })
+  brand: string;
 
   @Field(() => [String], { nullable: true, name: 'contentsImage' })
   contentsImage: [string];
