@@ -40,6 +40,7 @@ export class PaymentHistoriesService {
       board,
       user,
       price,
+      title: board.title,
       status: flag
         ? 'safeMoney'
         : board.user.id === user.id

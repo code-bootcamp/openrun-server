@@ -24,6 +24,10 @@ export class PaymentHistory {
   @Field(() => String, { nullable: true })
   status: string;
 
+  @Column({ nullable: true })
+  @Field(() => String, { nullable: true })
+  title: string;
+
   @CreateDateColumn()
   @Field(() => Date)
   createdAt: Date;
