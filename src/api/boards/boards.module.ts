@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ElasticsearchModule } from '@nestjs/elasticsearch';
+import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BankAccountsService } from '../bankAccounts/bankAccounts.service';
 import { BankAccount } from '../bankAccounts/entities/ bankAccount.entity';
