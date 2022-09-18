@@ -19,6 +19,10 @@ export class Event {
   @Field(() => String, { nullable: true })
   title: string;
 
+  @Column()
+  @Field(() => String, { nullable: true })
+  brand: string;
+
   @OneToMany(() => EventImage, (EventImage) => EventImage.event)
   @Field(() => [EventImage], { nullable: true })
   contentsImage: EventImage[];

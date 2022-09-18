@@ -53,6 +53,8 @@ export class InterestsResolver {
       board: findBoard,
     });
 
+    console.log('==========', findInterest);
+
     if (findInterest) {
       this.interestsService.delete({ interest: findInterest });
       return false;

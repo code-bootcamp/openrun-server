@@ -3,7 +3,6 @@ import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { Resolver, Query, Mutation, Args, Context, Int } from '@nestjs/graphql';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { IContext } from 'src/commons/types/type';
-import { CategoriesService } from '../categories/categories.service';
 import { PaymentHistoriesService } from '../paymentHistories/paymentHistories.service';
 import { RunnersService } from '../runners/runners.service';
 import { UsersService } from '../users/users.service';
@@ -20,7 +19,6 @@ export class BoardsResolver {
     private readonly usersService: UsersService,
     private readonly paymentHistoriesService: PaymentHistoriesService,
     private readonly elasticsearchService: ElasticsearchService,
-    private readonly categoriesService: CategoriesService,
   ) {}
 
   @Query(() => [Board])
@@ -158,6 +156,14 @@ export class BoardsResolver {
     const user = context.req.user;
 
     return this.boardsService.findBoardProcessing({ email: user.email });
+  }
+
+  @Query(() => [Board])
+  async fetchBestOfBoards(
+    @Args({ name: 'category', nullable: true }) category: string,
+    @Args({ name: 'page', nullable: true, type: () => Int }) page: number,
+  ) {
+    return this.boardsService.findBestOfBoards({ category, page });
   }
 
   @UseGuards(GqlAuthAccessGuard)

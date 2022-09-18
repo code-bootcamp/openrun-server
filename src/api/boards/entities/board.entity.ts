@@ -58,6 +58,10 @@ export class Board {
   @Field(() => Int, { nullable: true, name: 'price' })
   price: number;
 
+  @Column({ nullable: true, default: 0 })
+  @Field(() => Int, { nullable: true, name: 'interestCount' })
+  interestCount: number;
+
   @CreateDateColumn()
   @Field(() => Date, { nullable: true })
   createdAt: Date;
