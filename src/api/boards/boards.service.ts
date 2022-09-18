@@ -13,6 +13,7 @@ import { PaymentHistoriesService } from '../paymentHistories/paymentHistories.se
 import { Runner } from '../runners/entities/runner.entity';
 import { PaymentHistory } from '../paymentHistories/entities/paymentHistory.entity';
 import { FileService } from '../file/file.service';
+import { Cron } from '@nestjs/schedule';
 
 @Injectable()
 export class BoardsService {

@@ -22,6 +22,7 @@ import { FileModule } from './api/file/file.module';
 import { ChatModule } from './api/chat/chat.module';
 import { NotificationsModule } from './api/notifications/notifications.module';
 import { EventsModule } from './api/events/events.module';
+// import { RefreshesModule } from './api/refreshes/refreshes.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { EventsModule } from './api/events/events.module';
     NotificationsModule,
     PaymentHistoriesModule,
     PaymentsModule,
+    // RefreshesModule,
     ReportsModule,
     RunnersModule,
     TokensModule,
