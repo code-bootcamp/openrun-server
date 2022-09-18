@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Like, MoreThan, Repository } from 'typeorm';
 import { Image } from '../images/entities/image.entity';
@@ -84,6 +88,10 @@ export class BoardsService {
       if (!createBoardInput.eventDay || !createBoardInput.eventTime) {
         dueDate = new Date('2023');
       }
+      // 행사 날짜 입력시  이미 지난 날짜를 입력 할 경우
+      // const today = new Date();
+      // if (dueDate < today)
+      //   throw new ConflictException('행사 날짜가 올바르지 않습니다.');
 
       let img;
 

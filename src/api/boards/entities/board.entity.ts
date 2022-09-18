@@ -23,6 +23,7 @@ export enum BOARD_STATUS_ENUM {
   FINISHED = '완료',
   REPORTING = '신고진행중',
   COMPLETED = '처리완료',
+  ENDED = '일자마감',
 }
 
 registerEnumType(BOARD_STATUS_ENUM, {
