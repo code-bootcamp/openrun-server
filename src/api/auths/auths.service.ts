@@ -19,13 +19,22 @@ export class AuthsService {
     private readonly cacheManager: Cache,
   ) {}
 
-  setRefreshToken({ user, res }) {
+  setRefreshToken({ user, res, req }) {
     const refreshToken = this.jwtService.sign(
       { email: user.email, sub: user.id }, //
       { secret: 'myRefreshKey', expiresIn: '2w' },
     );
     //배포용
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000'); //프론트와 연결
+    const originList = [
+      'http://localhost:3000',
+      'http://open-run.shop',
+      'https://open-run.shop',
+    ];
+    const origin = req.headers.origin;
+    if (originList.includes(origin)) {
+      res.setHeader('Access-Control-Allow-Origin', origin); //프론트와 연결
+    }
+
     res.setHeader('Access-Control-Allow-Credentials', 'true'); //credential 함께 allow
     res.setHeader(
       'Access-Control-Allow-Methods',
@@ -57,7 +66,7 @@ export class AuthsService {
     return accessToken;
   }
 
-  async checkAndSaveToken({ accessToken, refreshToken, res }) {
+  async checkAndSaveToken({ accessToken, refreshToken, res, req }) {
     try {
       //현재 시간
       const currentTime = new Date();
@@ -97,7 +106,16 @@ export class AuthsService {
 
       //쿠키에서 refreshToken 삭제
       //배포용
-      res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000'); //프론트와 연결
+      const originList = [
+        'http://localhost:3000',
+        'http://open-run.shop',
+        'https://open-run.shop',
+      ];
+      const origin = req.headers.origin;
+      if (originList.includes(origin)) {
+        res.setHeader('Access-Control-Allow-Origin', origin); //프론트와 연결
+      }
+
       res.setHeader('Access-Control-Allow-Credentials', 'true'); //credential 함께 allow
       res.setHeader(
         'Access-Control-Allow-Methods',
@@ -126,7 +144,7 @@ export class AuthsService {
     }
   }
 
-  async socialLogin({ _user, res, loginType }) {
+  async socialLogin({ _user, res, req, loginType }) {
     //가입 확인
     let user = await this.usersService.findOne({ email: _user.email });
 
@@ -139,7 +157,7 @@ export class AuthsService {
     }
 
     //로그인
-    this.setRefreshToken({ user, res });
+    this.setRefreshToken({ user, res, req });
     res.redirect('http://localhost:3000/myPage/');
   }
 }
