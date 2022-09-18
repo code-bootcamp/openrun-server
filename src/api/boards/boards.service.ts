@@ -112,6 +112,7 @@ export class BoardsService {
         board: result,
         user: resultUser,
         price: price,
+        title: result.title,
         status: result.user.id === resultUser.id ? 'seller' : 'runner',
       });
       await queryRunner.commitTransaction();
