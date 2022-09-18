@@ -171,7 +171,7 @@ export class BoardsService {
       });
       const newLocation = await queryRunner.manager.save(Location, {
         ...newBoard.location,
-        address: location.address,
+        ...location,
       });
 
       let dueDate = new Date(
@@ -199,7 +199,6 @@ export class BoardsService {
         image: newImage,
         location: newLocation,
       };
-      console.log('@@@@@@@@@@@', result.location);
       const boardResult = await queryRunner.manager.save(Board, result);
 
       if (img !== 'default.img')
@@ -208,7 +207,6 @@ export class BoardsService {
         });
 
       await queryRunner.commitTransaction();
-
       return boardResult;
     } catch (error) {
       await queryRunner.rollbackTransaction();
