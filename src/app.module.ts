@@ -51,7 +51,11 @@ import { EventsModule } from './api/events/events.module';
       autoSchemaFile: 'src/commons/graphql/schema.gql',
       context: ({ req, res }) => ({ req, res }),
       cors: {
-        origin: 'http://localhost:3000',
+        origin: [
+          'http://localhost:3000',
+          'http://open-run.shop',
+          'https://open-run.shop',
+        ],
         credentials: true,
         exposedHeaders: ['Set-Cookie', 'Cookie'],
         methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
