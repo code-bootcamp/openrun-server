@@ -5,8 +5,8 @@ export class CreateEventInput {
   @Field(() => String)
   title: string;
 
-  @Field(() => String, { nullable: true, name: 'contents' })
-  contents: string;
+  @Field(() => [String], { nullable: true, name: 'contentsImage' })
+  contentsImage: [string];
 
   @Field(() => Date, { nullable: true, name: 'period' })
   period: Date;

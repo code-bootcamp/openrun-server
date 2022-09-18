@@ -18,7 +18,7 @@ export class EventsResolver {
 
   @Query(() => [Event])
   fetchEventsByDate(
-    @Args('date') date: Date, //
+    @Args({ name: 'date', nullable: true }) date: Date, //
   ) {
     return this.eventsService.findByDate({ date });
   }
