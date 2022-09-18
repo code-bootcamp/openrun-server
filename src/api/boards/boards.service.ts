@@ -1,8 +1,4 @@
-import {
-  ConflictException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Like, MoreThan, Repository } from 'typeorm';
 import { Image } from '../images/entities/image.entity';
@@ -17,8 +13,6 @@ import { PaymentHistoriesService } from '../paymentHistories/paymentHistories.se
 import { Runner } from '../runners/entities/runner.entity';
 import { PaymentHistory } from '../paymentHistories/entities/paymentHistory.entity';
 import { FileService } from '../file/file.service';
-import { Cron } from '@nestjs/schedule';
-import e from 'express';
 
 @Injectable()
 export class BoardsService {
