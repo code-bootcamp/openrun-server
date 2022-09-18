@@ -4,6 +4,7 @@ import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { IContext } from 'src/commons/types/type';
 import { BoardsService } from '../boards/boards.service';
 import { BOARD_STATUS_ENUM } from '../boards/entities/board.entity';
+import { PaymentHistoriesService } from '../paymentHistories/paymentHistories.service';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { Runner } from './entities/runner.entity';
@@ -15,6 +16,7 @@ export class RunnersResolver {
     private readonly boardsService: BoardsService, //
     private readonly usersService: UsersService, //
     private readonly runnersService: RunnersService,
+    private readonly paymentHistoriesService: PaymentHistoriesService,
   ) {}
 
   @UseGuards(GqlAuthAccessGuard)
@@ -101,8 +103,24 @@ export class RunnersResolver {
     if (runner.isChecked)
       throw new NotFoundException('이미 신청한 게시물 입니다.');
 
+    // 보드 상태 진행중으로 변경
     this.boardsService.updateStatus({ board });
 
-    return this.runnersService.updateIsChecked({ runner });
+    // 러너 보증금 차감
+    this.usersService.updatePoint({
+      resultUser: user,
+      price: safetyMoney,
+      flag: false,
+    });
+
+    // 보증금 차감한 로그 쌓기
+    this.paymentHistoriesService.create({
+      user: user,
+      board: board,
+      price: safetyMoney,
+      flag: true,
+    });
+
+    return await this.runnersService.updateIsChecked({ runner });
   }
 }
