@@ -18,6 +18,7 @@ export class AuthsController {
     this.authsService.socialLogin({
       _user: req.user,
       res,
+      req,
       loginType: USER_LOGINTYPE_ENUM.GOOGLE,
     });
   }
@@ -31,6 +32,7 @@ export class AuthsController {
     this.authsService.socialLogin({
       _user: req.user,
       res,
+      req,
       loginType: USER_LOGINTYPE_ENUM.KAKAO,
     });
   }
@@ -44,6 +46,7 @@ export class AuthsController {
     this.authsService.socialLogin({
       _user: req.user,
       res,
+      req,
       loginType: USER_LOGINTYPE_ENUM.NAVER,
     });
   }

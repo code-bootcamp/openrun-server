@@ -38,6 +38,7 @@ export class AuthsResolver {
     this.authsService.setRefreshToken({
       user, //
       res: context.res,
+      req: context.req,
     });
 
     //AccessToken 생성하여 리턴
@@ -55,6 +56,7 @@ export class AuthsResolver {
       accessToken,
       refreshToken, //
       res: context.res,
+      req: context.req,
     });
   }
 
