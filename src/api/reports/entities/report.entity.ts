@@ -36,29 +36,29 @@ export class Report {
     default: REPORT_TYPE_ENUM.TRASH_TALK,
     nullable: true,
   })
-  @Field(() => REPORT_TYPE_ENUM)
+  @Field(() => REPORT_TYPE_ENUM, { nullable: true })
   type: string;
 
   @Column({
     nullable: true,
   })
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   contents: string;
 
   @CreateDateColumn()
-  @Field(() => Date)
+  @Field(() => Date, { nullable: true })
   createdAt: Date;
 
   @DeleteDateColumn()
-  @Field(() => Date)
+  @Field(() => Date, { nullable: true })
   deletedAt: Date;
 
   @ManyToOne(() => User)
-  @Field(() => User)
+  @Field(() => User, { nullable: true })
   user: User;
 
   @JoinColumn()
   @OneToOne(() => Board)
-  @Field(() => Board)
+  @Field(() => Board, { nullable: true })
   board: Board;
 }

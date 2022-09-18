@@ -14,6 +14,7 @@ import { Runner } from '../runners/entities/runner.entity';
 import { PaymentHistory } from '../paymentHistories/entities/paymentHistory.entity';
 import { FileService } from '../file/file.service';
 import { Cron } from '@nestjs/schedule';
+import e from 'express';
 
 @Injectable()
 export class BoardsService {
@@ -162,9 +163,15 @@ export class BoardsService {
         img = 'default.img';
       }
 
+      const { location } = updateBoardInput;
+
       const newImage = await queryRunner.manager.save(Image, {
         ...newBoard.image,
         url: img,
+      });
+      const newLocation = await queryRunner.manager.save(Location, {
+        ...newBoard.location,
+        address: location.address,
       });
 
       let dueDate = new Date(
@@ -190,7 +197,9 @@ export class BoardsService {
         dueDate: dueDate,
         category: category,
         image: newImage,
+        location: newLocation,
       };
+      console.log('@@@@@@@@@@@', result.location);
       const boardResult = await queryRunner.manager.save(Board, result);
 
       if (img !== 'default.img')
