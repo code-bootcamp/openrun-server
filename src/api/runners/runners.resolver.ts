@@ -1,5 +1,5 @@
 import { NotFoundException, UseGuards } from '@nestjs/common';
-import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { IContext } from 'src/commons/types/type';
 import { BoardsService } from '../boards/boards.service';
@@ -36,11 +36,15 @@ export class RunnersResolver {
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => [Runner])
   fetchRuunerProcessingByUser(
+    @Args({ name: 'page', nullable: true, type: () => Int }) page: number,
     @Context() context: IContext, //
   ) {
     const user = context.req.user;
 
-    return this.runnersService.findRunnerProcessing({ email: user.email });
+    return this.runnersService.findRunnerProcessing({
+      email: user.email,
+      page,
+    });
   }
 
   @UseGuards(GqlAuthAccessGuard)

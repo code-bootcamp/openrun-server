@@ -79,7 +79,7 @@ export class RunnersService {
     return result;
   }
 
-  findRunnerProcessing({ email }) {
+  findRunnerProcessing({ email, page }) {
     return this.runnerRepository.find({
       relations: {
         user: {
@@ -99,6 +99,8 @@ export class RunnersService {
         board: { status: BOARD_STATUS_ENUM.INPROGRESS },
       },
       order: { board: { updatedAt: 'ASC' } },
+      take: 10,
+      skip: page ? (page - 1) * 10 : 0,
     });
   }
 
