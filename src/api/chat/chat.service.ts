@@ -64,6 +64,7 @@ export class ChatService {
         seller: {
           bankAccount: true,
         },
+        board: true,
       },
     });
   }
