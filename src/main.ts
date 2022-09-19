@@ -11,7 +11,11 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new HttpExceptionFilter());
   app.enableCors({
-    origin: 'http://localhost:3000',
+    origin: [
+      'http://localhost:3000',
+      'http://open-run.shop',
+      'https://open-run.shop',
+    ],
     credentials: true,
   });
   app.use(graphqlUploadExpress());

@@ -39,6 +39,10 @@ export class Event {
   @Field(() => String, { nullable: true })
   image: string;
 
+  @Column()
+  @Field(() => String, { nullable: true })
+  category: string;
+
   @CreateDateColumn()
   @Field(() => Date, { nullable: true })
   createdAt: Date;
