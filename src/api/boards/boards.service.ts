@@ -357,7 +357,7 @@ export class BoardsService {
     });
   }
 
-  findBestOfBoards({ category, page }) {
+  findBestOfBoards({ category }) {
     const today = new Date();
 
     if (!category) category = 'FASHION';
@@ -368,8 +368,8 @@ export class BoardsService {
         dueDate: MoreThan(today),
       },
       order: { interestCount: 'DESC' },
-      take: 10,
-      skip: page ? (page - 1) * 10 : 0,
+      take: 5,
+      relations: ['user', 'location', 'image', 'category'],
     });
   }
 
