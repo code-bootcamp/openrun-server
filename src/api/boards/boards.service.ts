@@ -341,7 +341,7 @@ export class BoardsService {
     return result;
   }
 
-  findBoardProcessing({ email }) {
+  findBoardProcessing({ email, page }) {
     return this.boardRepository.find({
       relations: {
         user: {
@@ -354,6 +354,8 @@ export class BoardsService {
       },
       where: { user: { email: email }, status: BOARD_STATUS_ENUM.INPROGRESS },
       order: { updatedAt: 'ASC' },
+      take: 10,
+      skip: page ? (page - 1) * 10 : 0,
     });
   }
 

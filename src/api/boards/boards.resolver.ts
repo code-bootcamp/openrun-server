@@ -151,11 +151,12 @@ export class BoardsResolver {
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => [Board])
   fetchBoardProcessingByUser(
+    @Args({ name: 'page', nullable: true, type: () => Int }) page: number,
     @Context() context: IContext, //
   ) {
     const user = context.req.user;
 
-    return this.boardsService.findBoardProcessing({ email: user.email });
+    return this.boardsService.findBoardProcessing({ email: user.email, page });
   }
 
   @Query(() => [Board])
