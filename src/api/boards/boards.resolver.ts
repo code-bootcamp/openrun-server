@@ -161,9 +161,8 @@ export class BoardsResolver {
   @Query(() => [Board])
   async fetchBestOfBoards(
     @Args({ name: 'category', nullable: true }) category: string,
-    @Args({ name: 'page', nullable: true, type: () => Int }) page: number,
   ) {
-    return this.boardsService.findBestOfBoards({ category, page });
+    return this.boardsService.findBestOfBoards({ category });
   }
 
   @UseGuards(GqlAuthAccessGuard)
