@@ -42,15 +42,7 @@ export class RefreshesService {
         { status: BOARD_STATUS_ENUM.ENDED },
       );
       // status 바꾸기
-      await this.paymentHistory.save({
-        board: newBoard[i],
-        user: newBoard[i].user,
-        price: newBoard[i].price,
-        title: newBoard[i].title,
-        status: 'refund',
-      });
 
-      //ElasticSearch에서 삭제
       await this.elasticsearchService.deleteByQuery({
         index: 'board',
         query: {
@@ -59,8 +51,17 @@ export class RefreshesService {
           },
         },
       });
+      //ElasticSearch에서 삭제
 
+      await this.paymentHistory.save({
+        board: newBoard[i],
+        user: newBoard[i].user,
+        price: newBoard[i].price,
+        title: newBoard[i].title,
+        status: 'refund',
+      });
       // payment 포인트 업데이트
+
       this.userRepository.update(
         { email: newBoard[i].user.email },
         { point: newBoard[i].user.point + newBoard[i].price },
