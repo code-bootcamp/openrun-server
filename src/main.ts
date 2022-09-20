@@ -13,8 +13,8 @@ async function bootstrap() {
   app.enableCors({
     origin: [
       'http://localhost:3000',
-      'http://open-run.shop',
-      'https://open-run.shop',
+      'http://openrun.site',
+      'https://openrun.site',
     ],
     credentials: true,
   });

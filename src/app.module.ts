@@ -53,8 +53,8 @@ import { RefreshesModule } from './api/refreshes/refreshes.module';
       cors: {
         origin: [
           'http://localhost:3000',
-          'http://open-run.shop',
-          'https://open-run.shop',
+          'http://openrun.site',
+          'https://openrun.site',
         ],
         credentials: true,
         exposedHeaders: ['Set-Cookie', 'Cookie'],
