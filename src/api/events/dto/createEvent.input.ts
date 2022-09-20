@@ -22,4 +22,7 @@ export class CreateEventInput {
 
   @Field(() => String, { nullable: true, name: 'fakeData' })
   fakeData: string;
+
+  @Field(() => String, { nullable: true, name: 'category' })
+  category: string;
 }
