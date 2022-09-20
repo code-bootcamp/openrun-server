@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { Cron } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LessThan, Repository } from 'typeorm';
@@ -15,10 +16,14 @@ export class RefreshesService {
     private readonly userRepository: Repository<User>,
     @InjectRepository(PaymentHistory)
     private readonly paymentHistory: Repository<PaymentHistory>,
+
+    //ElasticSearch
+    private readonly elasticsearchService: ElasticsearchService,
   ) {}
 
   @Cron('* * * * *')
   async refreshBoard() {
+    //마감기간이 넘어간 board가 있는지 확인
     const today = new Date();
     const newBoard = await this.boardRepository.find({
       where: {
@@ -44,6 +49,17 @@ export class RefreshesService {
         title: newBoard[i].title,
         status: 'refund',
       });
+
+      //ElasticSearch에서 삭제
+      await this.elasticsearchService.deleteByQuery({
+        index: 'board',
+        query: {
+          match: {
+            _id: newBoard[i].id,
+          },
+        },
+      });
+
       // payment 포인트 업데이트
       this.userRepository.update(
         { email: newBoard[i].user.email },
