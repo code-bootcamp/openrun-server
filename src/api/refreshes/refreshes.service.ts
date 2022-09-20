@@ -41,14 +41,6 @@ export class RefreshesService {
         { id: newBoard[i].id },
         { status: BOARD_STATUS_ENUM.ENDED },
       );
-      // status 바꾸기
-      await this.paymentHistory.save({
-        board: newBoard[i],
-        user: newBoard[i].user,
-        price: newBoard[i].price,
-        title: newBoard[i].title,
-        status: 'refund',
-      });
 
       //ElasticSearch에서 삭제
       await this.elasticsearchService.deleteByQuery({
@@ -58,6 +50,15 @@ export class RefreshesService {
             _id: newBoard[i].id,
           },
         },
+      });
+
+      // status 바꾸기
+      await this.paymentHistory.save({
+        board: newBoard[i],
+        user: newBoard[i].user,
+        price: newBoard[i].price,
+        title: newBoard[i].title,
+        status: 'refund',
       });
 
       // payment 포인트 업데이트
