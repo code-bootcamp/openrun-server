@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Board } from '../boards/entities/board.entity';
