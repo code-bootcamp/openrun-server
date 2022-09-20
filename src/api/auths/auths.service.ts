@@ -27,8 +27,8 @@ export class AuthsService {
     //배포용
     const originList = [
       'http://localhost:3000',
-      'http://open-run.shop',
-      'https://open-run.shop',
+      'http://openrun.site',
+      'https://openrun.site',
     ];
     const origin = req.headers.origin;
     if (originList.includes(origin)) {
@@ -108,8 +108,8 @@ export class AuthsService {
       //배포용
       const originList = [
         'http://localhost:3000',
-        'http://open-run.shop',
-        'https://open-run.shop',
+        'http://openrun.site',
+        'https://openrun.site',
       ];
       const origin = req.headers.origin;
       if (originList.includes(origin)) {
@@ -158,6 +158,6 @@ export class AuthsService {
 
     //로그인
     this.setRefreshToken({ user, res, req });
-    res.redirect('http://localhost:3000/myPage/');
+    res.redirect('https://openrun.site/main/');
   }
 }
