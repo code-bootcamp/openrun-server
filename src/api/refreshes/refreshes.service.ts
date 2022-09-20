@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ElasticsearchService } from '@nestjs/elasticsearch';
 // import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { Cron } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -16,6 +17,8 @@ export class RefreshesService {
     private readonly userRepository: Repository<User>,
     @InjectRepository(PaymentHistory)
     private readonly paymentHistory: Repository<PaymentHistory>,
+
+    private readonly elasticSearchService: ElasticsearchService,
   ) {}
 
   @Cron('* * * * *')
@@ -40,14 +43,14 @@ export class RefreshesService {
       );
       // status 바꾸기
 
-      // await this.elasticsearchService.deleteByQuery({
-      //   index: 'board',
-      //   query: {
-      //     match: {
-      //       _id: newBoard[i].id,
-      //     },
-      //   },
-      // });
+      await this.elasticSearchService.deleteByQuery({
+        index: 'board',
+        query: {
+          match: {
+            _id: newBoard[i].id,
+          },
+        },
+      });
       //ElasticSearch에서 삭제
 
       await this.paymentHistory.save({

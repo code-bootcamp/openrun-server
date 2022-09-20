@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ElasticsearchService } from '@nestjs/elasticsearch';
+import { ElasticsearchModule } from '@nestjs/elasticsearch';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Board } from '../boards/entities/board.entity';
@@ -15,6 +15,9 @@ import { RefreshesService } from './refreshes.service';
       PaymentHistory,
     ]),
     ScheduleModule.forRoot(),
+    ElasticsearchModule.register({
+      node: 'http://elasticsearch:9200', //
+    }),
   ],
   providers: [RefreshesService],
 })
