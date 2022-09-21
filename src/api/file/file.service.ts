@@ -13,9 +13,7 @@ export class FileService {
       }).bucket(process.env.GOOGLE_BUCKET);
 
       const result = await new Promise((resolve, reject) => {
-        const fname = `profile/${getToday()}/${uuidv4()}/origin/${
-          file.filename
-        }`;
+        const fname = `${getToday()}/${uuidv4()}/origin/${file.filename}`;
         // console.log(`fname = ${fname}`); //추후 이미지 업로드를 대비하여 남겨놓음
         file
           .createReadStream()
@@ -43,9 +41,7 @@ export class FileService {
         waitedFiles.map(
           (ele) =>
             new Promise((resolve, reject) => {
-              const fname = `board/${getToday()}/${uuidv4()}/origin/${
-                ele.filename
-              }`;
+              const fname = `${getToday()}/${uuidv4()}/origin/${ele.filename}`;
               ele
                 .createReadStream()
                 .pipe(storage.file(fname).createWriteStream())
