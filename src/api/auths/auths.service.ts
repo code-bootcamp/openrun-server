@@ -158,6 +158,7 @@ export class AuthsService {
 
     //로그인
     this.setRefreshToken({ user, res, req });
-    res.redirect('https://openrun.site/main/');
+    // res.redirect('https://openrun.site/main/');
+    res.redirect('http://localhost:3000/main/');
   }
 }
