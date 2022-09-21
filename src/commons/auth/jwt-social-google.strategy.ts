@@ -17,7 +17,7 @@ export class JwtGoogleStrategy extends PassportStrategy(Strategy, 'google') {
       password: 'socialLogin',
       nickName: profile.displayName,
       phone: '',
-      profileImg: 'default.png',
+      profileImg: '',
     };
   }
 }

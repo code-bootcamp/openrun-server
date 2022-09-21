@@ -7,7 +7,7 @@ export class JwtKakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
       clientID: process.env.KAKAO_CLIENT_ID,
       clientSecret: process.env.KAKAO_CLIENT_SECRET,
       callbackURL: process.env.KAKAO_CALLBACK_URL,
-      scope: ['profile_nickname', 'profile_image', 'account_email'],
+      scope: ['profile_nickname', 'account_email'],
     });
   }
 
@@ -17,7 +17,7 @@ export class JwtKakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
       password: 'socialLogin',
       nickName: profile._json.kakao_account.profile.nickname,
       phone: '',
-      profileImg: profile._json.kakao_account.profile.thumbnail_image_url,
+      profileImg: '',
     };
   }
 }
