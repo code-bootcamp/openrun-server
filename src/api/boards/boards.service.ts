@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Like, MoreThan, Repository } from 'typeorm';
 import { Image } from '../images/entities/image.entity';
@@ -53,9 +57,9 @@ export class BoardsService {
       const resultUser = await this.userService.findOne({
         email,
       });
-      // if (resultUser.point < price) {
-      //   throw new UnprocessableEntityException('포인트가 부족합니다');
-      // }
+      if (resultUser.point < price) {
+        throw new UnprocessableEntityException('포인트가 부족합니다');
+      }
 
       // const resultCategory = await this.categoriesService.findOne({ name });
 
