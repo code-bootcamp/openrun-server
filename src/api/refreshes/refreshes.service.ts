@@ -44,7 +44,7 @@ export class RefreshesService {
 
     if (newBoard2.length >= 1) {
       for (let i = 0; i < newBoard2.length; i++) {
-        this.elasticSearchService.deleteByQuery({
+        await this.elasticSearchService.deleteByQuery({
           index: 'board',
           query: {
             match: {
