@@ -275,9 +275,8 @@ export class BoardsService {
       // },
       // where: whereQuery,
       where: [
-        { status: BOARD_STATUS_ENUM.INPROGRESS },
-        { status: BOARD_STATUS_ENUM.RECRUITING },
-        whereQuery,
+        { status: BOARD_STATUS_ENUM.INPROGRESS, ...whereQuery },
+        { status: BOARD_STATUS_ENUM.RECRUITING, ...whereQuery },
       ],
       take: 12,
       skip: page ? (page - 1) * 12 : 0,
@@ -319,9 +318,8 @@ export class BoardsService {
       order: { dueDate: 'ASC' },
       // where: whereQuery,
       where: [
-        { status: BOARD_STATUS_ENUM.INPROGRESS },
-        { status: BOARD_STATUS_ENUM.RECRUITING },
-        whereQuery,
+        { status: BOARD_STATUS_ENUM.INPROGRESS, ...whereQuery },
+        { status: BOARD_STATUS_ENUM.RECRUITING, ...whereQuery },
       ],
       take: 12,
       skip: page ? (page - 1) * 12 : 0,
