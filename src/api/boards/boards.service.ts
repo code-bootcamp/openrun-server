@@ -273,7 +273,12 @@ export class BoardsService {
       //   dueDate: MoreThan(today),
       //   category: category,
       // },
-      where: whereQuery,
+      // where: whereQuery,
+      where: [
+        { status: BOARD_STATUS_ENUM.INPROGRESS },
+        { status: BOARD_STATUS_ENUM.RECRUITING },
+        whereQuery,
+      ],
       take: 12,
       skip: page ? (page - 1) * 12 : 0,
     });
@@ -312,7 +317,12 @@ export class BoardsService {
     const resultBoards = await this.boardRepository.find({
       relations: ['category', 'location', 'image', 'user'],
       order: { dueDate: 'ASC' },
-      where: whereQuery,
+      // where: whereQuery,
+      where: [
+        { status: BOARD_STATUS_ENUM.INPROGRESS },
+        { status: BOARD_STATUS_ENUM.RECRUITING },
+        whereQuery,
+      ],
       take: 12,
       skip: page ? (page - 1) * 12 : 0,
     });

@@ -30,8 +30,31 @@ export class RefreshesService {
         status: BOARD_STATUS_ENUM.RECRUITING, //
         dueDate: LessThan(today),
       },
+
       relations: ['user'],
     });
+
+    // 거래 완료 및 신고진행중
+    const newBoard2 = await this.boardRepository.find({
+      where: [
+        { status: BOARD_STATUS_ENUM.COMPLETED },
+        { status: BOARD_STATUS_ENUM.REPORTING },
+      ],
+    });
+
+    if (newBoard2.length >= 1) {
+      for (let i = 0; i < newBoard2.length; i++) {
+        this.elasticSearchService.deleteByQuery({
+          index: 'board',
+          query: {
+            match: {
+              _id: newBoard2[i].id,
+            },
+          },
+        });
+      }
+    }
+
     if (newBoard.length === 0) {
       return;
     }
