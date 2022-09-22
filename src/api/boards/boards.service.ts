@@ -133,6 +133,7 @@ export class BoardsService {
       };
     } catch (error) {
       await queryRunner.rollbackTransaction();
+      throw new UnprocessableEntityException(error);
     } finally {
       await queryRunner.release();
     }
