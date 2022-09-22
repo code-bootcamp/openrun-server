@@ -29,4 +29,11 @@ export class EventsResolver {
   ) {
     return this.eventsService.create({ createEventInput });
   }
+
+  @Mutation(() => Boolean)
+  async deleteEvent(
+    @Args('eventId') eventId: string, //
+  ) {
+    return (await this.eventsService.delete({ eventId })).affected;
+  }
 }

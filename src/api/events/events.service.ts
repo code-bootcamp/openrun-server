@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { EventImage } from '../eventImages/entities/eventImage.entity';
 import { Event } from './entities/event.entity';
+import { FileService } from '../file/file.service';
 
 @Injectable()
 export class EventsService {
@@ -12,6 +13,8 @@ export class EventsService {
 
     @InjectRepository(EventImage)
     private readonly eventImageRepository: Repository<EventImage>,
+
+    private readonly filesService: FileService,
   ) {}
 
   findOne({ eventId }) {
@@ -61,5 +64,26 @@ export class EventsService {
       contentsImageArr.push(img);
     }
     return { ...event, contentsImage: contentsImageArr };
+  }
+
+  async delete({ eventId }) {
+    const event = await this.eventRpository.findOne({
+      where: { id: eventId },
+      relations: {
+        contentsImage: true,
+      },
+    });
+
+    for (let i = 0; i < event.contentsImage.length; i++) {
+      await this.filesService.delete({ url: event.contentsImage[i].url });
+    }
+
+    this.eventImageRepository.delete({
+      event: { id: eventId },
+    });
+
+    return await this.eventRpository.delete({
+      id: eventId,
+    });
   }
 }
