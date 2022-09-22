@@ -1,4 +1,12 @@
-import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  Context,
+  Float,
+  Int,
+  Mutation,
+  Query,
+  Resolver,
+} from '@nestjs/graphql';
 import { CreateUserInput } from './dto/createUser.input';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
@@ -166,7 +174,7 @@ export class UsersResolver {
   }
 
   @UseGuards(GqlAuthAccessGuard)
-  @Mutation(() => Boolean) //굳이 user를 반환해줘야하나..?(여기서는 runner를 점수매기는 것이기 때문에 user필요없을 듯)
+  @Mutation(() => Float) //굳이 user를 반환해줘야하나..?(여기서는 runner를 점수매기는 것이기 때문에 user필요없을 듯)
   async createRating(
     @Args('boardId') boardId: string,
     @Args('rate') rate: number, //
@@ -189,6 +197,6 @@ export class UsersResolver {
       rating,
     });
 
-    return result ? true : false;
+    return result.rating;
   }
 }
