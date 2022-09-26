@@ -2,7 +2,7 @@
 
 ## 1.서비스 소개
 
-> ### [OPENRUN 바로가기](https://openrun.site)
+> ### [🖥 OPENRUN 바로가기](https://openrun.site)
 > 오픈런(Open Run): 특정 물건을 구매하기 위해 매장이 문을 열기도 전에 달려와 줄을 서는 현상을 의미.
 >
 > 경제적 이익과 희소 가치(한정판) 소유를 위하여 MZ세대를 중심으로 오픈런 수요가 늘고 있습니다. 백화점 명품을 시작으로 원소주, 당당치킨, 포켓몬빵 등 품목과 유통채널 구분없이 출시되는 한정판으로 인해 오픈런은 이제 하나의 문화로 자리잡고 있습니다.
@@ -45,5 +45,43 @@
 ## 7.서버 폴더구조
 
 ## 8.프로젝트 설치 및 실행 방법
+>1. 레포지토리 포크
+>2. Git clone
+>3. yarn install
+>4. docker-compose build
+>5. docker-compose up
 
 ## 9.env
+```
+DATABASE_TYPE=mysql
+DATABASE_HOST=데이터베이스 ip 또는 이름
+DATABASE_PORT=지정한 포트번호
+DATABASE_USERNAME=아이디
+DATABASE_PASSWORD=비밀번호
+DATABASE_DATABASE=데이터베이스 이름
+
+GOOGLE_CLIENT_ID=구글 클라이언트 ID
+GOOGLE_CLIENT_SECRET=구글 클라이언트 Secret
+GOOGLE_CALLBACK_URL=구글 클라이언트 Callback URL
+
+KAKAO_CLIENT_ID=카카오 클라이언트 ID
+KAKAO_CLIENT_SECRET=카카오 클라이언트 Secret
+KAKAO_CALLBACK_URL=카카오 클라이언트 Callback URL
+
+NAVER_CLIENT_ID=네이버 클라이언트 ID
+NAVER_CLIENT_SECRET=네이버 클라이언트 Secret
+NAVER_CALLBACK_URL=네이버 클라이언트 Callback URL
+
+REDIS_URL=Redis IP
+
+GOOGLE_BUCKET=구글 버킷 ID
+GOOGLE_BUCKET_PROJECT_ID=구글 버킷 Project ID
+GOOGLE_BUCKET_KEY_FILENAME=구글 버킷 키 파일
+
+SMS_KEY=쿨에스엠에스 키
+SMS_SECRET=쿨에스엠에스 Secret
+SMS_SENDER=쿨에스엠에스 발신번호
+
+IMP_KEY=아임포트 키
+IMP_SECRET=아임포트 Secret
+```
