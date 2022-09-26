@@ -27,15 +27,14 @@
 
 ### Backend 한정우
 
-- 담당 :
-- git :
+- 담당 : TypeScript, NestJS, TypeORM, ELK, GraphQL, MySQL, Docker, GCP
+- git : [https://github.com/EriicHaan12](https://github.com/EriicHaan12)
 
 ## 3.기술 스택
 ![기술스택](https://user-images.githubusercontent.com/99185757/192178471-ee8d61e0-2d86-4104-a075-7b37dbcb31fb.png)
 
 ## 4.Flow Chart
 <img src="https://user-images.githubusercontent.com/99185757/192178557-9c3a7518-2752-4791-96a4-303ff809b93f.png" width="500">
-![flowchart]()
 
 ## 5.ERD
 ![erd](https://user-images.githubusercontent.com/99185757/192178709-39681dee-a64a-447f-a9ba-815b4d8960c3.png)
