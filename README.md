@@ -40,6 +40,7 @@
 ![erd](https://user-images.githubusercontent.com/99185757/192178709-39681dee-a64a-447f-a9ba-815b4d8960c3.png)
 
 ## 6.API 명세서
+![스크린샷 2022-09-26 오후 1 37 27](https://user-images.githubusercontent.com/99185757/192194930-b2a2d227-8218-4f4f-96c7-66f678a46a16.png)
 
 ## 7.서버 폴더구조
 
