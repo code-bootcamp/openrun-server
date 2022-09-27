@@ -43,8 +43,184 @@
 ![스크린샷 2022-09-26 오후 1 37 27](https://user-images.githubusercontent.com/99185757/192194930-b2a2d227-8218-4f4f-96c7-66f678a46a16.png)
 
 ## 7.서버 폴더구조
-```🗂
-
+```
+🗂openrun-server
+├── Dockerfile
+├── Dockerfile.dev
+├── Dockerfile.prod
+├── README.md
+├── README_old.md
+├── docker-compose.dev.yaml
+├── docker-compose.prod.yaml
+├── docker-compose.yaml
+├── elk
+│   └── logstash
+│       ├── logstash.conf
+│       ├── logstash.dev.conf
+│       ├── mysql-connector-java-8.0.28.jar
+│       ├── template-board.json
+│       └── template.json
+├── gcp-bucket-keyfile.json
+├── nest-cli.json
+├── package-lock.json
+├── package.json
+├── src
+│   ├── api
+│   │   ├── auths
+│   │   │   ├── auths.controller.ts
+│   │   │   ├── auths.module.ts
+│   │   │   ├── auths.resolver.ts
+│   │   │   └── auths.service.ts
+│   │   ├── bankAccounts
+│   │   │   ├── bankAccounts.service.ts
+│   │   │   ├── dto
+│   │   │   │   └── createBankAccount.input.ts
+│   │   │   └── entities
+│   │   │       └──  bankAccount.entity.ts
+│   │   ├── boards
+│   │   │   ├── boards.module.ts
+│   │   │   ├── boards.resolver.ts
+│   │   │   ├── boards.service.ts
+│   │   │   ├── dto
+│   │   │   │   ├── createBoard.input.ts
+│   │   │   │   └── updateBoard.input.ts
+│   │   │   └── entities
+│   │   │       └── board.entity.ts
+│   │   ├── categories
+│   │   │   ├── categories.module.ts
+│   │   │   ├── categories.resolver.ts
+│   │   │   ├── categories.service.ts
+│   │   │   └── entities
+│   │   │       └── category.entity.ts
+│   │   ├── chat
+│   │   │   ├── chat.gateway.ts
+│   │   │   ├── chat.module.ts
+│   │   │   ├── chat.resolver.ts
+│   │   │   ├── chat.service.ts
+│   │   │   └── entities
+│   │   │       ├── chatMessage.entity.ts
+│   │   │       └── chatRoom.entity.ts
+│   │   ├── eventImages
+│   │   │   └── entities
+│   │   │       └── eventImage.entity.ts
+│   │   ├── events
+│   │   │   ├── dto
+│   │   │   │   └── createEvent.input.ts
+│   │   │   ├── entities
+│   │   │   │   └── event.entity.ts
+│   │   │   ├── events.module.ts
+│   │   │   ├── events.resolver.ts
+│   │   │   └── events.service.ts
+│   │   ├── file
+│   │   │   ├── file.module.ts
+│   │   │   ├── file.resolver.ts
+│   │   │   └── file.service.ts
+│   │   ├── iamport
+│   │   │   └── iamport.service.ts
+│   │   ├── images
+│   │   │   ├── entities
+│   │   │   │   └── image.entity.ts
+│   │   │   └── images.service.ts
+│   │   ├── inquiries
+│   │   │   ├── dto
+│   │   │   │   └── inquiry.input.ts
+│   │   │   ├── entities
+│   │   │   │   └── inquiry.entity.ts
+│   │   │   ├── inquiries.module.ts
+│   │   │   ├── inquiries.resolver.ts
+│   │   │   └── inquiries.service.ts
+│   │   ├── inquiriesAnswer
+│   │   │   ├── entities
+│   │   │   │   └── inquiryAnswer.entity.ts
+│   │   │   ├── inquiriesAnswer.module.ts
+│   │   │   ├── inquiriesAnswer.resolver.ts
+│   │   │   └── inquiriesAnswer.service.ts
+│   │   ├── interests
+│   │   │   ├── entities
+│   │   │   │   └── interests.entity.ts
+│   │   │   ├── interests.module.ts
+│   │   │   ├── interests.resolver.ts
+│   │   │   └── interests.service.ts
+│   │   ├── locations
+│   │   │   ├── dto
+│   │   │   │   └── createLocation.input.ts
+│   │   │   ├── entities
+│   │   │   │   └── location.entity.ts
+│   │   │   └── locationes.service.ts
+│   │   ├── notifications
+│   │   │   ├── entities
+│   │   │   │   └── notification.entity.ts
+│   │   │   ├── notifications.module.ts
+│   │   │   ├── notifications.resolver.ts
+│   │   │   └── notifications.service.ts
+│   │   ├── paymentHistories
+│   │   │   ├── entities
+│   │   │   │   └── paymentHistory.entity.ts
+│   │   │   ├── paymentHistories.module.ts
+│   │   │   ├── paymentHistories.resolver.ts
+│   │   │   └── paymentHistories.service.ts
+│   │   ├── payments
+│   │   │   ├── entities
+│   │   │   │   ├── payment.entity.ts
+│   │   │   │   └── paymentByDate.ts
+│   │   │   ├── payments.module.ts
+│   │   │   ├── payments.resolver.ts
+│   │   │   └── payments.service.ts
+│   │   ├── refreshes
+│   │   │   ├── refreshes.module.ts
+│   │   │   └── refreshes.service.ts
+│   │   ├── reports
+│   │   │   ├── dto
+│   │   │   │   └── report.input.ts
+│   │   │   ├── entities
+│   │   │   │   └── report.entity.ts
+│   │   │   ├── reports.module.ts
+│   │   │   ├── reports.resolver.ts
+│   │   │   └── reports.service.ts
+│   │   ├── runners
+│   │   │   ├── entities
+│   │   │   │   └── runner.entity.ts
+│   │   │   ├── runners.module.ts
+│   │   │   ├── runners.resolver.ts
+│   │   │   └── runners.service.ts
+│   │   ├── tokens
+│   │   │   ├── entities
+│   │   │   │   └── token.entity.ts
+│   │   │   ├── tokens.module.ts
+│   │   │   ├── tokens.resolver.ts
+│   │   │   └── tokens.service.ts
+│   │   └── users
+│   │       ├── dto
+│   │       │   ├── createAdmin.input.ts
+│   │       │   ├── createUser.input.ts
+│   │       │   └── updateUser.input.ts
+│   │       ├── entities
+│   │       │   └── user.entity.ts
+│   │       ├── users.module.ts
+│   │       ├── users.resolver.ts
+│   │       └── users.service.ts
+│   ├── app.controller.ts
+│   ├── app.module.ts
+│   ├── commons
+│   │   ├── auth
+│   │   │   ├── gql-auth.guard.ts
+│   │   │   ├── jwt-access.strategy.ts
+│   │   │   ├── jwt-refresh.strategy.ts
+│   │   │   ├── jwt-social-google.strategy.ts
+│   │   │   ├── jwt-social-kakao.strategy.ts
+│   │   │   └── jwt-social-naver.strategy.ts
+│   │   ├── filter
+│   │   │   └── http-exception.filter.ts
+│   │   ├── graphql
+│   │   │   └── schema.gql
+│   │   ├── libraries
+│   │   │   └── utils.ts
+│   │   └── types
+│   │       └── type.ts
+│   └── main.ts
+├── tsconfig.build.json
+├── tsconfig.json
+└── yarn.lock
 ```
 
 ## 8.프로젝트 설치 및 실행 방법
