@@ -18,7 +18,10 @@ export class NotificationsService {
   findOne({ user, board }) {
     return this.notificationRepository.findOne({
       where: { user: { id: user.id }, board: { id: board.id } },
-      relations: ['user', 'board'],
+      relations: {
+        user: true,
+        board: true,
+      },
     });
   }
 
@@ -28,7 +31,10 @@ export class NotificationsService {
         user: { email: email },
         board: { status: BOARD_STATUS_ENUM.INPROGRESS },
       },
-      relations: ['user', 'board'],
+      relations: {
+        user: true,
+        board: true,
+      },
     });
   }
 
@@ -110,7 +116,10 @@ export class NotificationsService {
   async update({ email }) {
     const notifications = await this.notificationRepository.find({
       where: { user: { email } }, //
-      relations: ['user', 'board'],
+      relations: {
+        user: true,
+        board: true,
+      },
     });
 
     notifications.every(async (ele) => {
