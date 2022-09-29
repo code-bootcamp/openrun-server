@@ -7,6 +7,7 @@ export class CategoriesResolver {
   constructor(
     private readonly categoriesService: CategoriesService, //
   ) {}
+  //카테고리 목록 조회
   @Query(() => [Category])
   fetchCategories() {
     return this.categoriesService.findAll();
