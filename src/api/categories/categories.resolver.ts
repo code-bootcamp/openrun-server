@@ -17,8 +17,6 @@ export class CategoriesResolver {
     @Args('name') name: string, //
   ) {
     const newCategory = this.categoriesService.create({ name });
-
-    console.log(newCategory);
     return newCategory;
   }
 }

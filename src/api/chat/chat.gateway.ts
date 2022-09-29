@@ -69,8 +69,6 @@ export class ChatGateway {
       findRoom = findChatRoom;
     }
 
-    console.log('===================findChatRoom===================', findRoom);
-
     if (
       findRoom.seller.nickName !== nickName &&
       findRoom.runner.nickName !== nickName
@@ -90,11 +88,6 @@ export class ChatGateway {
           user: { nickName: findRoom.seller.nickName },
         },
       });
-
-      console.log(
-        '===================findSellerMessage===================',
-        findSellerMessage,
-      );
 
       if (findSellerMessage.length === 0) {
         const result = await this.usersRepository.findOne({
@@ -126,11 +119,6 @@ export class ChatGateway {
           user: { nickName: findRoom.runner.nickName },
         },
       });
-
-      console.log(
-        '===================findRunnerMessage===================',
-        findRunnerMessage,
-      );
 
       if (findRunnerMessage.length === 0) {
         const result = await this.usersRepository.findOne({
@@ -164,10 +152,12 @@ export class ChatGateway {
   // }
 
   @SubscribeMessage('send')
-  async sendMessage(@MessageBody() data: string, @ConnectedSocket() client) {
-    const [room, nickname, message] = data;
+  async sendMessage(
+    @MessageBody() data: string, //
 
-    console.log(client);
+    @ConnectedSocket() client,
+  ) {
+    const [room, nickname, message] = data;
 
     const boardId = room.slice(5);
 
