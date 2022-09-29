@@ -114,6 +114,7 @@ export class NotificationsService {
   }
 
   async update({ email }) {
+    //해당하는 user의 notification 찾기
     const notifications = await this.notificationRepository.find({
       where: { user: { email } }, //
       relations: {
@@ -122,6 +123,7 @@ export class NotificationsService {
       },
     });
 
+    //신규 notification들 확인 완료 처리
     notifications.every(async (ele) => {
       const result = await this.notificationRepository.update(
         { id: ele.id },
