@@ -36,6 +36,7 @@ export class PaymentHistoriesService {
   }
 
   create({ user, board, price, flag }) {
+    // 거래내역 생성
     return this.paymentHistoryRepository.save({
       board,
       user,
@@ -52,11 +53,16 @@ export class PaymentHistoriesService {
   findAllByBoardId({ boardId }) {
     return this.paymentHistoryRepository.find({
       where: { board: { id: boardId } },
-      relations: ['board'],
+      relations: {
+        board: {
+          user: true,
+        },
+      },
     });
   }
 
   deleteOnlyBoardId({ id }) {
+    // 보드와 연결 끊기
     return this.paymentHistoryRepository.update(
       {
         id,
@@ -66,6 +72,7 @@ export class PaymentHistoriesService {
   }
 
   updateOnlyBoardId({ id, boardId }) {
+    // 보드와 연결하기
     return this.paymentHistoryRepository.update(
       {
         id,

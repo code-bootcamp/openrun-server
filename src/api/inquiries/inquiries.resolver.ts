@@ -24,6 +24,7 @@ export class InquiriesResolver {
   ) {
     const user = context.req.user;
 
+    // 문의내역 생성
     return this.inquiriesService.create({
       createInquiryInput,
       email: user.email,
@@ -33,6 +34,7 @@ export class InquiriesResolver {
 
   @Query(() => [Inquiry])
   fetchInquiry() {
+    // 모든 문의내역 조회
     return this.inquiriesService.findAll();
   }
 
@@ -43,8 +45,10 @@ export class InquiriesResolver {
   ) {
     const contextUser = context.req.user;
 
+    // 현재 유저 조회
     const user = await this.usersService.findOne({ email: contextUser.email });
 
+    // 현재 유저가 등록한 문의 내역 조회
     return this.inquiriesService.findUserInquiry({ user });
   }
 }

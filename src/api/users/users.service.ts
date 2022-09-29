@@ -236,13 +236,13 @@ export class UsersService {
 
   updatePoint({ resultUser, price, flag }) {
     if (flag) {
-      //충전(true)
+      // 충전(true)
       return this.userRepository.update(
         { email: resultUser.email },
         { point: resultUser.point + price },
       );
     } else {
-      //차감(false)
+      // 차감(false)
       return this.userRepository.update(
         { email: resultUser.email },
         { point: resultUser.point - price },
@@ -251,7 +251,7 @@ export class UsersService {
   }
 
   async updateRates({ runner, successRate, rating }) {
-    //runner rating 반영
+    // runner rating 반영
     const result = await this.userRepository.save({
       ...runner.user,
       successRate,

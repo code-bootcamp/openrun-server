@@ -16,7 +16,16 @@ export class InterestsService {
 
   async findInterests({ email, page }) {
     const result = await this.interestRepository.find({
-      relations: ['board', 'user', 'board.user', 'board.image'],
+      relations: {
+        board: {
+          location: true,
+          category: true,
+          chatRoom: true,
+        },
+        user: {
+          bankAccount: true,
+        },
+      },
       where: { user: { email } },
       take: 10,
       skip: page ? (page - 1) * 10 : 0,
@@ -61,6 +70,7 @@ export class InterestsService {
   }
 
   create({ user, board }) {
+    // 관심목록에 등록 및 게시물에 관심목록 개수 더하기
     this.boardRepository.update(
       {
         id: board.id,
@@ -76,6 +86,7 @@ export class InterestsService {
   }
 
   delete({ interest }) {
+    // 관심목록에서 삭제 및 게시물에 관심목록 개수 삭제
     this.boardRepository.update(
       {
         id: interest.board.id,

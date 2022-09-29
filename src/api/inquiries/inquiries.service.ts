@@ -54,14 +54,17 @@ export class InquiriesService {
   }
 
   async create({ createInquiryInput, email, boardId }) {
+    // 현재 유저 조회
     const user = await this.usersService.findOne({
       email,
     });
 
+    // 문의하는 게시물 조회
     const board = await this.boardsService.findOne({
       boardId,
     });
 
+    // 문의내역 저장
     return this.inquiryRepository.save({
       ...createInquiryInput,
       user,

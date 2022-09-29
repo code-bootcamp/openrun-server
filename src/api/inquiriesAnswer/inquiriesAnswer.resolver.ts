@@ -24,14 +24,18 @@ export class InquiriesAnswerResolver {
   ) {
     const user = context.req.user;
 
-    const result = await this.usersService.findOne({
+    // 현재 유저 조회
+    const findUser = await this.usersService.findOne({
       email: user.email,
     });
 
-    if (!result.isAdmin) throw new NotFoundException('관리자가 아닙니다.');
+    // 관리자인지 검증
+    if (!findUser.isAdmin) throw new NotFoundException('관리자가 아닙니다.');
 
+    // 문의내역 조회
     const inquiry = await this.inquiriesService.findOne({ inquiryId });
 
+    // 문의답변 생성
     return this.inquiriesAnswerService.create({ inquiry, contents });
   }
 
@@ -40,8 +44,10 @@ export class InquiriesAnswerResolver {
   async fetchLoginUserInquiryAnswer(
     @Args('inquiryId') inquiryId: string, //
   ) {
+    // 문의내역 조회
     const inquiry = await this.inquiriesService.findOne({ inquiryId });
 
+    // 문의내역에 대한 문의답변 조회 리턴
     return this.inquiriesAnswerService.findAllByInquiry({ inquiry });
   }
 }
