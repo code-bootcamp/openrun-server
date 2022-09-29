@@ -17,6 +17,7 @@ export class ChatResolver {
   fetchChatLogs(
     @Args('room') room: string, //
   ) {
+    // 현재 채팅방에 채팅 메시지 조회
     return this.chatService.load({ room });
   }
 
@@ -25,8 +26,10 @@ export class ChatResolver {
   fetchUserChatRoom(
     @Context() context: IContext, //
   ) {
+    // 현재 유저 조회
     const user = context.req.user;
 
+    // 현재 유저가 가지고 있는 채팅방 목록 조회
     return this.chatService.findAllUser({ email: user.email });
   }
 }

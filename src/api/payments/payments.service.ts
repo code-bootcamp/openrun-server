@@ -20,7 +20,11 @@ export class PaymentsService {
     const result = await this.paymentRepository.findOne({
       where: { impUid: impUid },
       order: { id: 'DESC' },
-      relations: ['user'],
+      relations: {
+        user: {
+          bankAccount: true,
+        },
+      },
     });
 
     return result;
@@ -30,7 +34,11 @@ export class PaymentsService {
     const result = await this.paymentRepository.find({
       where: { user: { id: id } },
       order: { createdAt: 'DESC' },
-      relations: ['user'],
+      relations: {
+        user: {
+          bankAccount: true,
+        },
+      },
       take: 10,
       skip: page ? (page - 1) * 10 : 0,
     });
@@ -39,13 +47,18 @@ export class PaymentsService {
   }
 
   async findTotalAmount() {
+    // 모든 충전, 취소내역 조회
     const result = await this.paymentRepository.find({
       order: { createdAt: 'ASC' },
     });
+    // 날짜별로 총 매출 데이터로 만들기 위한 빈 객체 선언
     const obj = {};
     result.forEach((el) => {
+      // 아이디로 날짜 할당
       const id = JSON.stringify(el.createdAt).slice(1, 11);
+      // 현재 날짜가 없으면
       if (!obj[id]) {
+        // 날짜를 키로 밸류 할당
         obj[id] = [
           {
             id: id,
@@ -54,11 +67,16 @@ export class PaymentsService {
           },
         ];
       } else {
+        // 현재 날짜가 있으면
+
+        // 조회한 키값에 밸류에 가격 더해주기
         obj[id][0].amount = obj[id][0].amount + el.amount;
+        // 조회한 키값에 밸류에 횟수 더해주기
         obj[id][0].count = obj[id][0].count + 1;
       }
     });
 
+    // 밸류만 뽑아서 새로운 배열로 변환
     const arr = Object.values(obj).map((el) => el[0]);
 
     return arr;
@@ -71,6 +89,7 @@ export class PaymentsService {
     await queryRunner.startTransaction('SERIALIZABLE');
 
     try {
+      // 유저 조회
       const user = await queryRunner.manager.findOne(User, {
         where: { id: _user.id },
         relations: {
@@ -79,6 +98,7 @@ export class PaymentsService {
         lock: { mode: 'pessimistic_write' },
       });
 
+      // 결제내역 생성
       const payment = this.paymentRepository.create({
         impUid,
         amount: amount,
@@ -88,6 +108,7 @@ export class PaymentsService {
 
       await queryRunner.manager.save(payment);
 
+      // 유저 포인트 업데이트
       const updateUser = this.userRepository.create({
         ...user,
         point: user.point + amount,
@@ -112,11 +133,13 @@ export class PaymentsService {
     await queryRunner.startTransaction('SERIALIZABLE');
 
     try {
+      // 유저 조회
       const findUser = await queryRunner.manager.findOne(User, {
         where: { id: user.id },
         lock: { mode: 'pessimistic_write' },
       });
 
+      // 유저에게 포인트 지급
       const updateUser = this.userRepository.create({
         ...findUser,
         point: findUser.point - amount,
@@ -124,6 +147,7 @@ export class PaymentsService {
 
       await queryRunner.manager.save(updateUser);
 
+      // 환불내역 저장
       const cancelPayment = this.paymentRepository.create({
         amount: -amount,
         impUid,

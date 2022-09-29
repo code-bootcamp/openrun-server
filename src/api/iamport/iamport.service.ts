@@ -13,6 +13,7 @@ export class IamportsService {
 
   async createIamportAccessToken() {
     try {
+      // 토큰발급 api 요청
       const result = await axios({
         url: 'https://api.iamport.kr/users/getToken',
         method: 'post',
@@ -24,6 +25,7 @@ export class IamportsService {
           imp_secret: process.env.IMP_SECRET,
         },
       });
+      // 발급받은 토큰 리턴
       return result.data.response.access_token;
     } catch (err) {
       throw new Error(err);
@@ -32,6 +34,7 @@ export class IamportsService {
 
   async checkPayment({ token, impUid }) {
     try {
+      // 결제정보 검증 api 요청
       const result = await axios({
         url: `https://api.iamport.kr/payments/${impUid}`,
         headers: {
@@ -40,12 +43,12 @@ export class IamportsService {
       });
       return result;
     } catch (err) {
-      console.log(err);
       return err.response.data.message;
     }
   }
 
   async cancelPayment({ impUid, token, amount }) {
+    // 결제 환불 api 요청
     const result = await axios({
       url: 'https://api.iamport.kr/payments/cancel',
       method: 'post',
