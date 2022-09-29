@@ -33,6 +33,7 @@ services:
     image: elasticsearch:7.17.0
     environment:
       discovery.type: single-node
+      ES_JAVA_OPTS: '-Xms750m -Xms750m'
     ports:
       - 9200:9200
 

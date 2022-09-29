@@ -1,3 +1,5 @@
+import { FindOperator } from 'typeorm';
+
 export interface IUser {
   user: {
     email: string;
@@ -18,4 +20,18 @@ export interface IOAuthUser {
     phone: string;
     profileImg: string;
   };
+}
+
+export interface ICategory {
+  name: 'string';
+}
+
+export interface ILocation {
+  address: FindOperator<string>;
+}
+
+export interface IWhereQuery {
+  dueDate: FindOperator<Date>;
+  category?: ICategory;
+  location?: ILocation;
 }

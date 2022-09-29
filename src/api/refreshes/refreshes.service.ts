@@ -39,6 +39,10 @@ export class RefreshesService {
       where: [
         { status: BOARD_STATUS_ENUM.COMPLETED },
         { status: BOARD_STATUS_ENUM.REPORTING },
+        {
+          status: BOARD_STATUS_ENUM.INPROGRESS, //
+          dueDate: LessThan(today),
+        },
       ],
     });
 

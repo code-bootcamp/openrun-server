@@ -7,8 +7,6 @@ import { Board } from '../boards/entities/board.entity';
 import { CategoriesService } from '../categories/categories.service';
 import { Category } from '../categories/entities/category.entity';
 import { FileService } from '../file/file.service';
-import { Image } from '../images/entities/image.entity';
-import { ImagesService } from '../images/images.service';
 import { Inquiry } from '../inquiries/entities/inquiry.entity';
 import { Location } from '../locations/entities/location.entity';
 import { Payment } from '../payments/entities/payment.entity';
@@ -27,7 +25,6 @@ import { PaymentHistoriesService } from './paymentHistories.service';
       BankAccount,
       Runner,
       Board,
-      Image,
       Location,
       Category,
       Inquiry,
@@ -41,7 +38,6 @@ import { PaymentHistoriesService } from './paymentHistories.service';
     BankAccountsService,
     BoardsService,
     CategoriesService,
-    ImagesService,
     FileService,
   ],
 })

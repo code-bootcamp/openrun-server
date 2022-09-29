@@ -223,7 +223,12 @@ export class BoardsResolver {
     @Args('boardId') boardId: string,
     @Args('updateBoardInput') updateBoardInput: UpdateBoardInput,
   ) {
-    return await this.boardsService.update({ boardId, updateBoardInput });
+    const result = await this.boardsService.update({
+      boardId,
+      updateBoardInput,
+    });
+    console.log(result);
+    return result;
   }
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Boolean)
