@@ -21,8 +21,6 @@ export class InterestsService {
       take: 10,
       skip: page ? (page - 1) * 10 : 0,
     });
-
-    console.log(result);
     return result;
   }
 
@@ -78,7 +76,6 @@ export class InterestsService {
   }
 
   delete({ interest }) {
-    console.log('==-----=------', interest);
     this.boardRepository.update(
       {
         id: interest.board.id,

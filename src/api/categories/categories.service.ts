@@ -25,7 +25,6 @@ export class CategoriesService {
 
   async findAll() {
     const resultCategorys = await this.categoryRepository.find({});
-    console.log(resultCategorys);
     return resultCategorys;
   }
 }

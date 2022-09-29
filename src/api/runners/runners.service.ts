@@ -75,7 +75,6 @@ export class RunnersService {
         board: true,
       },
     });
-    console.log('runner: ', result);
     return result;
   }
 
