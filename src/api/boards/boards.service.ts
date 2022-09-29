@@ -5,18 +5,17 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Like, MoreThan, Repository } from 'typeorm';
-import { Image } from '../images/entities/image.entity';
 import { User } from '../users/entities/user.entity';
 import { Board, BOARD_STATUS_ENUM } from './entities/board.entity';
 import { Location } from '../locations/entities/location.entity';
 import { Category } from '../categories/entities/category.entity';
 import { UsersService } from '../users/users.service';
 import { CategoriesService } from '../categories/categories.service';
-import { ImagesService } from '../images/images.service';
 import { PaymentHistoriesService } from '../paymentHistories/paymentHistories.service';
 import { Runner } from '../runners/entities/runner.entity';
 import { PaymentHistory } from '../paymentHistories/entities/paymentHistory.entity';
 import { FileService } from '../file/file.service';
+import { IWhereQuery } from 'src/commons/types/type';
 
 @Injectable()
 export class BoardsService {
@@ -25,8 +24,6 @@ export class BoardsService {
     private readonly boardRepository: Repository<Board>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-    @InjectRepository(Image)
-    private readonly imageRepository: Repository<Image>,
     @InjectRepository(Location)
     private readonly locationRepository: Repository<Location>,
     @InjectRepository(Category)
@@ -35,7 +32,6 @@ export class BoardsService {
     private readonly runnerRepository: Repository<Runner>,
     private readonly userService: UsersService,
     private readonly categoriesService: CategoriesService,
-    private readonly imagesService: ImagesService,
     private readonly paymentHistoriesService: PaymentHistoriesService,
     private readonly connection: DataSource,
     private readonly filesService: FileService,
@@ -60,8 +56,6 @@ export class BoardsService {
       if (resultUser.point < price) {
         throw new UnprocessableEntityException('포인트가 부족합니다');
       }
-
-      // const resultCategory = await this.categoriesService.findOne({ name });
 
       const resultPoint = await this.userService.updatePoint({
         resultUser,
@@ -91,7 +85,7 @@ export class BoardsService {
       // if (dueDate < today)
       //   throw new ConflictException('행사 날짜가 올바르지 않습니다.');
 
-      let img;
+      let img: string;
 
       if (image) {
         if (!image[0]) {
@@ -103,17 +97,13 @@ export class BoardsService {
         img = 'default.img';
       }
 
-      const resultImage = await queryRunner.manager.save(Image, {
-        url: img,
-      });
-
       const result = await queryRunner.manager.save(Board, {
         ...createBoardInput,
         dueDate: dueDate,
         location: resultLocation,
         category: resultCategory,
         user: resultUser,
-        image: resultImage,
+        image: img,
       });
 
       await queryRunner.manager.save(PaymentHistory, {
@@ -126,7 +116,7 @@ export class BoardsService {
       await queryRunner.commitTransaction();
       return {
         ...result,
-        image: resultImage,
+        image: img,
         location: resultLocation,
         category: resultCategory,
         user: resultUser,
@@ -151,31 +141,14 @@ export class BoardsService {
           category: true,
           location: true,
           chatRoom: true,
-          user: true,
-          image: true,
+          user: {
+            bankAccount: true,
+          },
         },
       });
 
-      const { image } = updateBoardInput;
-
-      let img;
-
-      if (image) {
-        if (!image[0]) {
-          img = 'default.img';
-        } else {
-          img = image[0];
-        }
-      } else {
-        img = 'default.img';
-      }
-
       const { location } = updateBoardInput;
 
-      const newImage = await queryRunner.manager.save(Image, {
-        ...newBoard.image,
-        url: img,
-      });
       const newLocation = await queryRunner.manager.save(Location, {
         ...newBoard.location,
         ...location,
@@ -201,17 +174,21 @@ export class BoardsService {
         ...newBoard,
         id: boardId,
         ...updateBoardInput,
+        image:
+          updateBoardInput.image && updateBoardInput.image.length >= 1
+            ? updateBoardInput.image[0]
+            : newBoard.image,
         dueDate: dueDate,
         category: category,
-        image: newImage,
         location: newLocation,
       };
       const boardResult = await queryRunner.manager.save(Board, result);
 
-      if (img !== 'default.img')
+      if (updateBoardInput.image && updateBoardInput.image.length >= 1) {
         await this.filesService.delete({
-          url: newBoard.image.url,
+          url: newBoard.image,
         });
+      }
 
       await queryRunner.commitTransaction();
       return boardResult;
@@ -241,39 +218,42 @@ export class BoardsService {
   async findOne({ boardId }) {
     const resultBoard = await this.boardRepository.findOne({
       where: { id: boardId },
-
       relations: {
-        category: true,
-        user: true,
+        user: {
+          bankAccount: true,
+        },
         location: true,
-        image: true,
+        chatRoom: true,
+        category: true,
       },
     });
     return resultBoard;
   }
+
   async findAllbyCurrent({ page, direcion, category }) {
     const today = new Date();
 
     //where query문 생성
-    const whereQuery = {
+    const whereQuery: IWhereQuery = {
       dueDate: MoreThan(today),
     };
     if (category !== 'ALL') {
-      whereQuery['category'] = { name: category };
+      whereQuery.category = { name: category };
     }
     if (direcion !== '전체' && direcion) {
-      whereQuery['location'] = { address: Like(`${direcion}%`) };
+      whereQuery.location = { address: Like(`${direcion}%`) };
     }
 
     const resultBoards = await this.boardRepository.find({
-      relations: ['category', 'location', 'image', 'user'],
+      relations: {
+        user: {
+          bankAccount: true,
+        },
+        location: true,
+        chatRoom: true,
+        category: true,
+      },
       order: { updatedAt: 'DESC' },
-      // where: {
-      //   location: { address: Like(`%${direcion}%`) },
-      //   dueDate: MoreThan(today),
-      //   category: category,
-      // },
-      // where: whereQuery,
       where: [
         { status: BOARD_STATUS_ENUM.INPROGRESS, ...whereQuery },
         { status: BOARD_STATUS_ENUM.RECRUITING, ...whereQuery },
@@ -297,24 +277,13 @@ export class BoardsService {
       whereQuery['location'] = { address: Like(`${direcion}%`) };
     }
 
-    // let whereQuery = {};
-    // if (category !== 'ALL') {
-    //   whereQuery = {
-    //     location: { address: Like(`${direcion}%`) },
-    //     dueDate: MoreThan(today),
-    //     category: {
-    //       name: category,
-    //     },
-    //   };
-    // } else {
-    //   whereQuery = {
-    //     location: { address: Like(`${direcion}%`) },
-    //     dueDate: MoreThan(today),
-    //   };
-    // }
-
     const resultBoards = await this.boardRepository.find({
-      relations: ['category', 'location', 'image', 'user'],
+      relations: {
+        category: true,
+        location: true,
+        chatRoom: true,
+        user: true,
+      },
       order: { dueDate: 'ASC' },
       // where: whereQuery,
       where: [
@@ -333,7 +302,14 @@ export class BoardsService {
     });
 
     const boards = await this.boardRepository.find({
-      relations: ['user', 'image'],
+      relations: {
+        user: {
+          bankAccount: true,
+        },
+        location: true,
+        chatRoom: true,
+        category: true,
+      },
       where: { user: { email: user.email } },
       order: { updatedAt: 'DESC' },
       take: 10,
@@ -361,7 +337,6 @@ export class BoardsService {
           bankAccount: true,
         },
         location: true,
-        image: true,
         chatRoom: true,
         category: true,
       },
@@ -384,7 +359,14 @@ export class BoardsService {
       },
       order: { interestCount: 'DESC' },
       take: 5,
-      relations: ['user', 'location', 'image', 'category'],
+      relations: {
+        user: {
+          bankAccount: true,
+        },
+        location: true,
+        chatRoom: true,
+        category: true,
+      },
     });
   }
 
@@ -394,11 +376,7 @@ export class BoardsService {
     await queryRunner.connect();
     await queryRunner.startTransaction('SERIALIZABLE');
 
-    //temporary for debug
-    let status = '';
-
     //1.PaymentHistory에 남겨진 Board를 찾아 연결(relation) 끊어줌
-    status = '[1]paymentHistory - deleteBoardId'; //for debug
     const paymentHistories =
       await this.paymentHistoriesService.findAllByBoardId({
         boardId,
@@ -413,35 +391,32 @@ export class BoardsService {
 
     try {
       //2.현재 선택된 Board 정보 찾기
-      status = '[2]board - findOne'; //for debug
       const board = await queryRunner.manager.findOne(Board, {
         where: { id: boardId },
-        relations: ['image', 'location'],
+        relations: {
+          user: {
+            bankAccount: true,
+          },
+          location: true,
+          chatRoom: true,
+          category: true,
+        },
         lock: { mode: 'pessimistic_write' },
       });
 
       //3.Board의 Location정보 삭제
-      status = '[3]location - softdelete'; //for debug
       await queryRunner.manager.softDelete(Location, {
         id: board.location.id,
       });
 
       //4.Board 삭제
-      status = '[4]board - delete'; //for debug
       const result = await queryRunner.manager.softDelete(Board, {
         id: boardId,
       });
 
-      //5.Image 삭제
-      status = '[5]image - softdelete'; //for debug
-      await queryRunner.manager.softDelete(Image, {
-        id: board.image.id,
-      });
-
       //6.Image bucket에서 삭제
-      status = '[6]file - delete'; //for debug
-      if (!board.image.url.includes('default.img')) {
-        await this.filesService.delete({ url: board.image.url });
+      if (board.image !== 'default.img') {
+        await this.filesService.delete({ url: board.image });
       }
 
       //Transaction 종료
@@ -488,9 +463,7 @@ export class BoardsService {
           address: ele['_source'].address,
           addressDetail: ele['_source'].addressDetail,
         },
-        image: {
-          url: ele['_source'].url,
-        },
+        image: ele['_source'].image,
         category: {
           name: ele['_source'].name,
         },

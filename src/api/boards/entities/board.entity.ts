@@ -1,7 +1,6 @@
 import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Category } from 'src/api/categories/entities/category.entity';
 import { ChatRoom } from 'src/api/chat/entities/chatRoom.entity';
-import { Image } from 'src/api/images/entities/image.entity';
 import { Location } from 'src/api/locations/entities/location.entity';
 import { User } from 'src/api/users/entities/user.entity';
 
@@ -96,10 +95,9 @@ export class Board {
   @Field(() => ChatRoom, { nullable: true })
   chatRoom: ChatRoom;
 
-  @JoinColumn()
-  @OneToOne(() => Image)
-  @Field(() => Image, { nullable: true })
-  image: Image;
+  @Column()
+  @Field(() => String, { nullable: true })
+  image: string;
 
   @Field(() => Int, { nullable: true })
   runnerTotal: number;

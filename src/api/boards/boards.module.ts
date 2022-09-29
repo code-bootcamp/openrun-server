@@ -1,14 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ElasticsearchModule } from '@nestjs/elasticsearch';
-import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BankAccountsService } from '../bankAccounts/bankAccounts.service';
 import { BankAccount } from '../bankAccounts/entities/ bankAccount.entity';
 import { CategoriesService } from '../categories/categories.service';
 import { Category } from '../categories/entities/category.entity';
 import { FileService } from '../file/file.service';
-import { Image } from '../images/entities/image.entity';
-import { ImagesService } from '../images/images.service';
 import { Inquiry } from '../inquiries/entities/inquiry.entity';
 import { Location } from '../locations/entities/location.entity';
 import { PaymentHistory } from '../paymentHistories/entities/paymentHistory.entity';
@@ -26,12 +23,10 @@ import { Board } from './entities/board.entity';
   imports: [
     TypeOrmModule.forFeature([
       Board, //
-      Image,
       Location,
       User,
       Category,
       BankAccount,
-      Image,
       Runner,
       Inquiry,
       Payment,
@@ -48,7 +43,6 @@ import { Board } from './entities/board.entity';
     UsersService,
     BankAccountsService,
     CategoriesService,
-    ImagesService,
     FileService,
     PaymentHistoriesService,
     RunnersService,
