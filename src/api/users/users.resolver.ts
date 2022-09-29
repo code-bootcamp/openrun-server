@@ -100,11 +100,6 @@ export class UsersResolver {
       email: createUserInput.email,
     });
 
-    //닉네임이 존재하는지 확인 -> unique값이 풀리면서 삭제 예정
-    // await this.usersService.checkIsNickNameAvailable({
-    //   nickName: createUserInput.nickName,
-    // });
-
     //패스워드 Encrypt
     const { password, ...user } = createUserInput;
     const hashedPwd = await this.usersService.encryptPassword({ password });
@@ -174,7 +169,7 @@ export class UsersResolver {
   }
 
   @UseGuards(GqlAuthAccessGuard)
-  @Mutation(() => Float) //굳이 user를 반환해줘야하나..?(여기서는 runner를 점수매기는 것이기 때문에 user필요없을 듯)
+  @Mutation(() => Float)
   async createRating(
     @Args('boardId') boardId: string,
     @Args('rate') rate: number, //

@@ -35,7 +35,9 @@ export class UsersService {
 
   async findAll() {
     const users = await this.userRepository.find({
-      relations: ['bankAccount'],
+      relations: {
+        bankAccount: true,
+      },
     });
 
     const data = await Promise.all(
@@ -46,12 +48,16 @@ export class UsersService {
 
         const inquiryTotal = await this.inquiryRepository.count({
           where: { user: { id: ele.id } },
-          relations: ['user'],
+          relations: {
+            user: true,
+          },
         });
 
         const paymentTotal = await this.paymentRepository.count({
           where: { user: { id: ele.id } },
-          relations: ['user'],
+          relations: {
+            user: true,
+          },
         });
 
         return {
@@ -70,7 +76,9 @@ export class UsersService {
     //유저의 정보 출력
     const result = await this.userRepository.findOne({
       where: { email },
-      relations: ['bankAccount'],
+      relations: {
+        bankAccount: true,
+      },
     });
 
     return result;
@@ -85,7 +93,9 @@ export class UsersService {
     //유저의 정보 출력
     const result = await this.userRepository.findOne({
       where: { email },
-      relations: ['bankAccount'],
+      relations: {
+        bankAccount: true,
+      },
     });
 
     result.boardTotal = boardTotal;
@@ -95,14 +105,18 @@ export class UsersService {
   findOneById({ userId }) {
     return this.userRepository.findOne({
       where: { id: userId },
-      relations: ['bankAccount'],
+      relations: {
+        bankAccount: true,
+      },
     });
   }
 
   findAllAdmin() {
     return this.userRepository.find({
       where: { isAdmin: true },
-      relations: ['bankAccount'],
+      relations: {
+        bankAccount: true,
+      },
     });
   }
 
@@ -112,7 +126,9 @@ export class UsersService {
         rating: 'DESC',
       },
       take: 4,
-      relations: ['bankAccount'],
+      relations: {
+        bankAccount: true,
+      },
     });
   }
 
@@ -263,13 +279,17 @@ export class UsersService {
     //유저가 거래한 총 횟수 구하기
     const totalAdopted = await this.runnerRepository.count({
       where: { user: { id: runner.user.id } },
-      relations: ['user'],
+      relations: {
+        user: true,
+      },
     });
 
     //성공한 거래 횟수 구하기
     const successTotal = await this.paymentHistoryRepository.count({
       where: { user: { id: runner.user.id }, status: 'safeMoney' },
-      relations: ['user'],
+      relations: {
+        user: true,
+      },
     });
 
     //성공률 계산
