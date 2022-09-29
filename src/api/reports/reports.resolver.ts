@@ -15,6 +15,7 @@ export class ReportsResolver {
     private readonly usersService: UsersService,
     private readonly boardsService: BoardsService,
   ) {}
+  //신고된 게시물 조회
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => [Report])
   async fetchReports(
@@ -26,7 +27,7 @@ export class ReportsResolver {
 
     return this.reportsService.findAll({ email });
   }
-
+  //게시물 신고하기
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Report)
   async createReport(
@@ -44,7 +45,7 @@ export class ReportsResolver {
       email: user.email,
     });
   }
-
+  //신고가 처리된 게시물 처리완료로 변경
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Boolean)
   async completeReport(
@@ -58,7 +59,7 @@ export class ReportsResolver {
     return (await this.boardsService.updateStatusCompleted({ boardId }))
       .affected;
   }
-
+  //DB 신고 table에 내역 삭제
   @Mutation(() => Boolean)
   deleteReport(
     @Args('reportId') reportId: string, //

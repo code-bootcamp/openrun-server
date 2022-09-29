@@ -13,7 +13,7 @@ export class ReportsService {
     private readonly usersService: UsersService,
     private readonly boardsService: BoardsService,
   ) {}
-
+  //신고할 게시물 찾기 및 생성
   async create({ createReportInput, email }) {
     const { boardId, ...report } = createReportInput;
 
@@ -33,7 +33,7 @@ export class ReportsService {
 
     return result;
   }
-
+  //신고된 게시물 조회
   async findAll({}) {
     const result = await this.reportRepository.find({
       order: { createdAt: 'DESC' },

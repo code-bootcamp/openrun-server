@@ -9,13 +9,13 @@ export class CategoriesService {
     @InjectRepository(Category)
     private readonly categoryRepository: Repository<Category>,
   ) {}
-
+  //카테고리 생성
   async create({ name }) {
     const result = await this.categoryRepository.save({ name });
 
     return result;
   }
-
+  //카테고리 조회
   async findOne({ categoryName }) {
     const selectCategory = await this.categoryRepository.findOne({
       where: { name: categoryName },
