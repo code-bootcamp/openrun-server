@@ -42,10 +42,12 @@ export class UsersService {
 
     const data = await Promise.all(
       users.map(async (ele) => {
+        //유저가 작성한 게시글 수
         const boardTotal = await this.boardRepository.count({
           where: { user: { id: ele.id } },
         });
 
+        //유저가 작성한 문의글 수
         const inquiryTotal = await this.inquiryRepository.count({
           where: { user: { id: ele.id } },
           relations: {
@@ -53,6 +55,7 @@ export class UsersService {
           },
         });
 
+        //유저의 결제완료 건수
         const paymentTotal = await this.paymentRepository.count({
           where: { user: { id: ele.id } },
           relations: {
@@ -306,15 +309,6 @@ export class UsersService {
       throw new UnprocessableEntityException('이미 사용중인 아이디입니다.');
     }
   }
-
-  /* 닉네임 unique값이 풀리면서 로직 삭제
-  async checkIsNickNameAvailable({ nickName }) {
-    const result = await this.userRepository.findOne({ where: { nickName } });
-    if (result) {
-      throw new UnprocessableEntityException('이미 사용중인 닉네임입니다.');
-    }
-  }
-  */
 
   async checkIsAdmin({ email }) {
     const result = await this.userRepository.findOne({
