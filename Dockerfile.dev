@@ -1,0 +1,10 @@
+FROM node:14
+
+WORKDIR /myfolder/
+COPY ./package.json /myfolder/
+COPY ./yarn.lock /myfolder/
+RUN yarn install --production
+
+COPY . /myfolder/
+RUN yarn build
+CMD yarn start:prod

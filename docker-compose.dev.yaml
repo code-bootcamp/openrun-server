@@ -1,0 +1,27 @@
+version: '3.7'
+
+services:
+  my-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./src:/myfolder/src
+    ports:
+      - 3000:3000
+    env_file:
+      - ./.env
+
+  elasticsearch:
+    image: elasticsearch:7.17.0
+    environment:
+      discovery.type: single-node
+    ports:
+      - 9200:9200
+
+  logstash:
+    image: logstash:7.17.0
+    volumes:
+      - ./elk/logstash/logstash.dev.conf:/usr/share/logstash/pipeline/logstash.dev.conf
+      - ./elk/logstash/mysql-connector-java-8.0.28.jar:/usr/share/logstash/mysql-connector-java-8.0.28.jar
+      - ./elk/logstash/template-board.json:/usr/share/logstash/template-board.json
